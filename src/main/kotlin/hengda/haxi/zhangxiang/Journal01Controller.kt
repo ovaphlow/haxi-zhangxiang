@@ -10,100 +10,84 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/journal02")
-class Journal02Controller {
+@RequestMapping("/api/journal01")
+class Journal01Controller {
 
-  val logger: Logger = LoggerFactory.getLogger(Journal02Controller::class.java)
+  val logger: Logger = LoggerFactory.getLogger(Journal01Controller::class.java)
 
   @Autowired
-  lateinit var mapper: Journal02Mapper
-
-  @RequestMapping("/dd/{id}", method = arrayOf(RequestMethod.PUT))
-  fun updateDD(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-    try {
-      map["id"] = id
-      mapper.updateDD(map)
-      response["status"] = 200
-    } catch (e: Exception) {
-      logger.error("{}", e)
-      response["message"] = "提交数据失败。"
-    }
-    return response
-  }
-
-  @RequestMapping("/dd/", method = arrayOf(RequestMethod.GET))
-  fun listDD(): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-    try {
-      response["content"] = mapper.listDD()
-      response["status"] = 200
-    } catch (e: Exception) {
-      logger.error("{}", e)
-      response["message"] = "检索数据失败。"
-    }
-    return response
-  }
-
-  @RequestMapping("/zbsz/{id}", method = arrayOf(RequestMethod.PUT))
-  fun updateZBSZ(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-    try {
-      map["id"] = id
-      mapper.updateZBSZ(map)
-      response["status"] = 200
-    } catch (e: Exception) {
-      logger.error("{}", e)
-      response["message"] = "提交数据失败。"
-    }
-    return response
-  }
-
-  @RequestMapping("/zbsz/", method = arrayOf(RequestMethod.GET))
-  fun listZBSZ(): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-    try {
-      response["content"] = mapper.listZBSZ()
-      response["status"] = 200
-    } catch (e: Exception) {
-      logger.error("{}", e)
-      response["message"] = "检索数据失败。"
-    }
-    return response
-  }
-
-  @RequestMapping("/jsy/{id}", method = arrayOf(RequestMethod.PUT))
-  fun updateJSY(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-    try {
-      map["id"] = id
-      mapper.updateJSY(map)
-      response["status"] = 200
-    } catch (e: Exception) {
-      logger.error("{}", e)
-      response["message"] = "提交数据失败。"
-    }
-    return response
-  }
-
-  @RequestMapping("/jsy/", method = arrayOf(RequestMethod.GET))
-  fun listJSY(): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-    try {
-      response["content"] = mapper.listJSY()
-      response["status"] = 200
-    } catch (e: Exception) {
-      logger.error("{}", e)
-      response["message"] = "检索数据失败。"
-    }
-    return response
-  }
+  lateinit var mapper: Journal01Mapper
 
   @RequestMapping("/", method = arrayOf(RequestMethod.GET))
-  fun list(): Map<String, Any> {
+  fun filter(): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      response["content"] = mapper.list()
+      response["content"] = mapper.filter()
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/return", method = arrayOf(RequestMethod.GET))
+  fun listReturn(): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.listReturn()
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/admin", method = arrayOf(RequestMethod.GET))
+  fun listByAdmin(): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.listByAdmin()
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/applicant/{id}", method = arrayOf(RequestMethod.GET))
+  fun listByApplicant(@PathVariable("id") id: Int): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.listByApplicant(id)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/{id}/borrow", method = arrayOf(RequestMethod.PUT))
+  fun borrow(@PathVariable("id") id: Int, @RequestBody map: Map<String, Any>): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      mapper.borrow(map["borrow"].toString(), map["borrowId"].toString().toInt(), id)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "提交数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/{id}", method = arrayOf(RequestMethod.GET))
+  fun info(@PathVariable("id") id: Int): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.info(id)
       response["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
