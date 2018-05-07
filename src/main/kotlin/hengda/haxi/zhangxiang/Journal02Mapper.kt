@@ -13,6 +13,32 @@ interface Journal02Mapper {
     update
       journal02
     set
+      verify_report = #{verify_report},
+      verify_leader = #{verify_leader},
+      verify_leader_id = #{verify_leader_id},
+      verify_leader_date = #{verify_leader_date},
+      verify_leader_time = #{verify_leader_time},
+      remark = #{remark}
+    where
+      id = #{id}
+  """)
+  fun updateVerifyLeader(map: Map<String, Any>)
+
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      verify_id = 0
+      and p_dd_id != 0
+  """)
+  fun listVerifyLeader(): List<Map<String, Any>>
+
+  @Update("""
+    update
+      journal02
+    set
       p_dd = #{p_dd},
       p_dd_id = #{p_dd_id},
       p_dd_date = now(),
@@ -93,6 +119,16 @@ interface Journal02Mapper {
     limit 1000
   """)
   fun list(): List<Map<String, Any>>
+
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      id = #{id}
+  """)
+  fun get(@Param("id") id: Int): Map<String, Any>
 
   @Insert("""
     insert into

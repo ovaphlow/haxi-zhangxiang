@@ -18,6 +18,33 @@ class Journal02Controller {
   @Autowired
   lateinit var mapper: Journal02Mapper
 
+  @RequestMapping("/verify/leader/{id}", method = arrayOf(RequestMethod.PUT))
+  fun updateVerifyLeader(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      map["id"] = id
+      mapper.updateVerifyLeader(map)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "提交数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/verify/leader/", method = arrayOf(RequestMethod.GET))
+  fun listVerify(): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.listVerifyLeader()
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
   @RequestMapping("/dd/{id}", method = arrayOf(RequestMethod.PUT))
   fun updateDD(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
@@ -104,6 +131,19 @@ class Journal02Controller {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
       response["content"] = mapper.list()
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/{id}", method = arrayOf(RequestMethod.GET))
+  fun get(@PathVariable("id") id: Int): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.get(id)
       response["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
