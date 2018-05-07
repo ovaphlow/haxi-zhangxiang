@@ -13,6 +13,31 @@ interface Journal02Mapper {
     update
       journal02
     set
+      verify = #{verify},
+      verify_id = #{verify_id},
+      verify_date = now(),
+      verify_time = now(),
+      remark = #{remark}
+    where
+      id = #{id}
+  """)
+  fun updateVerify(map: Map<String, Any>)
+
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      verify_id = 0
+      and verify_leader_id != 0
+  """)
+  fun listVerify(): List<Map<String, Any>>
+
+  @Update("""
+    update
+      journal02
+    set
       verify_report = #{verify_report},
       verify_leader = #{verify_leader},
       verify_leader_id = #{verify_leader_id},
@@ -30,7 +55,7 @@ interface Journal02Mapper {
     from
       journal02
     where
-      verify_id = 0
+      verify_leader_id = 0
       and p_dd_id != 0
   """)
   fun listVerifyLeader(): List<Map<String, Any>>
