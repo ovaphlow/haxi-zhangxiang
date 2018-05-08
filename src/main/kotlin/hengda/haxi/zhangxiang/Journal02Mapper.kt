@@ -1,6 +1,7 @@
 package hengda.haxi.zhangxiang
 
 import org.apache.ibatis.annotations.Insert
+import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
@@ -24,13 +25,7 @@ interface Journal02Mapper {
   fun updateVerify(map: Map<String, Any>)
 
   @Select("""
-    select
-      *
-    from
-      journal02
-    where
-      verify_id = 0
-      and verify_leader_id != 0
+    select * from journal02 where verify_id = 0 and verify_leader_id != 0
   """)
   fun listVerify(): List<Map<String, Any>>
 
@@ -50,13 +45,7 @@ interface Journal02Mapper {
   fun updateVerifyLeader(map: Map<String, Any>)
 
   @Select("""
-    select
-      *
-    from
-      journal02
-    where
-      verify_leader_id = 0
-      and p_dd_id != 0
+    select * from journal02 where verify_leader_id = 0 and p_dd_id != 0
   """)
   fun listVerifyLeader(): List<Map<String, Any>>
 
@@ -74,14 +63,7 @@ interface Journal02Mapper {
   fun updateDD(map: Map<String, Any>)
 
   @Select("""
-    select
-      *
-    from
-      journal02
-    where
-      p_dd_id = 0
-      and p_zbsz_id != 0
-    limit 1000
+    select * from journal02 where p_dd_id = 0 and p_zbsz_id != 0 limit 1000
   """)
   fun listDD(): List<Map<String, Any>>
 
@@ -99,14 +81,7 @@ interface Journal02Mapper {
   fun updateZBSZ(map: Map<String, Any>)
 
   @Select("""
-    select
-      j.*
-    from
-      journal02 as j
-    where
-      p_zbsz_id = 0
-      and p_jsy_id != 0
-    limit 1000
+    select j.* from journal02 as j where p_zbsz_id = 0 and p_jsy_id != 0 limit 1000
   """)
   fun listZBSZ(): List<Map<String, Any>>
 
@@ -124,36 +99,72 @@ interface Journal02Mapper {
   fun updateJSY(map: Map<String, Any>)
 
   @Select("""
-    select
-      j.*
-    from
-      journal02 as j
-    where
-      p_jsy_id = 0
-    limit 1000
+    select j.* from journal02 as j where p_jsy_id = 0 limit 1000
   """)
   fun listJSY(): List<Map<String, Any>>
 
   @Select("""
-    select
-      j.*
-    from
-      journal02 as j
-    order by
-      id desc
-    limit 1000
+    select j.* from journal02 as j order by id desc limit 1000
   """)
   fun list(): List<Map<String, Any>>
 
-  @Select("""
-    select
-      *
-    from
-      journal02
+  @Update("""
+    update
+      journal02_01
+    set
+      subject = #{subject},
+      approval_sn = #{approval_sn},
+      train_sn = #{train_sn},
+      date = #{date}
     where
-      id = #{id}
+      master_id = #{id}
+  """)
+  fun update01(map: Map<String, Any>)
+
+  @Delete("""
+    delete from journal02_01 where master_id = #{masterId} and id = #{id}
+  """)
+  fun remove01(@Param("masterId") masterId: Int, @Param("id") id: Int)
+
+  @Insert("""
+    insert into
+      journal02_01
+    set
+      uuid = uuid(),
+      master_id = #{master_id},
+      subject = #{subject},
+      approval_sn = #{approval_sn},
+      train_sn = #{train_sn},
+      date = #{date},
+      carriage = #{carriage},
+      carriage_subject = #{carriage_subject},
+      time_begin = #{time_begin},
+      time_end = #{time_end},
+      result = #{result},
+      report = #{report},
+      dept = #{dept},
+      executor = #{executor},
+      watcher = #{watcher},
+      watcher_group = #{watcher_group},
+      qc = #{qc},
+      remark = #{remark}
+  """)
+  fun save01(map: Map<String, Any>)
+
+  @Select("""
+    select * from journal02_01 where master_id = #{id}
+  """)
+  fun list01(@Param("id") id: Int): List<Map<String, Any>>
+
+  @Select("""
+    select * from journal02 where id = #{id}
   """)
   fun get(@Param("id") id: Int): Map<String, Any>
+
+  @Select("""
+    select last_insert_Id() as last_id
+  """)
+  fun lastId(): Map<String, Any>
 
   @Insert("""
     insert into
