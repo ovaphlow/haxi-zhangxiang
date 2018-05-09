@@ -108,6 +108,41 @@ interface Journal02Mapper {
   """)
   fun list(): List<Map<String, Any>>
 
+  @Delete("""
+    delete from journal02_02 where master_id = #{masterId} and id = #{id}
+  """)
+  fun remove02(@Param("masterId") masterId: Int, @Param("id") id: Int)
+
+  @Insert("""
+    insert into
+      journal02_02
+    set
+      master_id = #{masterId},
+      name = #{name},
+      train = #{train},
+      carriage = #{carriage},
+      position = #{position},
+      date = #{date},
+      time = #{time},
+      reason = #{reason},
+      p_gywj = #{p_gywj},
+      p_ljbs = #{p_ljbs},
+      component_sn_old = #{component_sn_old},
+      component_sn_new = #{component_sn_new},
+      p_bjaz = #{p_bjaz},
+      operator = #{operator},
+      leader = #{leader},
+      p_bjgnsy = #{p_bjgnsy},
+      qc = #{qc},
+      duty_officer = #{duty_officer}
+  """)
+  fun save02(map: Map<String, Any>)
+
+  @Select("""
+    select * from journal02_02 where master_id = #{masterId}
+  """)
+  fun list02(@Param("masterId") masterId: Int): List<Map<String, Any>>
+
   @Update("""
     update
       journal02_01
