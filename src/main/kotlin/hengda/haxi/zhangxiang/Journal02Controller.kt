@@ -179,6 +179,46 @@ class Journal02Controller {
     return response
   }
 
+  @RequestMapping("/{masterId}/03/{id}", method = arrayOf(RequestMethod.DELETE))
+  fun remove03(@PathVariable("masterId") masterId: Int, @PathVariable("id") id: Int): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      mapper.remove03(masterId, id)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "提交数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/{masterId}/03/", method = arrayOf(RequestMethod.GET))
+  fun list03(@PathVariable("masterId") masterId: Int): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.list03(masterId)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/{masterId}/03/", method = arrayOf(RequestMethod.POST))
+  fun save03(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      map["masterId"] = masterId
+      mapper.save03(map)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "提交数据失败。"
+    }
+    return response
+  }
+
   @RequestMapping("/{masterId}/02/{id}", method = arrayOf(RequestMethod.DELETE))
   fun remove02(@PathVariable("masterId") masterId: Int, @PathVariable("id") id: Int): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
