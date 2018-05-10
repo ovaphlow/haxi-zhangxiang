@@ -108,15 +108,59 @@ interface Journal02Mapper {
   """)
   fun list(): List<Map<String, Any>>
 
+  @Update("""
+    update
+      journal02_04
+    set
+      subject = #{subject},
+      software_version_new = #{software_version_new},
+      software_version_old = #{software_version_old},
+      approval_sn = #{approval_sn},
+      train = #{train},
+      date = #{date}
+    where
+      master_id = #{masterId}
+  """)
+  fun update04(map: Map<String, Any>)
+
+  @Delete("""
+    delete from journal02_04 where master_id = #{masterId} and id = #{id}
+  """)
+  fun remove04(@Param("masterId") masterId: Int, @Param("id") id: Int)
+
+  @Insert("""
+    insert into
+      journal02_04
+    set
+      uuid = uuid(),
+      master_id = #{masterId},
+      subject = #{subject},
+      software_version_new = #{software_version_new},
+      software_version_old = #{software_version_old},
+      approval_sn = #{approval_sn},
+      train = #{train},
+      date = #{date},
+      carriage = #{carriage},
+      time_begin = #{time_begin},
+      time_end = #{time_end},
+      dept = #{dept},
+      operator = #{operator},
+      watcher = #{watcher},
+      watcher_group = #{watcher_group},
+      qc = #{qc},
+      remark = #{remark}
+  """)
+  fun save04(map: Map<String, Any>)
+
+  @Select("""
+    select * from journal02_04 where master_id = #{masterId}
+  """)
+  fun list04(@Param("masterId") id: Int): List<Map<String, Any>>
+
   @Delete("""
     delete from journal02_03 where master_id = #{masterId} and id = #{id}
   """)
   fun remove03(@Param("masterId") masterId: Int, @Param("id") id: Int)
-
-  @Select("""
-    select * from journal02_03 where master_id = #{masterId}
-  """)
-  fun list03(@Param("masterId") masterId: Int): List<Map<String, Any>>
 
   @Insert("""
     insert into
@@ -142,6 +186,11 @@ interface Journal02Mapper {
       duty_officer = #{duty_officer}
   """)
   fun save03(map: Map<String, Any>)
+
+  @Select("""
+    select * from journal02_03 where master_id = #{masterId}
+  """)
+  fun list03(@Param("masterId") masterId: Int): List<Map<String, Any>>
 
   @Delete("""
     delete from journal02_02 where master_id = #{masterId} and id = #{id}
