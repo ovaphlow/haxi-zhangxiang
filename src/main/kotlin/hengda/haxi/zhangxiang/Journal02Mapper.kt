@@ -10,6 +10,19 @@ import org.apache.ibatis.annotations.Update
 @Mapper
 interface Journal02Mapper {
 
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      position(#{dept} in dept) > 0
+      and position(#{group_sn} in group_sn) > 0
+      and position(#{date_begin} in date_begin) > 0
+    limit 1000
+  """)
+  fun filter(map: Map<String, Any>): List<Map<String, Any>>
+
   @Update("""
     update
       journal02
@@ -173,6 +186,7 @@ interface Journal02Mapper {
       position = #{position},
       date = #{date},
       time = #{time},
+      production_date = #{production_date},
       reason = #{reason},
       p_gywj = #{p_gywj},
       p_ljbs = #{p_ljbs},
