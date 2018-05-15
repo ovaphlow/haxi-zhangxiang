@@ -12,6 +12,16 @@ interface Journal02Mapper {
 
   @Select("""
     select
+      group_sn as name, count(*) as value
+    from
+      journal02
+    group by
+      group_sn
+  """)
+  fun stats(): List<Map<String, Any>>
+
+  @Select("""
+    select
       *
     from
       journal02
