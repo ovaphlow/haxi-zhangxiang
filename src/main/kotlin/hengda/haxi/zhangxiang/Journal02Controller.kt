@@ -237,6 +237,7 @@ class Journal02Controller {
     try {
       map["masterId"] = masterId
       mapper.save04(map)
+      mapper.updateTag("加装改造（软件升级）记录单", masterId)
       response["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
@@ -290,6 +291,7 @@ class Journal02Controller {
     try {
       map["masterId"] = masterId
       mapper.save03(map)
+      mapper.updateTag("关键配件更换记录表", masterId)
       response["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
@@ -317,6 +319,7 @@ class Journal02Controller {
     try {
       map["masterId"] = masterId
       mapper.save02(map)
+      mapper.updateTag("一般配件更换记录表", masterId)
       res["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
@@ -371,6 +374,7 @@ class Journal02Controller {
     try {
       map["master_id"] = id
       mapper.save01(map)
+      mapper.updateTag("一般部件普查记录单", id)
       response["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
