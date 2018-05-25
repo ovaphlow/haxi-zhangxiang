@@ -331,7 +331,6 @@ interface Journal02Mapper {
       date_end = #{dateEnd},
       time_end = #{timeEnd},
       content = #{content},
-      content_detail = #{content_detail},
       p_yq_xdc = #{p_yq_xdc},
       p_yq_jcw = #{p_yq_jcw},
       p_yq_zydd = #{p_yq_zydd},
