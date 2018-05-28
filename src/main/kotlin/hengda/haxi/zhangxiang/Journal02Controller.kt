@@ -151,6 +151,20 @@ class Journal02Controller {
     return response
   }
 
+  @RequestMapping("/jsy/{id}/content", method = arrayOf(RequestMethod.PUT))
+  fun updateJSYContent(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "messsage" to "", "status" to 500)
+    try {
+      map["id"] = id
+      mapper.updateJSYContent(map)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "提交数据失败。"
+    }
+    return response
+  }
+
   @RequestMapping("/jsy/{id}", method = arrayOf(RequestMethod.PUT))
   fun updateJSY(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)

@@ -115,6 +115,18 @@ interface Journal02Mapper {
 
   @Update("""
     update
+      journal02 
+    set
+      p_jsy_content = #{p_jsy_content},
+      p_jsy_bz = #{p_jsy_bz},
+      p_jsy_qc = #{p_jsy_qc}
+    where
+      id = #{id}
+  """)
+  fun updateJSYContent(map: Map<String, Any>)
+
+  @Update("""
+    update
       journal02
     set
       p_jsy = #{p_jsy},

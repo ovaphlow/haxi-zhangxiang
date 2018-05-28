@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- 主机:                           192.168.1.123
+-- 主机:                           192.168.1.139
 -- 服务器版本:                        10.1.29-MariaDB-6 - Ubuntu 18.04
 -- 服务器操作系统:                      debian-linux-gnu
 -- HeidiSQL 版本:                  9.5.0.5196
@@ -77,6 +77,8 @@ CREATE TABLE IF NOT EXISTS `journal02` (
   `p_jsy_date` date NOT NULL DEFAULT '1970-01-01',
   `p_jsy_time` time NOT NULL DEFAULT '00:00:00',
   `p_jsy_content` varchar(20) NOT NULL DEFAULT '',
+  `p_jsy_bz` varchar(20) NOT NULL DEFAULT '',
+  `p_jsy_qc` varchar(20) NOT NULL DEFAULT '',
   `p_zbsz` varchar(20) NOT NULL DEFAULT '' COMMENT '值班所长',
   `p_zbsz_id` int(11) NOT NULL DEFAULT '0',
   `p_zbsz_date` date NOT NULL DEFAULT '1970-01-01',
