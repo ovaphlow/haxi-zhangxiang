@@ -151,6 +151,33 @@ class Journal02Controller {
     return response
   }
 
+  @RequestMapping("/jsy/bz/{bzId}", method = arrayOf(RequestMethod.PUT))
+  fun updateJsyBz(@PathVariable("bzId") bzId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      map["id"] = bzId
+      mapper.updateJsyBz(map)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "提交数据失败。"
+    }
+    return response
+  }
+
+  @RequestMapping("/jsy/bz/{bz}", method = arrayOf(RequestMethod.GET))
+  fun listJsyBz(@PathVariable("bz") bz: String): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      response["content"] = mapper.listJsyBz(bz)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "检索数据失败。"
+    }
+    return response
+  }
+
   @RequestMapping("/jsy/{id}/content", method = arrayOf(RequestMethod.PUT))
   fun updateJSYContent(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "messsage" to "", "status" to 500)
