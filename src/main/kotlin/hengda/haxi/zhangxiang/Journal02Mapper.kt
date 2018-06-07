@@ -114,12 +114,25 @@ interface Journal02Mapper {
   fun listZBSZ(): List<Map<String, Any>>
 
   @Update("""
-    update
+    update journal02 set p_jsy_qc_sign = 1 where id = #{id}
+  """)
+  fun updateJsyQc(map: Map<String, Any>)
+
+  @Select("""
+    select
+      *
+    from
       journal02
-    set
-      p_jsy_bz_sign = 1
     where
-      id = #{id}
+      position('质检跟踪' in p_jsy_content) > 0
+      and p_jsy_qc = #{qc}
+      and p_jsy_qc_sign = 0
+      and p_jsy_id > 0
+  """)
+  fun listJsyQc(@Param("qc") qc: String): List<Map<String, Any>>
+
+  @Update("""
+    update journal02 set p_jsy_bz_sign = 1 where id = #{id}
   """)
   fun updateJsyBz(map: Map<String, Any>)
 
