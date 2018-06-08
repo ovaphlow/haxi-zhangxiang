@@ -167,7 +167,6 @@ class Journal02Controller {
 
   @RequestMapping("/jsy/qc/{qc}", method = arrayOf(RequestMethod.GET))
   fun listJsyQc(@PathVariable("qc") qc: String): Map<String, Any> {
-    logger.info(qc)
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
       response["content"] = mapper.listJsyQc(qc)
