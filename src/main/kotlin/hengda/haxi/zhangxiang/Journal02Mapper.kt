@@ -91,7 +91,7 @@ interface Journal02Mapper {
   fun updateVerifyLeader(map: Map<String, Any>)
 
   @Select("""
-    select * from journal02 where verify_leader = 0 and p_dd_id != 0 and leader = #{leader}
+    select * from journal02 where verify_leader_id = 0 and p_dd_id != 0 and leader = #{leader}
   """)
   fun listVerifyByLeader(@Param("leader") leader: String): List<Map<String, Any>>
 

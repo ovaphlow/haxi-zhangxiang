@@ -11,6 +11,18 @@ interface Journal01Mapper {
 
   @Select("""
     select
+      *
+    from
+      journal01
+    where
+      position(#{date} in date) = 1
+      and position(#{dept} in dept) = 1
+      and position(#{user} in applicant) = 1
+  """)
+  fun filter(map: Map<String, Any>): List<Map<String, Any>>
+
+  @Select("""
+    select
       id, uuid,
       date, time, quantity, applicant, applicant_id, dept,
       borrow_date, borrow_time, borrow, borrow_id,
@@ -22,7 +34,7 @@ interface Journal01Mapper {
     limit
       1000
   """)
-  fun filter(): List<Map<String, Any>>
+  fun list(): List<Map<String, Any>>
 
   @Select("""
     select

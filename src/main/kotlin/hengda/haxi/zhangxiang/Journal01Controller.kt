@@ -18,11 +18,24 @@ class Journal01Controller {
   @Autowired
   lateinit var mapper: Journal01Mapper
 
+  @RequestMapping("/filter", method = arrayOf(RequestMethod.POST))
+  fun filter(@RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      r["content"] = mapper.filter(map)
+      r["status"] = 200
+    } catch(e: Exception) {
+      logger.error("{}", e)
+      r["message"] = "检索数据失败。"
+    }
+    return r
+  }
+
   @RequestMapping("/", method = arrayOf(RequestMethod.GET))
-  fun filter(): Map<String, Any> {
+  fun list(): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      response["content"] = mapper.filter()
+      response["content"] = mapper.list()
       response["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
