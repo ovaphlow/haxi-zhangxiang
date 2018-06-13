@@ -69,6 +69,37 @@ class Journal02Controller {
     }
     return response
   }
+
+  @RequestMapping("/verify/leader/qc/{id}", method = arrayOf(RequestMethod.PUT))
+  fun verifyLeaderQc(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      map["id"] = id
+      mapper.updateVerifyLeaderQc(map)
+      r["status"] = 200
+    } catch(e: Exception) {
+      logger.error("{}", e)
+      r["message"] = "提交数据失败。"
+    }
+    return r
+  }
+
+  @RequestMapping("/verify/leader/qc/{qc}", method = arrayOf(RequestMethod.GET))
+  fun listVerifyLeaderQc(@PathVariable("qc") qc: String): Map<String, Any> {
+    var r: MutableMap<String, Any> = hashMapOf(
+      "content" to "",
+      "message" to "",
+      "status" to 500
+    )
+    try {
+      r["content"] = mapper.listVerifyLeaderQc(qc)
+      r["status"] = 200
+    } catch(e: Exception) {
+      logger.error("{}", e)
+      r["message"] = "检索数据失败。"
+    }
+    return r
+  }
   
   @RequestMapping("/verify/leader/bz/{id}", method = arrayOf(RequestMethod.PUT))
   fun updateVerifyLeaderBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {

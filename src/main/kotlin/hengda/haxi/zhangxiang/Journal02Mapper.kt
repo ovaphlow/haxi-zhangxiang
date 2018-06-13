@@ -58,6 +58,27 @@ interface Journal02Mapper {
   fun listVerify(): List<Map<String, Any>>
 
   @Update("""
+    update journal02 set verify_leader_qc_sign = 1 where id = #{id}
+  """)
+  fun updateVerifyLeaderQc(map: Map<String, Any>)
+
+  // 只判断了质检跟踪的数据
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      verify_leader_id > 0
+      and position('班组' in p_jsy_content) = 1
+      and verify_leader_bz_sign = 1
+      and verify_leader_qc_sign = 0
+      and position('质检跟踪' in p_jsy_content) > 0
+      and p_jsy_qc = #{qc}
+  """)
+  fun listVerifyLeaderQc(@Param("qc") qc: String): List<Map<String, Any>>
+
+  @Update("""
     update journal02 set verify_leader_bz_sign = 1 where id = #{id}
   """)
   fun updateVerifyLeaderBz(map: Map<String, Any>)
