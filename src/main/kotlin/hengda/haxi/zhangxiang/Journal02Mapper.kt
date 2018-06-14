@@ -53,7 +53,18 @@ interface Journal02Mapper {
   fun updateVerify(map: Map<String, Any>)
 
   @Select("""
-    select * from journal02 where verify_id = 0 and verify_leader_id != 0
+    select
+      *
+    from
+      journal02
+    where
+      verify_id = 0
+      and verify_leader_id != 0
+      and (
+        ( p_jsy_content = '同意' )
+        or ( position('质检跟踪' in p_jsy_content) > 0 and verify_leader_qc_sign = 1)
+        or ( position('班组跟踪' in p_jsy_content) > 0 and verify_leader_bz_sign = 1 )
+      )
   """)
   fun listVerify(): List<Map<String, Any>>
 
@@ -195,7 +206,7 @@ interface Journal02Mapper {
 
   @Update("""
     update
-      journal02 
+      journal02
     set
       p_jsy_content = #{p_jsy_content},
       p_jsy_bz = #{p_jsy_bz},
