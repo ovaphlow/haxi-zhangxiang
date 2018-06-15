@@ -340,15 +340,15 @@ interface Journal02Mapper {
       p_zbsz_id = 0
       and p_jsy_content != ''
       and (
-        (position('班组' in p_jsy_content) = 1 and p_jsy_bz_sign != null)
-        or (position('质检跟踪' in p_jsy_content) > 0 and p_jsy_qc_sign != null)
+        (position('班组跟踪' in p_jsy_content) = 1 and sign_p_jsy_bz is not null)
+        or (position('质检跟踪' in p_jsy_content) > 0 and sign_p_jsy_qc is not null)
       )
     limit 1000
   """)
   fun listZBSZ(): List<Map<String, Any>>
 
   @Update("""
-    update journal02 set p_jsy_qc_sign = 1 where id = #{id}
+    update journal02 set sign_p_jsy_qc = #{sign} where id = #{id}
   """)
   fun updateJsyQc(map: Map<String, Any>)
 
@@ -360,7 +360,7 @@ interface Journal02Mapper {
     where
       position('质检跟踪' in p_jsy_content) > 0
       and p_jsy_qc = #{qc}
-      and sign_p_jsy_bz is not null
+      and sign_p_jsy_bz is null
       and p_jsy_id > 0
   """)
   fun listJsyQc(@Param("qc") qc: String): List<Map<String, Any>>

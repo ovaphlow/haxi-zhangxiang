@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- 主机:                           192.168.1.139
+-- 主机:                           127.0.0.1
 -- 服务器版本:                        10.1.29-MariaDB-6 - Ubuntu 18.04
 -- 服务器操作系统:                      debian-linux-gnu
 -- HeidiSQL 版本:                  9.5.0.5196
@@ -76,9 +76,9 @@ CREATE TABLE IF NOT EXISTS `journal02` (
   `p_jsy_id` int(11) NOT NULL DEFAULT '0',
   `p_jsy_date` date NOT NULL DEFAULT '1970-01-01',
   `p_jsy_time` time NOT NULL DEFAULT '00:00:00',
-  `p_jsy_content` varchar(20) NOT NULL DEFAULT '',
-  `p_jsy_bz` varchar(20) NOT NULL DEFAULT '',
-  `p_jsy_qc` varchar(20) NOT NULL DEFAULT '',
+  `p_jsy_content` varchar(20) NOT NULL DEFAULT '' COMMENT '技术员选择跟踪形式',
+  `p_jsy_bz` varchar(20) NOT NULL DEFAULT '' COMMENT '技术员指定班组',
+  `p_jsy_qc` varchar(20) NOT NULL DEFAULT '' COMMENT '技术员指定质检',
   `p_zbsz` varchar(20) NOT NULL DEFAULT '' COMMENT '值班所长',
   `p_zbsz_id` int(11) NOT NULL DEFAULT '0',
   `p_zbsz_date` date NOT NULL DEFAULT '1970-01-01',
@@ -93,11 +93,16 @@ CREATE TABLE IF NOT EXISTS `journal02` (
   `verify_leader_id` int(10) unsigned NOT NULL DEFAULT '0',
   `verify_leader_date` date NOT NULL DEFAULT '1970-01-01',
   `verify_leader_time` time NOT NULL DEFAULT '00:00:00',
+  `verify_leader_bz_sign` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '作业负责人完成签字后班组签字',
+  `verify_leader_qc_sign` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '作业负责人完成作业签字后质检签字',
   `verify` varchar(20) NOT NULL DEFAULT '' COMMENT '调度员',
   `verify_id` int(10) unsigned NOT NULL DEFAULT '0',
   `verify_date` date NOT NULL DEFAULT '1970-01-01',
   `verify_time` time NOT NULL DEFAULT '00:00:00',
   `remark` text COMMENT '备注',
+  `sign_p_jsy` text,
+  `sign_p_jsy_bz` text,
+  `sign_p_jsy_qc` text,
   PRIMARY KEY (`id`),
   KEY `p_jsy_id` (`p_jsy_id`),
   KEY `p_zbsz_id` (`p_zbsz_id`),
@@ -107,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `journal02` (
   KEY `journal02_dept_IDX` (`dept`) USING BTREE,
   KEY `journal02_group_sn_IDX` (`group_sn`) USING BTREE,
   KEY `journal02_date_begin_IDX` (`date_begin`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 haxi.journal02_01 结构
@@ -134,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `journal02_01` (
   PRIMARY KEY (`id`),
   KEY `journal02_01_uuid_IDX` (`uuid`) USING BTREE,
   KEY `journal02_01_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='一般部件普查记录单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='一般部件普查记录单';
 
 -- 数据导出被取消选择。
 -- 导出  表 haxi.journal02_02 结构
@@ -160,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `journal02_02` (
   `duty_officer` varchar(20) NOT NULL DEFAULT '' COMMENT '值班干部',
   PRIMARY KEY (`id`),
   KEY `journal02_02_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
 
 -- 数据导出被取消选择。
 -- 导出  表 haxi.journal02_03 结构
@@ -187,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `journal02_03` (
   `duty_officer` varchar(20) NOT NULL DEFAULT '' COMMENT '值班干部',
   PRIMARY KEY (`id`),
   KEY `journal02_03_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='动车组关键配件更换记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='动车组关键配件更换记录表';
 
 -- 数据导出被取消选择。
 -- 导出  表 haxi.journal02_04 结构
@@ -213,7 +218,15 @@ CREATE TABLE IF NOT EXISTS `journal02_04` (
   PRIMARY KEY (`id`),
   KEY `journal02_04_uuid_IDX` (`uuid`) USING BTREE,
   KEY `journal02_04_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='动车组加装改造（软件升级）记录单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='动车组加装改造（软件升级）记录单';
+
+-- 数据导出被取消选择。
+-- 导出  表 haxi.journal02_sign 结构
+CREATE TABLE IF NOT EXISTS `journal02_sign` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `jsy` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 haxi.user 结构
@@ -232,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `auth_p_dd` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '动车所调度',
   PRIMARY KEY (`id`),
   KEY `account` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

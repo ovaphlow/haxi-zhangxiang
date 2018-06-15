@@ -222,7 +222,7 @@ class Journal02Controller {
     return response
   }
 
-  @RequestMapping("/jsy/qc/{id}", method = arrayOf(RequestMethod.PUT))
+  @RequestMapping("/{id}/jsy/qc", method = arrayOf(RequestMethod.PUT))
   fun updateJsyQc(@PathVariable("id")id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
