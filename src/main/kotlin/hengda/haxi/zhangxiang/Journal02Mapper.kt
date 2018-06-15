@@ -69,177 +69,6 @@ interface Journal02Mapper {
   fun listVerify(): List<Map<String, Any>>
 
   @Update("""
-    update journal02 set verify_leader_qc_sign = 1 where id = #{id}
-  """)
-  fun updateVerifyLeaderQc(map: Map<String, Any>)
-
-  // 只判断了质检跟踪的数据
-  @Select("""
-    select
-      *
-    from
-      journal02
-    where
-      verify_leader_id > 0
-      and position('班组' in p_jsy_content) = 1
-      and verify_leader_bz_sign = 1
-      and verify_leader_qc_sign = 0
-      and position('质检跟踪' in p_jsy_content) > 0
-      and p_jsy_qc = #{qc}
-  """)
-  fun listVerifyLeaderQc(@Param("qc") qc: String): List<Map<String, Any>>
-
-  @Update("""
-    update journal02 set verify_leader_bz_sign = 1 where id = #{id}
-  """)
-  fun updateVerifyLeaderBz(map: Map<String, Any>)
-
-  @Select("""
-    select
-      *
-    from
-      journal02
-    where
-      verify_leader_id > 0
-      and position('班组' in p_jsy_content) = 1
-      and verify_leader_bz_sign = 0
-      and p_jsy_bz = #{bz}
-  """)
-  fun listVerifyLeaderBz(@Param("bz") bz: String): List<Map<String, Any>>
-
-  @Update("""
-    update
-      journal02
-    set
-      verify_report = #{verify_report},
-      verify_leader = #{verify_leader},
-      verify_leader_id = #{verify_leader_id},
-      verify_leader_date = #{verify_leader_date},
-      verify_leader_time = #{verify_leader_time},
-      remark = #{remark}
-    where
-      id = #{id}
-  """)
-  fun updateVerifyLeader(map: Map<String, Any>)
-
-  @Select("""
-    select * from journal02 where verify_leader_id = 0 and p_dd_id != 0 and leader = #{leader}
-  """)
-  fun listVerifyByLeader(@Param("leader") leader: String): List<Map<String, Any>>
-
-  @Select("""
-    select * from journal02 where verify_leader_id = 0 and p_dd_id != 0
-  """)
-  fun listVerifyLeader(): List<Map<String, Any>>
-
-  @Update("""
-    update
-      journal02
-    set
-      p_dd = #{p_dd},
-      p_dd_id = #{p_dd_id},
-      p_dd_date = now(),
-      p_dd_time = now()
-    where
-      id = #{id}
-  """)
-  fun updateDD(map: Map<String, Any>)
-
-  @Select("""
-    select * from journal02 where p_dd_id = 0 and p_zbsz_id != 0 limit 1000
-  """)
-  fun listDD(): List<Map<String, Any>>
-
-  @Update("""
-    update
-      journal02
-    set
-      p_zbsz = #{p_zbsz},
-      p_zbsz_id = #{p_zbsz_id},
-      p_zbsz_date = now(),
-      p_zbsz_time = now()
-    where
-      id = #{id}
-  """)
-  fun updateZBSZ(map: Map<String, Any>)
-
-  @Select("""
-    select j.* from journal02 as j where p_zbsz_id = 0 and p_jsy_id != 0 limit 1000
-  """)
-  fun listZBSZ(): List<Map<String, Any>>
-
-  @Update("""
-    update journal02 set p_jsy_qc_sign = 1 where id = #{id}
-  """)
-  fun updateJsyQc(map: Map<String, Any>)
-
-  @Select("""
-    select
-      *
-    from
-      journal02
-    where
-      position('质检跟踪' in p_jsy_content) > 0
-      and p_jsy_qc = #{qc}
-      and p_jsy_qc_sign = 0
-      and p_jsy_id > 0
-  """)
-  fun listJsyQc(@Param("qc") qc: String): List<Map<String, Any>>
-
-  @Update("""
-    update journal02 set p_jsy_bz_sign = 1 where id = #{id}
-  """)
-  fun updateJsyBz(map: Map<String, Any>)
-
-  @Select("""
-    select
-      *
-    from
-      journal02
-    where
-      position('班组' in p_jsy_content) > 0
-      and p_jsy_bz = #{bz}
-      and p_jsy_bz_sign = 0
-      and p_jsy_id > 0
-  """)
-  fun listJsyBz(@Param("bz") bz: String): List<Map<String, Any>>
-
-  @Update("""
-    update
-      journal02
-    set
-      p_jsy_content = #{p_jsy_content},
-      p_jsy_bz = #{p_jsy_bz},
-      p_jsy_qc = #{p_jsy_qc}
-    where
-      id = #{id}
-  """)
-  fun updateJSYContent(map: Map<String, Any>)
-
-  @Update("""
-    update
-      journal02
-    set
-      p_jsy = #{p_jsy},
-      p_jsy_id = #{p_jsy_id},
-      p_jsy_date = now(),
-      p_jsy_time = now()
-    where
-      id = #{id}
-  """)
-  fun updateJSY(map: Map<String, Any>)
-
-  @Select("""
-    select j.* from journal02 as j where p_jsy_id = 0 limit 1000
-  """)
-  fun listJSY(): List<Map<String, Any>>
-
-  @Select("""
-    select j.* from journal02 as j order by id desc limit 1000
-  """)
-  fun list(): List<Map<String, Any>>
-
-  @Update("""
     update
       journal02_04
     set
@@ -406,6 +235,189 @@ interface Journal02Mapper {
     select * from journal02_01 where master_id = #{id}
   """)
   fun list01(@Param("id") id: Int): List<Map<String, Any>>
+
+  @Update("""
+    update journal02 set verify_leader_qc_sign = 1 where id = #{id}
+  """)
+  fun updateVerifyLeaderQc(map: Map<String, Any>)
+
+  // 只判断了质检跟踪的数据
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      verify_leader_id > 0
+      and position('班组' in p_jsy_content) = 1
+      and verify_leader_bz_sign = 1
+      and verify_leader_qc_sign = 0
+      and position('质检跟踪' in p_jsy_content) > 0
+      and p_jsy_qc = #{qc}
+  """)
+  fun listVerifyLeaderQc(@Param("qc") qc: String): List<Map<String, Any>>
+
+  @Update("""
+    update journal02 set verify_leader_bz_sign = 1 where id = #{id}
+  """)
+  fun updateVerifyLeaderBz(map: Map<String, Any>)
+
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      verify_leader_id > 0
+      and position('班组' in p_jsy_content) = 1
+      and verify_leader_bz_sign = 0
+      and p_jsy_bz = #{bz}
+  """)
+  fun listVerifyLeaderBz(@Param("bz") bz: String): List<Map<String, Any>>
+
+  @Update("""
+    update
+      journal02
+    set
+      verify_report = #{verify_report},
+      verify_leader = #{verify_leader},
+      verify_leader_id = #{verify_leader_id},
+      verify_leader_date = #{verify_leader_date},
+      verify_leader_time = #{verify_leader_time},
+      remark = #{remark}
+    where
+      id = #{id}
+  """)
+  fun updateVerifyLeader(map: Map<String, Any>)
+
+  @Select("""
+    select * from journal02 where verify_leader_id = 0 and p_dd_id != 0 and leader = #{leader}
+  """)
+  fun listVerifyByLeader(@Param("leader") leader: String): List<Map<String, Any>>
+
+  @Select("""
+    select * from journal02 where verify_leader_id = 0 and p_dd_id != 0
+  """)
+  fun listVerifyLeader(): List<Map<String, Any>>
+
+  @Update("""
+    update
+      journal02
+    set
+      p_dd = #{p_dd},
+      p_dd_id = #{p_dd_id},
+      p_dd_date = now(),
+      p_dd_time = now()
+    where
+      id = #{id}
+  """)
+  fun updateDD(map: Map<String, Any>)
+
+  @Select("""
+    select * from journal02 where p_dd_id = 0 and p_zbsz_id != 0 limit 1000
+  """)
+  fun listDD(): List<Map<String, Any>>
+
+  @Update("""
+    update
+      journal02
+    set
+      p_zbsz = #{p_zbsz},
+      p_zbsz_id = #{p_zbsz_id},
+      p_zbsz_date = now(),
+      p_zbsz_time = now()
+    where
+      id = #{id}
+  """)
+  fun updateZBSZ(map: Map<String, Any>)
+
+  @Select("""
+    select
+      j.*
+    from
+      journal02 as j
+    where
+      p_zbsz_id = 0
+      and p_jsy_content != ''
+      and (
+        (position('班组' in p_jsy_content) = 1 and p_jsy_bz_sign != null)
+        or (position('质检跟踪' in p_jsy_content) > 0 and p_jsy_qc_sign != null)
+      )
+    limit 1000
+  """)
+  fun listZBSZ(): List<Map<String, Any>>
+
+  @Update("""
+    update journal02 set p_jsy_qc_sign = 1 where id = #{id}
+  """)
+  fun updateJsyQc(map: Map<String, Any>)
+
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      position('质检跟踪' in p_jsy_content) > 0
+      and p_jsy_qc = #{qc}
+      and sign_p_jsy_bz is not null
+      and p_jsy_id > 0
+  """)
+  fun listJsyQc(@Param("qc") qc: String): List<Map<String, Any>>
+
+  @Update("""
+    update journal02 set sign_p_jsy_bz = #{sign} where id = #{id}
+  """)
+  fun updateJsyBz(map: Map<String, Any>)
+
+  @Select("""
+    select
+      *
+    from
+      journal02
+    where
+      position('班组' in p_jsy_content) > 0
+      and p_jsy_bz = #{bz}
+      and sign_p_jsy_bz is null
+      and p_jsy_id > 0
+  """)
+  fun listJsyBz(@Param("bz") bz: String): List<Map<String, Any>>
+
+  @Update("""
+    update
+      journal02
+    set
+      p_jsy_content = #{p_jsy_content},
+      p_jsy_bz = #{p_jsy_bz},
+      p_jsy_qc = #{p_jsy_qc}
+    where
+      id = #{id}
+  """)
+  fun updateJSYContent(map: Map<String, Any>)
+
+  @Update("""
+    update
+      journal02
+    set
+      p_jsy = #{p_jsy},
+      p_jsy_id = #{p_jsy_id},
+      p_jsy_date = now(),
+      p_jsy_time = now(),
+      sign_p_jsy = #{sign}
+    where
+      id = #{id}
+  """)
+  fun updateJSY(map: Map<String, Any>)
+
+  @Select("""
+    select j.* from journal02 as j where p_jsy_id = 0 or p_jsy_content = '' limit 1000
+  """)
+  fun listJSY(): List<Map<String, Any>>
+
+  @Select("""
+    select j.* from journal02 as j order by id desc limit 1000
+  """)
+  fun list(): List<Map<String, Any>>
 
   @Select("""
     select * from journal02 where id = #{id}

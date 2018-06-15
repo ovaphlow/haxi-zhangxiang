@@ -249,11 +249,12 @@ class Journal02Controller {
     return response
   }
 
-  @RequestMapping("/jsy/bz/{bzId}", method = arrayOf(RequestMethod.PUT))
-  fun updateJsyBz(@PathVariable("bzId") bzId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+  @RequestMapping("/{id}/jsy/bz", method = arrayOf(RequestMethod.PUT))
+  fun updateJsyBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    logger.info("{}", id)
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      map["id"] = bzId
+      map["id"] = id
       mapper.updateJsyBz(map)
       response["status"] = 200
     } catch (e: Exception) {
@@ -276,7 +277,7 @@ class Journal02Controller {
     return response
   }
 
-  @RequestMapping("/jsy/{id}/content", method = arrayOf(RequestMethod.PUT))
+  @RequestMapping("/{id}/jsy/content", method = arrayOf(RequestMethod.PUT))
   fun updateJSYContent(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "messsage" to "", "status" to 500)
     try {
@@ -290,7 +291,7 @@ class Journal02Controller {
     return response
   }
 
-  @RequestMapping("/jsy/{id}", method = arrayOf(RequestMethod.PUT))
+  @RequestMapping("/{id}/jsy", method = arrayOf(RequestMethod.PUT))
   fun updateJSY(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
