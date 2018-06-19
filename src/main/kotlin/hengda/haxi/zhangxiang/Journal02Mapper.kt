@@ -307,7 +307,8 @@ interface Journal02Mapper {
       p_dd = #{p_dd},
       p_dd_id = #{p_dd_id},
       p_dd_date = now(),
-      p_dd_time = now()
+      p_dd_time = now(),
+      sign_p_dd = #{sign}
     where
       id = #{id}
   """)
@@ -325,7 +326,8 @@ interface Journal02Mapper {
       p_zbsz = #{p_zbsz},
       p_zbsz_id = #{p_zbsz_id},
       p_zbsz_date = now(),
-      p_zbsz_time = now()
+      p_zbsz_time = now(),
+      sign_p_zbsz = #{sign}
     where
       id = #{id}
   """)

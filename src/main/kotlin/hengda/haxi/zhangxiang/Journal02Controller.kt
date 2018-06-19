@@ -168,7 +168,7 @@ class Journal02Controller {
     return response
   }
 
-  @RequestMapping("/dd/{id}", method = arrayOf(RequestMethod.PUT))
+  @RequestMapping("/{id}/dd", method = arrayOf(RequestMethod.PUT))
   fun updateDD(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
@@ -195,7 +195,7 @@ class Journal02Controller {
     return response
   }
 
-  @RequestMapping("/zbsz/{id}", method = arrayOf(RequestMethod.PUT))
+  @RequestMapping("/{id}/zbsz", method = arrayOf(RequestMethod.PUT))
   fun updateZBSZ(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
