@@ -39,6 +39,11 @@ interface Journal02Mapper {
   fun filter(map: Map<String, Any>): List<Map<String, Any>>
 
   @Update("""
+    update journal02 set sign_verify = #{sign} where id = #{id}
+  """)
+  fun updateVerifySign(map: Map<String, Any>)
+
+  @Update("""
     update
       journal02
     set
@@ -62,8 +67,8 @@ interface Journal02Mapper {
       and verify_leader_id != 0
       and (
         ( p_jsy_content = '同意' )
-        or ( position('质检跟踪' in p_jsy_content) > 0 and verify_leader_qc_sign = 1)
-        or ( position('班组跟踪' in p_jsy_content) > 0 and verify_leader_bz_sign = 1 )
+        or ( position('质检跟踪' in p_jsy_content) > 0 and sign_verify_leader_qc is not null)
+        or ( position('班组跟踪' in p_jsy_content) > 0 and sign_verify_leader_bz is not null)
       )
   """)
   fun listVerify(): List<Map<String, Any>>
@@ -237,7 +242,7 @@ interface Journal02Mapper {
   fun list01(@Param("id") id: Int): List<Map<String, Any>>
 
   @Update("""
-    update journal02 set verify_leader_qc_sign = 1 where id = #{id}
+    update journal02 set sign_verify_leader_qc = #{sign} where id = #{id}
   """)
   fun updateVerifyLeaderQc(map: Map<String, Any>)
 
@@ -250,15 +255,15 @@ interface Journal02Mapper {
     where
       verify_leader_id > 0
       and position('班组' in p_jsy_content) = 1
-      and verify_leader_bz_sign = 1
-      and verify_leader_qc_sign = 0
+      and sign_verify_leader_bz is not null
+      and sign_verify_leader_qc is null
       and position('质检跟踪' in p_jsy_content) > 0
       and p_jsy_qc = #{qc}
   """)
   fun listVerifyLeaderQc(@Param("qc") qc: String): List<Map<String, Any>>
 
   @Update("""
-    update journal02 set verify_leader_bz_sign = 1 where id = #{id}
+    update journal02 set sign_verify_leader_bz = #{sign} where id = #{id}
   """)
   fun updateVerifyLeaderBz(map: Map<String, Any>)
 
@@ -270,10 +275,15 @@ interface Journal02Mapper {
     where
       verify_leader_id > 0
       and position('班组' in p_jsy_content) = 1
-      and verify_leader_bz_sign = 0
+      and sign_verify_leader_bz is null
       and p_jsy_bz = #{bz}
   """)
   fun listVerifyLeaderBz(@Param("bz") bz: String): List<Map<String, Any>>
+
+  @Update("""
+    update journal02 set sign_verify_leader = #{sign} where id = #{id}
+  """)
+  fun updateVerifyLeaderSign(map: Map<String, Any>)
 
   @Update("""
     update

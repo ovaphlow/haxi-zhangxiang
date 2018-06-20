@@ -43,6 +43,20 @@ class Journal02Controller {
     return response
   }
 
+  @RequestMapping("/{id}/verify/sign", method = arrayOf(RequestMethod.PUT))
+  fun updateVerifySign(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      map["id"] = id
+      mapper.updateVerifySign(map)
+      r["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      r["message"] = "提交数据失败。"
+    }
+    return r
+  }
+
   @RequestMapping("/verify/{id}", method = arrayOf(RequestMethod.PUT))
   fun updateVerify(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
@@ -70,7 +84,7 @@ class Journal02Controller {
     return response
   }
 
-  @RequestMapping("/verify/leader/qc/{id}", method = arrayOf(RequestMethod.PUT))
+  @RequestMapping("/{id}/verify/leader/qc", method = arrayOf(RequestMethod.PUT))
   fun verifyLeaderQc(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
@@ -101,7 +115,7 @@ class Journal02Controller {
     return r
   }
   
-  @RequestMapping("/verify/leader/bz/{id}", method = arrayOf(RequestMethod.PUT))
+  @RequestMapping("/{id}/verify/leader/bz", method = arrayOf(RequestMethod.PUT))
   fun updateVerifyLeaderBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
@@ -126,6 +140,20 @@ class Journal02Controller {
       r["message"] = "检索数据失败。"
     }
     return r
+  }
+
+  @RequestMapping("/{id}/verify/leader/sign", method = arrayOf(RequestMethod.PUT))
+  fun updateVerifyLeaderSign(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    try {
+      map["id"] = id
+      mapper.updateVerifyLeaderSign(map)
+      response["status"] = 200
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      response["message"] = "提交数据失败。"
+    }
+    return response
   }
 
   @RequestMapping("/verify/leader/{id}", method = arrayOf(RequestMethod.PUT))
