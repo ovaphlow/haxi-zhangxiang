@@ -372,8 +372,8 @@ interface Journal02Mapper {
     where
       position('质检跟踪' in p_jsy_content) > 0
       and p_jsy_qc = #{qc}
-      and sign_p_jsy_bz is null
-      and p_jsy_id > 0
+      and sign_p_jsy_bz is not null
+      and sign_p_jsy_qc is null
   """)
   fun listJsyQc(@Param("qc") qc: String): List<Map<String, Any>>
 
