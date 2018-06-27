@@ -46,7 +46,6 @@ class Journal01Controller {
 
   @RequestMapping("/return/{id}", method = arrayOf(RequestMethod.PUT))
   fun returnSubmit(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-    logger.info("{}", map)
     var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
     try {
       map["id"] = id
