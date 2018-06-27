@@ -23,10 +23,7 @@ interface Journal01Mapper {
 
   @Select("""
     select
-      id, uuid,
-      date, time, quantity, applicant, applicant_id, dept,
-      borrow_date, borrow_time, borrow, borrow_id,
-      remark
+      *
     from
       journal01
     order by
@@ -41,7 +38,8 @@ interface Journal01Mapper {
       journal01
     set
       return_name = #{return_name},
-      return_id = #{return_id},
+      return_by = #{return_by},
+      return_by_id = #{return_by_id},
       return_date = now(),
       return_time = now(),
       remark = #{remark}
@@ -60,7 +58,7 @@ interface Journal01Mapper {
       journal01
     where
       borrow_id != 0
-      and return_id = 0
+      and return_by_id = 0
     order by
       id desc
     limit
@@ -85,6 +83,7 @@ interface Journal01Mapper {
       journal01 as j
     where
       applicant_id = #{id}
+      and borrow_id = 0
   """)
   fun listByApplicant(@Param("id") id: Int): List<Map<String, Any>>
 
@@ -103,11 +102,7 @@ interface Journal01Mapper {
 
   @Select("""
     select
-      id, uuid,
-      date, time, quantity, applicant, applicant_id, dept,
-      borrow_date, borrow_time, borrow, borrow_id,
-      `return`, return_id, return_by, return_by_id, return_date, return_time,
-      remark
+      *
     from
       journal01
     where
