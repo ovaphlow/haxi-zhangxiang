@@ -44,6 +44,20 @@ class Journal01Controller {
     return response
   }
 
+  @RequestMapping("/return/{id}", method = arrayOf(RequestMethod.PUT))
+  fun returnSubmit(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    logger.info("{}", map)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+    try {
+      map["id"] = id
+      mapper.returnSubmit(map)
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      r["message"] = "服务器错误。"
+    }
+    return r
+  }
+
   @RequestMapping("/return", method = arrayOf(RequestMethod.GET))
   fun listReturn(): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)

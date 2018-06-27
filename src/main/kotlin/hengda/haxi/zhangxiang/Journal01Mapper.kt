@@ -36,6 +36,20 @@ interface Journal01Mapper {
   """)
   fun list(): List<Map<String, Any>>
 
+  @Update("""
+    update
+      journal01
+    set
+      return_name = #{return_name},
+      return_id = #{return_id},
+      return_date = now(),
+      return_time = now(),
+      remark = #{remark}
+    where
+      id = #{id}
+  """)
+  fun returnSubmit(map: Map<String, Any>)
+
   @Select("""
     select
       id, uuid,
