@@ -33,15 +33,15 @@ class Journal01Controller {
 
   @RequestMapping("/", method = arrayOf(RequestMethod.GET))
   fun list(): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      response["content"] = mapper.list()
-      response["status"] = 200
+      r["content"] = mapper.list()
+      r["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
-      response["message"] = "检索数据失败。"
+      r["message"] = "检索数据失败。"
     }
-    return response
+    return r
   }
 
   @RequestMapping("/return/{id}", method = arrayOf(RequestMethod.PUT))
@@ -72,79 +72,79 @@ class Journal01Controller {
 
   @RequestMapping("/return", method = arrayOf(RequestMethod.GET))
   fun listReturn(): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      response["content"] = mapper.listReturn()
-      response["status"] = 200
+      r["content"] = mapper.listReturn()
+      r["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
-      response["message"] = "检索数据失败。"
+      r["message"] = "检索数据失败。"
     }
-    return response
+    return r
   }
 
   @RequestMapping("/admin", method = arrayOf(RequestMethod.GET))
   fun listByAdmin(): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      response["content"] = mapper.listByAdmin()
-      response["status"] = 200
+      r["content"] = mapper.listByAdmin()
+      r["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
-      response["message"] = "检索数据失败。"
+      r["message"] = "检索数据失败。"
     }
-    return response
+    return r
   }
 
   @RequestMapping("/applicant/{id}", method = arrayOf(RequestMethod.GET))
   fun listByApplicant(@PathVariable("id") id: Int): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      response["content"] = mapper.listByApplicant(id)
-      response["status"] = 200
+      r["content"] = mapper.listByApplicant(id)
+      r["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
-      response["message"] = "检索数据失败。"
+      r["message"] = "检索数据失败。"
     }
-    return response
+    return r
   }
 
   @RequestMapping("/{id}/borrow", method = arrayOf(RequestMethod.PUT))
   fun borrow(@PathVariable("id") id: Int, @RequestBody map: Map<String, Any>): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
       mapper.borrow(map["borrow"].toString(), map["borrowId"].toString().toInt(), id)
-      response["status"] = 200
+      r["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
-      response["message"] = "提交数据失败。"
+      r["message"] = "提交数据失败。"
     }
-    return response
+    return r
   }
 
   @RequestMapping("/{id}", method = arrayOf(RequestMethod.GET))
   fun info(@PathVariable("id") id: Int): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
-      response["content"] = mapper.info(id)
-      response["status"] = 200
+      r["content"] = mapper.info(id)
+      r["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
-      response["message"] = "检索数据失败。"
+      r["message"] = "检索数据失败。"
     }
-    return response
+    return r
   }
 
   @RequestMapping("/", method = arrayOf(RequestMethod.POST))
   fun save(@RequestBody map: Map<String, Any>): Map<String, Any> {
-    var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
     try {
       mapper.save(map)
-      response["status"] = 200
+      r["status"] = 200
     } catch (e: Exception) {
       logger.error("{}", e)
-      response["message"] = "提交数据失败。"
+      r["message"] = "提交数据失败。"
     }
-    return response
+    return r
   }
 }

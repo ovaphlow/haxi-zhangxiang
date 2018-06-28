@@ -1,6 +1,7 @@
 .idea/
 .gradle/
 build/
+*.iml
 
 # Compiled class file
 *.class
