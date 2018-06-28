@@ -48,6 +48,12 @@ interface Journal01Mapper {
   """)
   fun returnSubmit(map: Map<String, Any>)
 
+  // 普通用户未返还列表
+  @Select("""
+    select * from journal01 where applicant_id = #{id} and return_by_id != 0
+  """)
+  fun listUserReturn(@Param("id") id: Int): List<Map<String, Any>>
+
   @Select("""
     select
       id, uuid,

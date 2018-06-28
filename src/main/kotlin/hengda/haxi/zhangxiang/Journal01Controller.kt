@@ -57,6 +57,19 @@ class Journal01Controller {
     return r
   }
 
+  // 普通用户未返还列表
+  @RequestMapping("/return/user/{id}", method = arrayOf(RequestMethod.GET))
+  fun listUserReturn(@PathVariable("id") id: Int): Map<String, Any> {
+    var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+    try {
+      r["content"] = mapper.listUserReturn(id)
+    } catch (e: Exception) {
+      logger.error("{}", e)
+      r["message"] = "服务器错误。"
+    }
+    return r
+  }
+
   @RequestMapping("/return", method = arrayOf(RequestMethod.GET))
   fun listReturn(): Map<String, Any> {
     var response: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
