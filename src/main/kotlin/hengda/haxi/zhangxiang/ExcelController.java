@@ -1,9 +1,7 @@
 package hengda.haxi.zhangxiang;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +77,24 @@ public class ExcelController {
             }
 
             sheet.getRow(67).getCell(26).setCellValue(map.get("p_yq_qt").toString());
+            sheet.getRow(77).getCell(15).setCellValue(map.get("p_dd").toString());
+            sheet.getRow(77).getCell(48).setCellValue(map.get("p_jsy").toString());
+            sheet.getRow(77).getCell(75).setCellValue(map.get("p_zbsz").toString());
+            sheet.getRow(92).getCell(15).setCellValue(map.get("verify_report").toString());
+            sheet.getRow(104).getCell(15).setCellValue(map.get("verify_leader_date").toString() + " " + map.get("verify_leader_time").toString());
+            sheet.getRow(104).getCell(75).setCellValue(map.get("verify_leader").toString());
+            sheet.getRow(110).getCell(15).setCellValue(map.get("verify_date").toString() + " " + map.get("verify_time").toString());
+            sheet.getRow(110).getCell(75).setCellValue(map.get("verify").toString());
+
+            String v = "技术员：" + map.get("p_jsy_content").toString() +
+                    "   班组：" +
+                    map.get("p_jsy_bz").toString() +
+                    "   质检：" +
+                    map.get("p_jsy_qc").toString();
+            if (map.get("remark") != null) {
+                v += map.get("remark").toString();
+            }
+            sheet.getRow(116).getCell(15).setCellValue(v);
 
             out = new FileOutputStream("c:/Users/ovaphlow/Desktop/out.xlsx");
             wb.write(out);
