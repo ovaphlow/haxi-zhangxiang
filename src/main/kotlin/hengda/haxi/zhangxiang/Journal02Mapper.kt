@@ -432,7 +432,16 @@ interface Journal02Mapper {
   fun list(): List<Map<String, Any>>
 
   @Select("""
-    select * from journal02 where id = #{id}
+    select
+      *,
+      date_format(date_begin, '%Y年%m月%d日') as date_begin_alt,
+      date_format(time_begin, '%k时%i分') as time_begin_alt,
+      date_format(date_end, '%Y年%m月%d日') as date_end_alt,
+      date_format(time_end, '%k时%i分') as time_end_alt
+    from
+      journal02
+    where
+      id = #{id}
   """)
   fun get(@Param("id") id: Int): Map<String, Any>
 
