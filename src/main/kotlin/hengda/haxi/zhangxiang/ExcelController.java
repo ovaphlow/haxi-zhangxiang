@@ -21,7 +21,9 @@ public class ExcelController {
 
     private final Journal02Mapper mapper02;
 
-    private final String templatePath = "./template.xlsx";
+    private final String staticPath = "../webapp/public/";
+    private final String targetDir = "download/";
+    private final String templateJournal02Path = "./excel/template-journal02.xlsx";
 
     @Autowired
     public ExcelController(Journal02Mapper mapper02) {
@@ -35,7 +37,7 @@ public class ExcelController {
         try {
             Map<String, Object> map = mapper02.get(id);
 
-            File buffer = new File("c:/Users/ovaphlow/Desktop/template.xlsx");
+            File buffer = new File(templateJournal02Path);
             InputStream fis = new FileInputStream(buffer);
             Workbook wb = new XSSFWorkbook(fis);
             Sheet sheet = wb.getSheetAt(0);
@@ -194,10 +196,10 @@ public class ExcelController {
             }
             sheet.getRow(116).getCell(15).setCellValue(v);
 
-            out = new FileOutputStream("c:/Users/ovaphlow/Desktop/out.xlsx");
+            out = new FileOutputStream(staticPath + targetDir + map.get("uuid").toString() + ".xlsx");
             wb.write(out);
 
-            r.put("content", "");
+            r.put("content", targetDir + map.get("uuid").toString() + ".xlsx");
             r.put("message", "");
         } catch (Exception e) {
             e.printStackTrace();
