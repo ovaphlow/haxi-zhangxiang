@@ -49,6 +49,7 @@ configurations {
 }
 
 dependencies {
+	compile('com.google.guava:guava:25.1-jre')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-undertow')
 	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
@@ -59,4 +60,5 @@ dependencies {
 	compile('com.zaxxer:HikariCP:2.7.8')
 	// runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('mysql:mysql-connector-java')
+	compile('org.apache.poi:poi-ooxml:3.17')
 }
