@@ -1,12 +1,12 @@
 package hengda.haxi.zhangxiang;
 
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
 import java.io.*;
 import java.util.HashMap;
@@ -21,6 +21,8 @@ public class ExcelController {
 
     private final Journal02Mapper mapper02;
 
+    private final String templatePath = "./template.xlsx";
+
     @Autowired
     public ExcelController(Journal02Mapper mapper02) {
         this.mapper02 = mapper02;
@@ -32,6 +34,7 @@ public class ExcelController {
         OutputStream out = null;
         try {
             Map<String, Object> map = mapper02.get(id);
+
             File buffer = new File("c:/Users/ovaphlow/Desktop/template.xlsx");
             InputStream fis = new FileInputStream(buffer);
             Workbook wb = new XSSFWorkbook(fis);
@@ -77,14 +80,109 @@ public class ExcelController {
             }
 
             sheet.getRow(67).getCell(26).setCellValue(map.get("p_yq_qt").toString());
-            sheet.getRow(77).getCell(15).setCellValue(map.get("p_dd").toString());
-            sheet.getRow(77).getCell(48).setCellValue(map.get("p_jsy").toString());
-            sheet.getRow(77).getCell(75).setCellValue(map.get("p_zbsz").toString());
+
+            BASE64Decoder dec = new BASE64Decoder();
+            byte[] imgData;
+
+//            调度签字
+            if (map.get("sign_p_dd") != null) {
+//            sheet.getRow(77).getCell(15).setCellValue(map.get("p_dd").toString());
+                imgData = dec.decodeBuffer(map.get("sign_p_dd").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxDD = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperDD = wb.getCreationHelper();
+                Drawing drawingDD = sheet.createDrawingPatriarch();
+                ClientAnchor anchorDD = helperDD.createClientAnchor();
+                anchorDD.setCol1(15);
+                anchorDD.setRow1(77);
+                Picture pictDD = drawingDD.createPicture(anchorDD, picIdxDD);
+                pictDD.resize();
+            }
+
+//            技术员签字
+            if (map.get("sign_p_jsy") != null) {
+//            sheet.getRow(77).getCell(48).setCellValue(map.get("p_jsy").toString());
+                imgData = dec.decodeBuffer(map.get("sign_p_jsy").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxJSY = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperJSY = wb.getCreationHelper();
+                Drawing drawingJSY = sheet.createDrawingPatriarch();
+                ClientAnchor anchorJSY = helperJSY.createClientAnchor();
+                anchorJSY.setCol1(48);
+                anchorJSY.setRow1(77);
+                Picture pictJSY = drawingJSY.createPicture(anchorJSY, picIdxJSY);
+                pictJSY.resize();
+            }
+
+//            值班所长签字
+            if (map.get("sign_p_zbsz") != null) {
+//            sheet.getRow(77).getCell(75).setCellValue(map.get("p_zbsz").toString());
+                imgData = dec.decodeBuffer(map.get("sign_p_zbsz").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxZBSZ = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperZBSZ = wb.getCreationHelper();
+                Drawing drawingZBSZ = sheet.createDrawingPatriarch();
+                ClientAnchor anchorZBSZ = helperZBSZ.createClientAnchor();
+                anchorZBSZ.setCol1(75);
+                anchorZBSZ.setRow1(77);
+                Picture pictZBSZ = drawingZBSZ.createPicture(anchorZBSZ, picIdxZBSZ);
+                pictZBSZ.resize();
+            }
+
             sheet.getRow(92).getCell(15).setCellValue(map.get("verify_report").toString());
             sheet.getRow(104).getCell(15).setCellValue(map.get("verify_leader_date").toString() + " " + map.get("verify_leader_time").toString());
-            sheet.getRow(104).getCell(75).setCellValue(map.get("verify_leader").toString());
+
+//            作业负责人签字
+            if (map.get("sign_verify_leader") != null) {
+//                sheet.getRow(104).getCell(75).setCellValue(map.get("verify_leader").toString());
+                imgData = dec.decodeBuffer(map.get("sign_verify_leader").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxVerifyLeader = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperVerifyLeader = wb.getCreationHelper();
+                Drawing drawingVerifyLeader = sheet.createDrawingPatriarch();
+                ClientAnchor anchorVerifyLeader = helperVerifyLeader.createClientAnchor();
+                anchorVerifyLeader.setCol1(75);
+                anchorVerifyLeader.setRow1(104);
+                Picture pictVerifyLeader = drawingVerifyLeader.createPicture(anchorVerifyLeader, picIdxVerifyLeader);
+                pictVerifyLeader.resize();
+            }
+
             sheet.getRow(110).getCell(15).setCellValue(map.get("verify_date").toString() + " " + map.get("verify_time").toString());
-            sheet.getRow(110).getCell(75).setCellValue(map.get("verify").toString());
+
+//            调度员签字
+            if (map.get("sign_verify") != null) {
+                sheet.getRow(110).getCell(75).setCellValue(map.get("verify").toString());
+                imgData = dec.decodeBuffer(map.get("sign_verify").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxVerify = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperVerify = wb.getCreationHelper();
+                Drawing drawingVerify = sheet.createDrawingPatriarch();
+                ClientAnchor anchorVerify = helperVerify.createClientAnchor();
+                anchorVerify.setCol1(75);
+                anchorVerify.setRow1(104);
+                Picture pictVerify = drawingVerify.createPicture(anchorVerify, picIdxVerify);
+                pictVerify.resize();
+            }
 
             String v = "技术员：" + map.get("p_jsy_content").toString() +
                     "   班组：" +
