@@ -144,7 +144,9 @@ public class ExcelController {
             }
 
             sheet.getRow(92).getCell(15).setCellValue(map.get("verify_report").toString());
-            sheet.getRow(104).getCell(15).setCellValue(map.get("verify_leader_date").toString() + " " + map.get("verify_leader_time").toString());
+            if (map.get("verify_leader_date") != null) {
+                sheet.getRow(104).getCell(15).setCellValue(map.get("verify_leader_date").toString() + " " + map.get("verify_leader_time").toString());
+            }
 
 //            作业负责人签字
             if (map.get("sign_verify_leader") != null) {
@@ -165,7 +167,9 @@ public class ExcelController {
                 pictVerifyLeader.resize();
             }
 
-            sheet.getRow(110).getCell(15).setCellValue(map.get("verify_date").toString() + " " + map.get("verify_time").toString());
+            if (map.get("verify_date") != null) {
+                sheet.getRow(110).getCell(15).setCellValue(map.get("verify_date").toString() + " " + map.get("verify_time").toString());
+            }
 
 //            调度员签字
             if (map.get("sign_verify") != null) {
