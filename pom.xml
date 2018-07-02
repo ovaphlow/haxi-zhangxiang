@@ -102,7 +102,12 @@
     <build>
         <!-- <finalName>zhangxiang</finalName> -->
 
-        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <sourceDirectory>
+            ${project.basedir}/src/main/kotlin
+        </sourceDirectory>
+        <!-- <sourceDirectory> -->
+            <!-- ${project.basedir}/src/main/java -->
+        <!-- </sourceDirectory> -->
 
         <plugins>
             <plugin>
