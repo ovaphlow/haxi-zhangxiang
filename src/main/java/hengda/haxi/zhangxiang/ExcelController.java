@@ -137,7 +137,7 @@ public class ExcelController {
                 CreationHelper helperZBSZ = wb.getCreationHelper();
                 Drawing drawingZBSZ = sheet.createDrawingPatriarch();
                 ClientAnchor anchorZBSZ = helperZBSZ.createClientAnchor();
-                anchorZBSZ.setCol1(75);
+                anchorZBSZ.setCol1(86);
                 anchorZBSZ.setRow1(77);
                 Picture pictZBSZ = drawingZBSZ.createPicture(anchorZBSZ, picIdxZBSZ);
                 pictZBSZ.resize();
@@ -185,7 +185,7 @@ public class ExcelController {
                 Drawing drawingVerify = sheet.createDrawingPatriarch();
                 ClientAnchor anchorVerify = helperVerify.createClientAnchor();
                 anchorVerify.setCol1(75);
-                anchorVerify.setRow1(104);
+                anchorVerify.setRow1(110);
                 Picture pictVerify = drawingVerify.createPicture(anchorVerify, picIdxVerify);
                 pictVerify.resize();
             }
