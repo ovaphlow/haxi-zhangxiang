@@ -1,0 +1,11 @@
+{
+  "name": "haxi.journal",
+  "script": "java",
+  "args": [
+    "-jar",
+    "./build/libs/zhangxiang-1.0.0.jar"
+  ],
+  "exec_interpreter": "",
+  "exec_mode": "fork",
+  "watch": "build/libs/zhangxiang-1.0.0.jar"
+}
