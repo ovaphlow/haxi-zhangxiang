@@ -137,7 +137,7 @@ public class ExcelController {
                 CreationHelper helperZBSZ = wb.getCreationHelper();
                 Drawing drawingZBSZ = sheet.createDrawingPatriarch();
                 ClientAnchor anchorZBSZ = helperZBSZ.createClientAnchor();
-                anchorZBSZ.setCol1(86);
+                anchorZBSZ.setCol1(80);
                 anchorZBSZ.setRow1(77);
                 Picture pictZBSZ = drawingZBSZ.createPicture(anchorZBSZ, picIdxZBSZ);
                 pictZBSZ.resize();
@@ -161,7 +161,7 @@ public class ExcelController {
                 CreationHelper helperVerifyLeader = wb.getCreationHelper();
                 Drawing drawingVerifyLeader = sheet.createDrawingPatriarch();
                 ClientAnchor anchorVerifyLeader = helperVerifyLeader.createClientAnchor();
-                anchorVerifyLeader.setCol1(75);
+                anchorVerifyLeader.setCol1(65);
                 anchorVerifyLeader.setRow1(104);
                 Picture pictVerifyLeader = drawingVerifyLeader.createPicture(anchorVerifyLeader, picIdxVerifyLeader);
                 pictVerifyLeader.resize();
@@ -184,8 +184,59 @@ public class ExcelController {
                 CreationHelper helperVerify = wb.getCreationHelper();
                 Drawing drawingVerify = sheet.createDrawingPatriarch();
                 ClientAnchor anchorVerify = helperVerify.createClientAnchor();
-                anchorVerify.setCol1(75);
+                anchorVerify.setCol1(65);
                 anchorVerify.setRow1(110);
+                Picture pictVerify = drawingVerify.createPicture(anchorVerify, picIdxVerify);
+                pictVerify.resize();
+            }
+
+            // 班组签字
+            if (map.get("sign_verify_leader_bz") != null) {
+                imgData = dec.decodeBuffer(map.get("sign_verify_leader_bz").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxVerify = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperVerify = wb.getCreationHelper();
+                Drawing drawingVerify = sheet.createDrawingPatriarch();
+                ClientAnchor anchorVerify = helperVerify.createClientAnchor();
+                anchorVerify.setCol1(15);
+                anchorVerify.setRow1(116);
+                Picture pictVerify = drawingVerify.createPicture(anchorVerify, picIdxVerify);
+                pictVerify.resize();
+            } else if (map.get("sign_p_jsy_bz") != null) {
+                imgData = dec.decodeBuffer(map.get("sign_p_jsy_bz").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxVerify = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperVerify = wb.getCreationHelper();
+                Drawing drawingVerify = sheet.createDrawingPatriarch();
+                ClientAnchor anchorVerify = helperVerify.createClientAnchor();
+                anchorVerify.setCol1(15);
+                anchorVerify.setRow1(116);
+                Picture pictVerify = drawingVerify.createPicture(anchorVerify, picIdxVerify);
+                pictVerify.resize();
+            }
+
+            // 质检签字
+            if (map.get("sign_verify_leader_qc") != null) {
+                imgData = dec.decodeBuffer(map.get("sign_verify_leader_qc").toString().substring(22));
+                for (int i = 0; i < imgData.length; ++i) {
+                    if (imgData[i] < 0) {
+                        imgData[i] += 256;
+                    }
+                }
+                int picIdxVerify = wb.addPicture(imgData, Workbook.PICTURE_TYPE_PNG);
+                CreationHelper helperVerify = wb.getCreationHelper();
+                Drawing drawingVerify = sheet.createDrawingPatriarch();
+                ClientAnchor anchorVerify = helperVerify.createClientAnchor();
+                anchorVerify.setCol1(80);
+                anchorVerify.setRow1(116);
                 Picture pictVerify = drawingVerify.createPicture(anchorVerify, picIdxVerify);
                 pictVerify.resize();
             }

@@ -246,7 +246,6 @@ interface Journal02Mapper {
     """)
     fun updateVerifyLeaderQc(map: Map<String, Any>)
 
-    // 只判断了质检跟踪的数据
     @Select("""
         select
             *
@@ -257,7 +256,6 @@ interface Journal02Mapper {
             and position('班组' in p_jsy_content) = 1
             and sign_verify_leader_bz is not null
             and sign_verify_leader_qc is null
-            and position('质检跟踪' in p_jsy_content) > 0
             and p_jsy_qc = #{qc}
     """)
     fun listVerifyLeaderQc(@Param("qc") qc: String): List<Map<String, Any>>
@@ -350,9 +348,11 @@ interface Journal02Mapper {
             journal02 as j
         where
             p_zbsz_id = 0
+            and sign_p_jsy is not null
             and p_jsy_content != ''
             and (
-                (position('班组跟踪' in p_jsy_content) = 1 and sign_p_jsy_bz is not null)
+                (p_jsy_content = '同意')
+                or (position('班组跟踪' in p_jsy_content) = 1 and sign_p_jsy_bz is not null)
                 or (position('质检跟踪' in p_jsy_content) > 0 and sign_p_jsy_qc is not null)
             )
         limit 1000
