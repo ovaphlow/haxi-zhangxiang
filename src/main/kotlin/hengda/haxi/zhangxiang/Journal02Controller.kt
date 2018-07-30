@@ -3,6 +3,7 @@ package hengda.haxi.zhangxiang
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,9 +17,12 @@ class Journal02Controller {
     val logger: Logger = LoggerFactory.getLogger(Journal02Controller::class.java)
 
     @Autowired
+    private val jdbc: JdbcTemplate? = null
+
+    @Autowired
     lateinit var mapper: Journal02Mapper
 
-    @RequestMapping("/stats", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/stats", method = [RequestMethod.GET])
     fun stats(): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -30,7 +34,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/filter/", method = arrayOf(RequestMethod.POST))
+    @RequestMapping("/filter/", method = [RequestMethod.POST])
     fun filter(@RequestBody map: Map<String, Any>): MutableMap<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -43,7 +47,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/verify/sign", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/verify/sign", method = [RequestMethod.PUT])
     fun updateVerifySign(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -57,7 +61,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/{id}", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/verify/{id}", method = [RequestMethod.PUT])
     fun updateVerify(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -71,7 +75,10 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/", method = arrayOf(RequestMethod.GET))
+    /**
+     * 调度销记列表
+     */
+    @RequestMapping("/verify/", method = [RequestMethod.GET])
     fun listVerify(): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -84,7 +91,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/verify/leader/qc", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/verify/leader/qc", method = [RequestMethod.PUT])
     fun verifyLeaderQc(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -98,7 +105,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/leader/qc/{qc}", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/verify/leader/qc/{qc}", method = [RequestMethod.GET])
     fun listVerifyLeaderQc(@PathVariable("qc") qc: String): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf(
                 "content" to "",
@@ -115,7 +122,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/verify/leader/bz", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/verify/leader/bz", method = [RequestMethod.PUT])
     fun updateVerifyLeaderBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -129,7 +136,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/leader/bz/{bz}", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/verify/leader/bz/{bz}", method = [RequestMethod.GET])
     fun listVerifyLeaderBz(@PathVariable("bz") bz: String): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -142,7 +149,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/verify/leader/sign", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/verify/leader/sign", method = [RequestMethod.PUT])
     fun updateVerifyLeaderSign(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -156,7 +163,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/leader/{id}", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/verify/leader/{id}", method = [RequestMethod.PUT])
     fun updateVerifyLeader(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -170,7 +177,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/leader/{leader}", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/verify/leader/{leader}", method = [RequestMethod.GET])
     fun listVerifyByLeader(@PathVariable("leader") leader: String): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -183,7 +190,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/leader/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/verify/leader/", method = [RequestMethod.GET])
     fun listVerifyLeader(): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -196,7 +203,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/dd", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/dd", method = [RequestMethod.PUT])
     fun updateDD(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -210,7 +217,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/dd/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/dd/", method = [RequestMethod.GET])
     fun listDD(): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -223,7 +230,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/zbsz", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/zbsz", method = [RequestMethod.PUT])
     fun updateZBSZ(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -237,7 +244,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/zbsz/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/zbsz/", method = [RequestMethod.GET])
     fun listZBSZ(): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -250,7 +257,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/jsy/qc", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/jsy/qc", method = [RequestMethod.PUT])
     fun updateJsyQc(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -264,7 +271,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/jsy/qc/{qc}", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/jsy/qc/{qc}", method = [RequestMethod.GET])
     fun listJsyQc(@PathVariable("qc") qc: String): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -277,7 +284,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/jsy/bz", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/jsy/bz", method = [RequestMethod.PUT])
     fun updateJsyBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         logger.info("{}", id)
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
@@ -292,7 +299,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/jsy/bz/{bz}", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/jsy/bz/{bz}", method = [RequestMethod.GET])
     fun listJsyBz(@PathVariable("bz") bz: String): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -305,7 +312,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/jsy/content", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/jsy/content", method = [RequestMethod.PUT])
     fun updateJSYContent(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "messsage" to "", "status" to 500)
         try {
@@ -319,7 +326,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/jsy", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{id}/jsy", method = [RequestMethod.PUT])
     fun updateJSY(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -333,7 +340,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/jsy/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/jsy/", method = [RequestMethod.GET])
     fun listJSY(): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -346,7 +353,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/", method = [RequestMethod.GET])
     fun list(): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -359,7 +366,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/{id}", method = [RequestMethod.GET])
     fun get(@PathVariable("id") id: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -372,7 +379,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/04/", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{masterId}/04/", method = [RequestMethod.PUT])
     fun update04(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -386,7 +393,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/04/{id}", method = arrayOf(RequestMethod.DELETE))
+    @RequestMapping("/{masterId}/04/{id}", method = [RequestMethod.DELETE])
     fun remove04(@PathVariable("masterId") masterId: Int, @PathVariable("id") id: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -399,7 +406,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/04/", method = arrayOf(RequestMethod.POST))
+    @RequestMapping("/{masterId}/04/", method = [RequestMethod.POST])
     fun save04(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -414,7 +421,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/04/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/{masterId}/04/", method = [RequestMethod.GET])
     fun list04(@PathVariable("masterId") masterId: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -427,7 +434,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/03/{id}", method = arrayOf(RequestMethod.DELETE))
+    @RequestMapping("/{masterId}/03/{id}", method = [RequestMethod.DELETE])
     fun remove03(@PathVariable("masterId") masterId: Int, @PathVariable("id") id: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -440,7 +447,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/03/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/{masterId}/03/", method = [RequestMethod.GET])
     fun list03(@PathVariable("masterId") masterId: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -453,7 +460,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/03/", method = arrayOf(RequestMethod.POST))
+    @RequestMapping("/{masterId}/03/", method = [RequestMethod.POST])
     fun save03(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -468,7 +475,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/02/{id}", method = arrayOf(RequestMethod.DELETE))
+    @RequestMapping("/{masterId}/02/{id}", method = [RequestMethod.DELETE])
     fun remove02(@PathVariable("masterId") masterId: Int, @PathVariable("id") id: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -481,7 +488,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/02/", method = arrayOf(RequestMethod.POST))
+    @RequestMapping("/{masterId}/02/", method = [RequestMethod.POST])
     fun save02(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var res: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -496,7 +503,7 @@ class Journal02Controller {
         return res
     }
 
-    @RequestMapping("/{masterId}/02/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/{masterId}/02/", method = [RequestMethod.GET])
     fun list02(@PathVariable("masterId") masterId: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -509,7 +516,43 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/01/", method = arrayOf(RequestMethod.PUT))
+    @RequestMapping("/{masterId}/01/{id}/qc", method = [RequestMethod.PUT])
+    fun update01Qc(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_01 set qc = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["qc"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    @RequestMapping("/{masterId}/01/{id}/p_bz", method = [RequestMethod.PUT])
+    fun update01Pbz(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_01 set watcher = ?, watcher_group = ? where id = ? and masterId = ? limit 1
+            """.trimIndent(), body["watcher"], body["watcher_group"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    @RequestMapping("/{masterId}/01/", method = [RequestMethod.PUT])
     fun update01(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -523,7 +566,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{masterId}/01/{id}", method = arrayOf(RequestMethod.DELETE))
+    @RequestMapping("/{masterId}/01/{id}", method = [RequestMethod.DELETE])
     fun remove01(@PathVariable("masterId") masterId: Int, @PathVariable("id") id: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -536,7 +579,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/01/", method = arrayOf(RequestMethod.POST))
+    @RequestMapping("/{id}/01/", method = [RequestMethod.POST])
     fun save01(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -551,7 +594,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/{id}/01/", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/{id}/01/", method = [RequestMethod.GET])
     fun list01(@PathVariable("id") id: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
@@ -564,7 +607,7 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/", method = arrayOf(RequestMethod.POST))
+    @RequestMapping("/", method = [RequestMethod.POST])
     fun save(@RequestBody map: Map<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
