@@ -379,6 +379,49 @@ class Journal02Controller {
         return r
     }
 
+    /**
+     * 子帐单04：质检确认
+     */
+    @RequestMapping("/{masterId}/04/{id}/qc", method = [RequestMethod.PUT])
+    fun update04Qc(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id:Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_04 set qc = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["qc"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /**
+     * 子帐单04：班组确认
+     */
+    @RequestMapping("/{masterId}/04/{id}/p_bz", method = [RequestMethod.PUT])
+    fun update04Pbz(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        logger.info("{}", body)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_04 set watcher = ?, watcher_group = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["watcher"], body["watcher_group"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     @RequestMapping("/{masterId}/04/", method = [RequestMethod.PUT])
     fun update04(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
@@ -434,6 +477,52 @@ class Journal02Controller {
         return r
     }
 
+    /**
+     * 子帐单03：质检确认
+     * 值班干部是什么？
+     */
+    @RequestMapping("/{masterId}/03/{id}/qc", method = [RequestMethod.PUT])
+    fun update03Qc(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_03 set p_bjgnsy = ?, qc = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["p_bjgnsy"], body["qc"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /**
+     * 子帐单03：班组确认
+     * ???????????????????????????????????
+     */
+    @RequestMapping("/{masterId}/03/{id}/p_bz", method = [RequestMethod.PUT])
+    fun update03Pbz(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            /*
+            jdbc!!.update("""
+                update journal02_03 set where id = ? and masterId = ? limit 1
+            """.trimIndent(), body["watcher"], body["watcher_group"], id, masterId)
+            */
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     @RequestMapping("/{masterId}/03/{id}", method = [RequestMethod.DELETE])
     fun remove03(@PathVariable("masterId") masterId: Int, @PathVariable("id") id: Int): Map<String, Any> {
         var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
@@ -473,6 +562,51 @@ class Journal02Controller {
             r["message"] = "提交数据失败。"
         }
         return r
+    }
+
+    /**
+     * 子帐单02：质检确认
+     */
+    @RequestMapping("/{masterId}/02/{id}/qc", method = [RequestMethod.PUT])
+    fun update02Qc(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_02 set p_bjgnsy = ?, qc = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["p_bjgnsy"], body["qc"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["messsage"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /**
+     * 子帐单02：班组确认
+     * ？？？？？？？？？？？？？？？
+     */
+    @RequestMapping("/{masterId}/02/{id}/p_bz", method = [RequestMethod.PUT])
+    fun update02Pbz(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf( "content" to "", "message" to "" )
+        try {
+            /*
+            jdbc!!.update("""
+                update journal02_02 set watcher = ?, watcher_group = ? where id = ? and masterId = ? limit 1
+            """.trimIndent(), body["watcher"], body["watcher_group"], id, masterId)
+            */
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
     }
 
     @RequestMapping("/{masterId}/02/{id}", method = [RequestMethod.DELETE])

@@ -112,9 +112,6 @@ interface Journal02Mapper {
             time_end = #{time_end},
             dept = #{dept},
             operator = #{operator},
-            watcher = #{watcher},
-            watcher_group = #{watcher_group},
-            qc = #{qc},
             remark = #{remark}
       """)
     fun save04(map: Map<String, Any>)
@@ -148,10 +145,7 @@ interface Journal02Mapper {
             component_sn_new = #{component_sn_new},
             p_bjaz = #{p_bjaz},
             operator = #{operator},
-            leader = #{leader},
-            p_bjgnsy = #{p_bjgnsy},
-            qc = #{qc},
-            duty_officer = #{duty_officer}
+            leader = #{leader}
       """)
     fun save03(map: Map<String, Any>)
 
@@ -183,10 +177,7 @@ interface Journal02Mapper {
             component_sn_new = #{component_sn_new},
             p_bjaz = #{p_bjaz},
             operator = #{operator},
-            leader = #{leader},
-            p_bjgnsy = #{p_bjgnsy},
-            qc = #{qc},
-            duty_officer = #{duty_officer}
+            leader = #{leader}
     """)
     fun save02(map: Map<String, Any>)
 
