@@ -409,7 +409,6 @@ class Journal02Controller {
             @PathVariable("id") id: Int,
             @RequestBody body: Map<String, Any>
     ): Map<String, Any> {
-        logger.info("{}", body)
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             jdbc!!.update("""
@@ -677,7 +676,7 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             jdbc!!.update("""
-                update journal02_01 set watcher = ?, watcher_group = ? where id = ? and masterId = ? limit 1
+                update journal02_01 set watcher = ?, watcher_group = ? where id = ? and master_id = ? limit 1
             """.trimIndent(), body["watcher"], body["watcher_group"], id, masterId)
         } catch (e: Exception) {
             logger.error("{}", e)
