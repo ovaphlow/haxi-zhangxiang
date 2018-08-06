@@ -222,9 +222,6 @@ interface Journal02Mapper {
             report = #{report},
             dept = #{dept},
             executor = #{executor},
-            watcher = #{watcher},
-            watcher_group = #{watcher_group},
-            qc = #{qc},
             remark = #{remark}
     """)
     fun save01(map: Map<String, Any>)
@@ -292,9 +289,9 @@ interface Journal02Mapper {
     fun updateVerifyLeader(map: Map<String, Any>)
 
     @Select("""
-        select * from journal02 where p_dd_id != 0 and leader = #{leader} and sign_verify_leader is null
+        select * from journal02 where sign_p_dd is not null and applicant_id = #{id} and sign_verify_leader is null
     """)
-    fun listVerifyByLeader(@Param("leader") leader: String): List<Map<String, Any>>
+    fun listVerifyByLeader(@Param("id") id: Int): List<Map<String, Any>>
 
     @Select("""
         select * from journal02 where verify_leader_id = 0 and p_dd_id != 0

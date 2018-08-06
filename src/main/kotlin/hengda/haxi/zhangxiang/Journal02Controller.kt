@@ -177,17 +177,17 @@ class Journal02Controller {
         return r
     }
 
-    @RequestMapping("/verify/leader/{leader}", method = [RequestMethod.GET])
-    fun listVerifyByLeader(@PathVariable("leader") leader: String): Map<String, Any> {
-        var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+    @RequestMapping("/verify/leader/{id}", method = [RequestMethod.GET])
+    fun listVerifyByLeader(@PathVariable("id") id: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
-            r["content"] = mapper.listVerifyByLeader(leader)
-            r["status"] = 200
+            resp["content"] = mapper.listVerifyByLeader(id)
+            resp["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
-            r["message"] = "检索数据失败。"
+            resp["message"] = "检索数据失败。"
         }
-        return r
+        return resp
     }
 
     @RequestMapping("/verify/leader/", method = [RequestMethod.GET])
@@ -465,15 +465,14 @@ class Journal02Controller {
 
     @RequestMapping("/{masterId}/04/", method = [RequestMethod.GET])
     fun list04(@PathVariable("masterId") masterId: Int): Map<String, Any> {
-        var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            r["content"] = mapper.list04(masterId)
-            r["status"] = 200
+            resp["content"] = mapper.list04(masterId)
         } catch (e: Exception) {
             logger.error("{}", e)
-            r["message"] = "检索数据失败。"
+            resp["message"] = "服务器错误"
         }
-        return r
+        return resp
     }
 
     /**
@@ -550,17 +549,16 @@ class Journal02Controller {
 
     @RequestMapping("/{masterId}/03/", method = [RequestMethod.POST])
     fun save03(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             map["masterId"] = masterId
             mapper.save03(map)
-            mapper.updateTag("关键配件更换记录表", masterId)
-            r["status"] = 200
+            // mapper.updateTag("关键配件更换记录表", masterId)
         } catch (e: Exception) {
             logger.error("{}", e)
-            r["message"] = "提交数据失败。"
+            resp["message"] = "提交数据失败。"
         }
-        return r
+        return resp
     }
 
     /**
@@ -623,17 +621,16 @@ class Journal02Controller {
 
     @RequestMapping("/{masterId}/02/", method = [RequestMethod.POST])
     fun save02(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        var res: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             map["masterId"] = masterId
             mapper.save02(map)
             mapper.updateTag("一般配件更换记录表", masterId)
-            res["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
-            res["message"] = "提交数据失败。"
+            resp["message"] = "提交数据失败。"
         }
-        return res
+        return resp
     }
 
     @RequestMapping("/{masterId}/02/", method = [RequestMethod.GET])
@@ -714,17 +711,16 @@ class Journal02Controller {
 
     @RequestMapping("/{id}/01/", method = [RequestMethod.POST])
     fun save01(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             map["master_id"] = id
             mapper.save01(map)
-            mapper.updateTag("一般部件普查记录单", id)
-            r["status"] = 200
+            // mapper.updateTag("一般部件普查记录单", id)
         } catch (e: Exception) {
             logger.error("{}", e)
-            r["message"] = "提交数据失败。"
+            resp["message"] = "服务器错误"
         }
-        return r
+        return resp
     }
 
     @RequestMapping("/{id}/01/", method = [RequestMethod.GET])
