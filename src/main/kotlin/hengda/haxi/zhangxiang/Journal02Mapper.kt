@@ -16,16 +16,6 @@ interface Journal02Mapper {
     fun updateTag(@Param("tag") tag: String, @Param("id") id: Int)
 
     @Select("""
-        select
-            group_sn as name, count(*) as value
-        from
-            journal02
-        group by
-            group_sn
-    """)
-    fun stats(): List<Map<String, Any>>
-
-    @Select("""
     select
         *
     from
@@ -57,25 +47,8 @@ interface Journal02Mapper {
       """)
     fun updateVerify(map: Map<String, Any>)
 
-    /**
-     * 调度销记列表
-     */
-    @Select("""
-        select
-            *
-        from
-            journal02
-        where
-            sign_verify is null
-            and sign_verify_leader is not null
-            and (
-                ( p_jsy_content = '同意' )
-                or ( sign_verify_leader_qc is not null )
-            )
-    """)
-    fun listVerify(): List<Map<String, Any>>
-
-    @Update("""
+    /* 保存同一账单下所有子帐单04的表头 */
+    /* @Update("""
         update
             journal02_04
         set
@@ -88,14 +61,16 @@ interface Journal02Mapper {
         where
             master_id = #{masterId}
     """)
-    fun update04(map: Map<String, Any>)
+    fun update04(map: Map<String, Any>) */
 
-    @Delete("""
+    /* 子帐单04：删除 */
+    /* @Delete("""
         delete from journal02_04 where master_id = #{masterId} and id = #{id}
     """)
-    fun remove04(@Param("masterId") masterId: Int, @Param("id") id: Int)
+    fun remove04(@Param("masterId") masterId: Int, @Param("id") id: Int) */
 
-    @Insert("""
+    /* 子帐单04：添加 */
+    /* @Insert("""
         insert into
             journal02_04
         set
@@ -114,19 +89,16 @@ interface Journal02Mapper {
             operator = #{operator},
             remark = #{remark}
       """)
-    fun save04(map: Map<String, Any>)
+    fun save04(map: Map<String, Any>) */
 
-    @Select("""
-        select * from journal02_04 where master_id = #{masterId}
-    """)
-    fun list04(@Param("masterId") id: Int): List<Map<String, Any>>
-
-    @Delete("""
+    /* 子帐单03：删除 */
+    /* @Delete("""
         delete from journal02_03 where master_id = #{masterId} and id = #{id}
     """)
-    fun remove03(@Param("masterId") masterId: Int, @Param("id") id: Int)
+    fun remove03(@Param("masterId") masterId: Int, @Param("id") id: Int) */
 
-    @Insert("""
+    /* 子帐单03：添加 */
+    /* @Insert("""
         insert into
             journal02_03
         set
@@ -147,19 +119,16 @@ interface Journal02Mapper {
             operator = #{operator},
             leader = #{leader}
       """)
-    fun save03(map: Map<String, Any>)
+    fun save03(map: Map<String, Any>) */
 
-    @Select("""
-        select * from journal02_03 where master_id = #{masterId}
-    """)
-    fun list03(@Param("masterId") masterId: Int): List<Map<String, Any>>
-
-    @Delete("""
+    /* 子帐单02：删除 */
+    /* @Delete("""
         delete from journal02_02 where master_id = #{masterId} and id = #{id}
     """)
-    fun remove02(@Param("masterId") masterId: Int, @Param("id") id: Int)
+    fun remove02(@Param("masterId") masterId: Int, @Param("id") id: Int) */
 
-    @Insert("""
+    /* 子帐单02：添加 */
+    /* @Insert("""
         insert into
             journal02_02
         set
@@ -179,14 +148,10 @@ interface Journal02Mapper {
             operator = #{operator},
             leader = #{leader}
     """)
-    fun save02(map: Map<String, Any>)
+    fun save02(map: Map<String, Any>) */
 
-    @Select("""
-        select * from journal02_02 where master_id = #{masterId}
-    """)
-    fun list02(@Param("masterId") masterId: Int): List<Map<String, Any>>
-
-    @Update("""
+    /* 保存同一账单下所有子帐单的表头 */
+    /* @Update("""
         update
             journal02_01
         set
@@ -197,14 +162,16 @@ interface Journal02Mapper {
         where
             master_id = #{id}
     """)
-    fun update01(map: Map<String, Any>)
+    fun update01(map: Map<String, Any>) */
 
-    @Delete("""
+    /* 子帐单01：删除 */
+    /* @Delete("""
         delete from journal02_01 where master_id = #{masterId} and id = #{id}
     """)
-    fun remove01(@Param("masterId") masterId: Int, @Param("id") id: Int)
+    fun remove01(@Param("masterId") masterId: Int, @Param("id") id: Int) */
 
-    @Insert("""
+    /* 子帐单01：添加 */
+    /* @Insert("""
         insert into
             journal02_01
         set
@@ -224,12 +191,7 @@ interface Journal02Mapper {
             executor = #{executor},
             remark = #{remark}
     """)
-    fun save01(map: Map<String, Any>)
-
-    @Select("""
-        select * from journal02_01 where master_id = #{id}
-    """)
-    fun list01(@Param("id") id: Int): List<Map<String, Any>>
+    fun save01(map: Map<String, Any>) */
 
     @Update("""
         update journal02 set sign_verify_leader_qc = #{sign} where id = #{id}
@@ -255,25 +217,13 @@ interface Journal02Mapper {
     """)
     fun updateVerifyLeaderBz(map: Map<String, Any>)
 
-    @Select("""
-        select
-            *
-        from
-            journal02
-        where
-            verify_leader_id > 0
-            and position('班组' in p_jsy_content) = 1
-            and sign_verify_leader_bz is null
-            and p_jsy_bz = #{bz}
-    """)
-    fun listVerifyLeaderBz(@Param("bz") bz: String): List<Map<String, Any>>
-
     @Update("""
         update journal02 set sign_verify_leader = #{sign} where id = #{id}
     """)
     fun updateVerifyLeaderSign(map: Map<String, Any>)
 
-    @Update("""
+    /* 作业负责人销记 */
+    /* @Update("""
         update
             journal02
         set
@@ -286,12 +236,7 @@ interface Journal02Mapper {
         where
             id = #{id}
     """)
-    fun updateVerifyLeader(map: Map<String, Any>)
-
-    @Select("""
-        select * from journal02 where sign_p_dd is not null and applicant_id = #{id} and sign_verify_leader is null
-    """)
-    fun listVerifyByLeader(@Param("id") id: Int): List<Map<String, Any>>
+    fun updateVerifyLeader(map: Map<String, Any>) */
 
     @Select("""
         select * from journal02 where verify_leader_id = 0 and p_dd_id != 0
@@ -312,12 +257,8 @@ interface Journal02Mapper {
     """)
     fun updateDD(map: Map<String, Any>)
 
-    @Select("""
-        select * from journal02 where p_dd_id = 0 and p_zbsz_id != 0 limit 1000
-    """)
-    fun listDD(): List<Map<String, Any>>
-
-    @Update("""
+    /* 值班所长签字 */
+    /* @Update("""
         update
             journal02
         set
@@ -329,61 +270,19 @@ interface Journal02Mapper {
         where
             id = #{id}
       """)
-    fun updateZBSZ(map: Map<String, Any>)
+    fun updateZBSZ(map: Map<String, Any>) */
 
-    @Select("""
-        select
-            j.*
-        from
-            journal02 as j
-        where
-            p_zbsz_id = 0
-            and sign_p_jsy is not null
-            and p_jsy_content != ''
-            and (
-                (p_jsy_content = '同意')
-                or (position('班组跟踪' in p_jsy_content) = 1 and sign_p_jsy_bz is not null)
-                or (position('质检跟踪' in p_jsy_content) > 0 and sign_p_jsy_qc is not null)
-            )
-        limit 1000
-    """)
-    fun listZBSZ(): List<Map<String, Any>>
-
-    @Update("""
+    /* 技术员后质检签字 */
+    /* @Update("""
         update journal02 set sign_p_jsy_qc = #{sign} where id = #{id}
     """)
-    fun updateJsyQc(map: Map<String, Any>)
+    fun updateJsyQc(map: Map<String, Any>) */
 
-    @Select("""
-        select
-            *
-        from
-            journal02
-        where
-            position('质检跟踪' in p_jsy_content) > 0
-            and p_jsy_qc = #{qc}
-            and sign_p_jsy_bz is not null
-            and sign_p_jsy_qc is null
-    """)
-    fun listJsyQc(@Param("qc") qc: String): List<Map<String, Any>>
-
-    @Update("""
+    /* 技术员后班组签字 */
+    /* @Update("""
         update journal02 set sign_p_jsy_bz = #{sign} where id = #{id}
     """)
-    fun updateJsyBz(map: Map<String, Any>)
-
-    @Select("""
-        select
-            *
-        from
-            journal02
-        where
-            position('班组' in p_jsy_content) > 0
-            and p_jsy_bz = #{bz}
-            and sign_p_jsy_bz is null
-            and p_jsy_id > 0
-    """)
-    fun listJsyBz(@Param("bz") bz: String): List<Map<String, Any>>
+    fun updateJsyBz(map: Map<String, Any>) */
 
     @Update("""
         update
@@ -397,71 +296,8 @@ interface Journal02Mapper {
       """)
     fun updateJSYContent(map: Map<String, Any>)
 
-    @Update("""
-        update
-            journal02
-        set
-            p_jsy = #{p_jsy},
-            p_jsy_id = #{p_jsy_id},
-            p_jsy_date = now(),
-            p_jsy_time = now(),
-            sign_p_jsy = #{sign}
-        where
-            id = #{id}
-    """)
-    fun updateJSY(map: Map<String, Any>)
-
     @Select("""
-        select j.* from journal02 as j where p_jsy_id = 0 or p_jsy_content = '' limit 1000
-    """)
-    fun listJSY(): List<Map<String, Any>>
-
-    @Select("""
-        select j.* from journal02 as j order by id desc limit 1000
-    """)
-    fun list(): List<Map<String, Any>>
-
-    @Select("""
-        select
-            *,
-            date_format(date_begin, '%Y年%m月%d日') as date_begin_alt,
-            date_format(time_begin, '%k时%i分') as time_begin_alt,
-            date_format(date_end, '%Y年%m月%d日') as date_end_alt,
-            date_format(time_end, '%k时%i分') as time_end_alt
-        from
-            journal02
-        where
-            id = #{id}
-    """)
-    fun get(@Param("id") id: Int): Map<String, Any>
-
-    @Select("""
-        select last_insert_Id() as last_id
+        select last_insert_id() as last_id
     """)
     fun lastId(): Map<String, Any>
-
-    @Insert("""
-        insert into
-            journal02
-        set
-            uuid = uuid(),
-            applicant = #{applicant},
-            applicant_id = #{applicantId},
-            applicant_phone = #{applicantPhone},
-            leader = #{leader},
-            leader_phone = #{leaderPhone},
-            dept = #{dept},
-            group_sn = #{groupSN},
-            date_begin = #{dateBegin},
-            time_begin = #{timeBegin},
-            date_end = #{dateEnd},
-            time_end = #{timeEnd},
-            content = #{content},
-            content_detail = #{content_detail},
-            p_yq_xdc = #{p_yq_xdc},
-            p_yq_jcw = #{p_yq_jcw},
-            p_yq_zydd = #{p_yq_zydd},
-            p_yq_qt = #{p_yq_qt}
-      """)
-    fun save(map: Map<String, Any>)
 }

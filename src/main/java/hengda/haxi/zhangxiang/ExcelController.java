@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Decoder;
 
@@ -26,6 +27,9 @@ public class ExcelController {
     private final String templateJournal02Path = "./excel/template-journal02.xlsx";
 
     @Autowired
+    private JdbcTemplate jdbc;
+
+    @Autowired
     public ExcelController(Journal02Mapper mapper02) {
         this.mapper02 = mapper02;
     }
@@ -35,7 +39,13 @@ public class ExcelController {
         Map<String, Object> r = new HashMap();
         OutputStream out = null;
         try {
-            Map<String, Object> map = mapper02.get(id);
+            String sql = "select *, " +
+                "date_format(date_begin, '%Y年%m月%d日') as date_begin_alt, " +
+                "date_format(time_begin, '%k时%i分') as time_begin_alt, " +
+                "date_format(date_end, '%Y年%m月%d日') as date_end_alt, " +
+                "date_format(time_end, '%k时%i分') as time_end_alt " +
+                "from journal02 where id = ?";
+            Map<String, Object> map = jdbc.queryForMap(sql, id);
 
             File buffer = new File(templateJournal02Path);
             InputStream fis = new FileInputStream(buffer);
