@@ -10,10 +10,11 @@ import org.apache.ibatis.annotations.Update
 @Mapper
 interface Journal02Mapper {
 
-    @Update("""
+    /* 废弃 */
+    /* @Update("""
         update journal02 set tag = #{tag} where id = #{id}
     """)
-    fun updateTag(@Param("tag") tag: String, @Param("id") id: Int)
+    fun updateTag(@Param("tag") tag: String, @Param("id") id: Int) */
 
     @Select("""
     select

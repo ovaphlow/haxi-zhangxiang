@@ -41,17 +41,28 @@ class Journal02Controller {
         return resp
     }
 
+    /* 查询 */
     @RequestMapping("/filter/", method = [RequestMethod.POST])
     fun filter(@RequestBody map: Map<String, Any>): MutableMap<String, Any> {
-        var r: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            r["content"] = mapper.filter(map)
-            r["status"] = 200
+            resp["content"] = jdbc!!.queryForList("""
+                select
+                    *
+                from
+                    journal02
+                where
+                    position(? in dept) > 0
+                    and position(? in group_sn) > 0
+                    and position(? in date_begin) > 0
+                limit 1000
+            """.trimIndent(), map["dept"], map["group"], map["date_begin"])
+            /* resp["content"] = mapper.filter(map) */
         } catch (e: Exception) {
             logger.error("{}", e)
-            r["message"] = "服务器错误。"
+            resp["message"] = "服务器错误。"
         }
-        return r
+        return resp
     }
 
     @RequestMapping("/{id}/verify/sign", method = [RequestMethod.PUT])
@@ -663,6 +674,21 @@ class Journal02Controller {
         return resp
     }
 
+    /* 子帐单04计数 */
+    @RequestMapping("/{masterId}/04/qty", method = [RequestMethod.GET])
+    fun detail04Quantity(@PathVariable("masterId") masterId: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForMap("""
+                select count(*) as qty from journal02_04 where master_id = ?
+            """.trimIndent(), masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 子帐单04列表 */
     @RequestMapping("/{masterId}/04/", method = [RequestMethod.GET])
     fun list04(@PathVariable("masterId") masterId: Int): Map<String, Any> {
@@ -737,6 +763,21 @@ class Journal02Controller {
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
+        }
+        return resp
+    }
+
+    /* 子帐单03计数 */
+    @RequestMapping("/{masterId}/03/qty", method = [RequestMethod.GET])
+    fun detail03Quantity(@PathVariable("masterId") masterId: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForMap("""
+                select count(*) as qty from journal02_03 where master_id = ?
+            """.trimIndent(), masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
         }
         return resp
     }
@@ -894,6 +935,21 @@ class Journal02Controller {
         return resp
     }
 
+    /* 子帐单02计数 */
+    @RequestMapping("/{masterId}/02/qty", method = [RequestMethod.GET])
+    fun detail02Quantity(@PathVariable("masterId") masterId: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForMap("""
+                select count(*) as qty from journal02_02 where master_id = ?
+            """.trimIndent(), masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 子帐单02列表 */
     @RequestMapping("/{masterId}/02/", method = [RequestMethod.GET])
     fun list02(@PathVariable("masterId") masterId: Int): Map<String, Any> {
@@ -1013,6 +1069,21 @@ class Journal02Controller {
             """.trimIndent(), id, map["subject"], map["approval_sn"], map["train_sn"], map["date"],
                     map["carriage"], map["carriage_subject"], map["time_begin"], map["time_end"],
                     map["result"], map["report"], map["dept"], map["executor"], map["remark"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /* 子帐单01计数 */
+    @RequestMapping("/{masterId}/01/qty", method = [RequestMethod.GET])
+    fun detail01Quantity(@PathVariable("masterId") masterId: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForMap("""
+                select count(*) as qty from journal02_01 where master_id = ?
+            """.trimIndent(), masterId)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
