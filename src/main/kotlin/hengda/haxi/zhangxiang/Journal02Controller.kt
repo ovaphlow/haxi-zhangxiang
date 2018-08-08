@@ -218,7 +218,7 @@ class Journal02Controller {
                 where
                     id = ?
             """.trimIndent(), map["verify_report"], map["verify_leader"], map["verify_leader_id"],
-            map["verify_leader_date"], map["verify_leader_time"], map["remark"], id)
+                    map["verify_leader_date"], map["verify_leader_time"], map["remark"], id)
             /* map["id"] = id */
             /* mapper.updateVerifyLeader(map) */
         } catch (e: Exception) {
@@ -548,7 +548,7 @@ class Journal02Controller {
     @RequestMapping("/{masterId}/04/{id}/qc", method = [RequestMethod.PUT])
     fun update04Qc(
             @PathVariable("masterId") masterId: Int,
-            @PathVariable("id") id:Int,
+            @PathVariable("id") id: Int,
             @RequestBody body: Map<String, Any>
     ): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
@@ -601,7 +601,7 @@ class Journal02Controller {
                 where
                     master_id = ?
             """.trimIndent(), map["subject"], map["software_version_new"], map["software_version_old"],
-            map["approval_sn"], map["train"], map["date"], masterId)
+                    map["approval_sn"], map["train"], map["date"], masterId)
             /* map["masterId"] = masterId */
             /* mapper.update04(map) */
         } catch (e: Exception) {
@@ -651,8 +651,8 @@ class Journal02Controller {
                     operator = ?,
                     remark = ?
             """.trimIndent(), masterId, map["subject"], map["software_version_new"], map["software_version_old"],
-            map["approval_sn"], map["train"], map["date"],
-            map["carriage"], map["time_begin"], map["time_end"], map["dept"], map["operator"], map["remark"])
+                    map["approval_sn"], map["train"], map["date"],
+                    map["carriage"], map["time_begin"], map["time_end"], map["dept"], map["operator"], map["remark"])
             /* map["masterId"] = masterId */
             /* mapper.save04(map) */
             /* mapper.updateTag("加装改造（软件升级）记录单", masterId) */
@@ -782,9 +782,9 @@ class Journal02Controller {
                     operator = ?,
                     leader = ?
             """.trimIndent(), masterId, map["name"], map["train"], map["carriage"], map["position"],
-            map["date"], map["time"], map["production_date"], map["reason"],
-            map["p_gywj"], map["p_ljbs"], map["component_sn_old"], map["component_sn_new"],
-            map["p_bjaz"], map["operator"], map["leader"])
+                    map["date"], map["time"], map["production_date"], map["reason"],
+                    map["p_gywj"], map["p_ljbs"], map["component_sn_old"], map["component_sn_new"],
+                    map["p_bjaz"], map["operator"], map["leader"])
             /* map["masterId"] = masterId */
             /* mapper.save03(map) */
             // mapper.updateTag("关键配件更换记录表", masterId)
@@ -826,7 +826,7 @@ class Journal02Controller {
             @PathVariable("id") id: Int,
             @RequestBody body: Map<String, Any>
     ): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf( "content" to "", "message" to "" )
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             /*
             jdbc!!.update("""
@@ -881,9 +881,9 @@ class Journal02Controller {
                     operator = ?,
                     leader = ?
             """.trimIndent(), masterId, map["name"], map["train"], map["carriage"], map["position"],
-            map["date"], map["time"], map["reason"], map["p_gywj"], map["p_ljbs"],
-            map["component_sn_old"], map["component_sn_new"],
-            map["p_bjaz"], map["operator"], map["leader"])
+                    map["date"], map["time"], map["reason"], map["p_gywj"], map["p_ljbs"],
+                    map["component_sn_old"], map["component_sn_new"],
+                    map["p_bjaz"], map["operator"], map["leader"])
             /* map["masterId"] = masterId */
             /* mapper.save02(map) */
             /* mapper.updateTag("一般配件更换记录表", masterId) */
@@ -1011,8 +1011,8 @@ class Journal02Controller {
                     executor = ?,
                     remark = ?
             """.trimIndent(), id, map["subject"], map["approval_sn"], map["train_sn"], map["date"],
-            map["carriage"], map["carriage_subject"], map["time_begin"], map["time_end"],
-            map["result"], map["report"], map["dept"], map["executor"], map["remark"])
+                    map["carriage"], map["carriage_subject"], map["time_begin"], map["time_end"],
+                    map["result"], map["report"], map["dept"], map["executor"], map["remark"])
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -1063,10 +1063,10 @@ class Journal02Controller {
                     p_yq_zydd = ?,
                     p_yq_qt = ?
             """.trimIndent(), map["applicant"], map["applicantId"].toString().toInt(),
-            map["applicantPhone"], map["leader"], map["leaderPhone"], map["dept"], map["groupSN"],
-            map["dateBegin"], map["timeBegin"], map["dateEnd"], map["timeEnd"],
-            map["content"], map["content_detail"],
-            map["p_yq_xdc"], map["p_yq_jcw"], map["p_yq_zydd"], map["p_yq_qt"])
+                    map["applicantPhone"], map["leader"], map["leaderPhone"], map["dept"], map["groupSN"],
+                    map["dateBegin"], map["timeBegin"], map["dateEnd"], map["timeEnd"],
+                    map["content"], map["content_detail"],
+                    map["p_yq_xdc"], map["p_yq_jcw"], map["p_yq_zydd"], map["p_yq_qt"])
             resp["content"] = jdbc.queryForMap("""
                 select last_insert_id() as last_id
             """.trimIndent())
