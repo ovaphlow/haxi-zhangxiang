@@ -16,7 +16,8 @@ interface Journal02Mapper {
     """)
     fun updateTag(@Param("tag") tag: String, @Param("id") id: Int) */
 
-    @Select("""
+    /* 查询 */
+    /* @Select("""
     select
         *
     from
@@ -27,14 +28,16 @@ interface Journal02Mapper {
         and position(#{date_begin} in date_begin) > 0
     limit 1000
     """)
-    fun filter(map: Map<String, Any>): List<Map<String, Any>>
+    fun filter(map: Map<String, Any>): List<Map<String, Any>> */
 
-    @Update("""
+    /* 调度销记签字 */
+    /* @Update("""
         update journal02 set sign_verify = #{sign} where id = #{id}
     """)
-    fun updateVerifySign(map: Map<String, Any>)
+    fun updateVerifySign(map: Map<String, Any>) */
 
-    @Update("""
+    /* 调度销记 */
+    /* @Update("""
         update
             journal02
         set
@@ -46,7 +49,7 @@ interface Journal02Mapper {
         where
             id = #{id}
       """)
-    fun updateVerify(map: Map<String, Any>)
+    fun updateVerify(map: Map<String, Any>) */
 
     /* 保存同一账单下所有子帐单04的表头 */
     /* @Update("""
@@ -194,12 +197,14 @@ interface Journal02Mapper {
     """)
     fun save01(map: Map<String, Any>) */
 
-    @Update("""
+    /* 质检销记签字 */
+    /* @Update("""
         update journal02 set sign_verify_leader_qc = #{sign} where id = #{id}
     """)
-    fun updateVerifyLeaderQc(map: Map<String, Any>)
+    fun updateVerifyLeaderQc(map: Map<String, Any>) */
 
-    @Select("""
+    /* 质检销记列表 */
+    /* @Select("""
         select
             *
         from
@@ -211,17 +216,19 @@ interface Journal02Mapper {
             and sign_verify_leader_qc is null
             and p_jsy_qc = #{qc}
     """)
-    fun listVerifyLeaderQc(@Param("qc") qc: String): List<Map<String, Any>>
+    fun listVerifyLeaderQc(@Param("qc") qc: String): List<Map<String, Any>> */
 
-    @Update("""
+    /* 班组销记签字 */
+    /* @Update("""
         update journal02 set sign_verify_leader_bz = #{sign} where id = #{id}
     """)
-    fun updateVerifyLeaderBz(map: Map<String, Any>)
+    fun updateVerifyLeaderBz(map: Map<String, Any>) */
 
-    @Update("""
+    /* 作业负责人销记签字 */
+    /* @Update("""
         update journal02 set sign_verify_leader = #{sign} where id = #{id}
     """)
-    fun updateVerifyLeaderSign(map: Map<String, Any>)
+    fun updateVerifyLeaderSign(map: Map<String, Any>) */
 
     /* 作业负责人销记 */
     /* @Update("""
@@ -239,12 +246,14 @@ interface Journal02Mapper {
     """)
     fun updateVerifyLeader(map: Map<String, Any>) */
 
-    @Select("""
+    /* todo: 检查是否有用 */
+    /* @Select("""
         select * from journal02 where verify_leader_id = 0 and p_dd_id != 0
     """)
-    fun listVerifyLeader(): List<Map<String, Any>>
+    fun listVerifyLeader(): List<Map<String, Any>> */
 
-    @Update("""
+    /* 调度签字 */
+    /* @Update("""
         update
             journal02
         set
@@ -256,7 +265,7 @@ interface Journal02Mapper {
         where
             id = #{id}
     """)
-    fun updateDD(map: Map<String, Any>)
+    fun updateDD(map: Map<String, Any>) */
 
     /* 值班所长签字 */
     /* @Update("""
@@ -285,7 +294,8 @@ interface Journal02Mapper {
     """)
     fun updateJsyBz(map: Map<String, Any>) */
 
-    @Update("""
+    /* 技术员设定 */
+    /* @Update("""
         update
             journal02
         set
@@ -295,10 +305,10 @@ interface Journal02Mapper {
         where
             id = #{id}
       """)
-    fun updateJSYContent(map: Map<String, Any>)
+    fun updateJSYContent(map: Map<String, Any>) */
 
-    @Select("""
+    /* @Select("""
         select last_insert_id() as last_id
     """)
-    fun lastId(): Map<String, Any>
+    fun lastId(): Map<String, Any> */
 }
