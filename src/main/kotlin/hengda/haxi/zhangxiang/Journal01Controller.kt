@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
+/* todo: 移除MyBatis，加入Spring JDBC */
+
 @RestController
 @RequestMapping("/api/journal01")
 class Journal01Controller {
