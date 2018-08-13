@@ -22,6 +22,147 @@ class Journal02Controller {
     @Autowired
     lateinit var mapper: Journal02Mapper
 
+    /* 待处理任务计数：值班所长 */
+    @RequestMapping(("/todo/p_zbsz"), method = [RequestMethod.GET])
+    fun todoPzbsz(): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02
+                where
+                    sign_p_dd is not null
+                    and sign_p_zbsz is null
+                limit 1000
+            """.trimIndent())
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+
+    /* 待处理任务计数：调度 */
+    @RequestMapping("/todo/p_dd", method = [RequestMethod.GET])
+    fun todoPdd(): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            var qty = jdbc!!.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02 as j
+                where
+                    sign_p_dd is null
+                    and sign_p_jsy is not null
+                    and (
+                        ( p_jsy_content = '同意' )
+                        or (
+                            position( '班组跟踪' in p_jsy_content ) = 1
+                            and sign_p_jsy_bz is not null
+                        )
+                        or (
+                            position( '质检跟踪' in p_jsy_content ) > 0
+                            and sign_p_jsy_qc is not null
+                        )
+                    )
+                limit 1000
+            """.trimIndent())
+            var qty1 = jdbc.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02
+                where
+                    sign_verify is null
+                    and sign_verify_leader is not null
+                    and (
+                        ( p_jsy_content = '同意' )
+                        or ( sign_verify_leader_qc is not null )
+                    )
+            """.trimIndent())
+            resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /* 待处理任务计数：质检 */
+    @RequestMapping("/todo/qc/{qc}", method = [RequestMethod.GET])
+    fun todoQc(@PathVariable("qc") qc: String): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            var qty = jdbc!!.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02
+                where
+                    position('质检跟踪' in p_jsy_content) > 0
+                    and p_jsy_qc = ?
+                    and sign_p_jsy_bz is not null
+                    and sign_p_jsy_qc is null
+            """.trimIndent(), qc)
+            var qty1 = jdbc.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02
+                where
+                    verify_leader_id > 0
+                    and position('班组' in p_jsy_content) = 1
+                    and sign_verify_leader_bz is not null
+                    and sign_verify_leader_qc is null
+                    and p_jsy_qc = ?
+            """.trimIndent(), qc)
+            resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /* 待处理任务计数：班组 */
+    @RequestMapping("/todo/p_bz/{p_bz}", method = [RequestMethod.GET])
+    fun todoPbz(@PathVariable("p_bz") p_bz: String): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            var qty = jdbc!!.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02
+                where
+                    position('班组' in p_jsy_content) > 0
+                    and p_jsy_bz = ?
+                    and sign_p_jsy_bz is null
+                    and p_jsy_id > 0
+            """.trimIndent(), p_bz)
+            var qty1 = jdbc.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02
+                where
+                    verify_leader_id > 0
+                    and position('班组' in p_jsy_content) = 1
+                    and sign_verify_leader_bz is null
+                    and p_jsy_bz = ?
+            """.trimIndent(), p_bz)
+            resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 按车组统计一体化作业数量 */
     @RequestMapping("/stats", method = [RequestMethod.GET])
     fun stats(): Map<String, Any> {
@@ -71,7 +212,7 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             jdbc!!.update("""
-                update journal02 set sign_verify = #{sign} where id = #{id}
+                update journal02 set sign_verify = ? where id = ?
             """.trimIndent(), body["sign"], id)
             /* map["id"] = id */
             /* mapper.updateVerifySign(map) */
@@ -223,7 +364,7 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             jdbc!!.update("""
-                update journal02 set sign_verify = ? where id = ?
+                update journal02 set sign_verify_leader = ? where id = ?
             """.trimIndent(), map["sign"], id)
             /* map["id"] = id */
             /* mapper.updateVerifyLeaderSign(map) */
@@ -237,7 +378,6 @@ class Journal02Controller {
     /* 作业负责人销记 */
     @RequestMapping("/verify/leader/{id}", method = [RequestMethod.PUT])
     fun updateVerifyLeader(@PathVariable("id") id: Int, @RequestBody map: Map<String, Any>): Map<String, Any> {
-        logger.info("{}", map)
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             jdbc!!.update("""
@@ -285,7 +425,6 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
             resp["content"] = mapper.listVerifyLeader()
-            resp["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -312,7 +451,6 @@ class Journal02Controller {
             """.trimIndent(), map["p_dd"], map["p_dd_id"], map["sign"], id)
             /* map["id"] = id */
             /* mapper.updateDD(map) */
-            resp["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -376,7 +514,6 @@ class Journal02Controller {
             """.trimIndent(), map["p_zbsz"], map["p_zbsz_id"], map["sign"], id)
             /* map["id"] = id */
             /* mapper.updateZBSZ(map) */
-            resp["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -433,7 +570,6 @@ class Journal02Controller {
             """.trimIndent(), map["sign"], id)
             /* map["id"] = id */
             /* mapper.updateJsyQc(map) */
-            resp["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -467,7 +603,6 @@ class Journal02Controller {
     /* 技术员后班组签字 */
     @RequestMapping("/{id}/jsy/bz", method = [RequestMethod.PUT])
     fun updateJsyBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        logger.info("{}", id)
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
             jdbc!!.update("""
@@ -475,7 +610,6 @@ class Journal02Controller {
             """.trimIndent(), map["sign"], id)
             /* map["id"] = id */
             /* mapper.updateJsyBz(map) */
-            resp["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -548,7 +682,6 @@ class Journal02Controller {
                 where
                     id = ?
             """.trimIndent(), map["p_jsy"], map["p_jsy_id"].toString().toInt(), map["sign"], id)
-            resp["status"] = 200
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
