@@ -182,6 +182,32 @@ class Journal02Controller {
         return resp
     }
 
+    /* 查询未完成申请单 */
+    @RequestMapping("/filter/notcomplete", method = [RequestMethod.POST])
+    fun filterNotComplete(@RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForList("""
+                select
+                    *
+                from
+                    journal02
+                where
+                    verify_id = 0
+                    and sign_verify is null
+                    and position(? in dept) = 1
+                    and position(? in group_sn) = 1
+                    and position(? in date_begin) = 1
+                order by date_begin
+                limit 1000
+            """.trimIndent(), body["dept"], body["group"], body["date"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 查询 */
     @RequestMapping("/filter/", method = [RequestMethod.POST])
     fun filter(@RequestBody map: Map<String, Any>): MutableMap<String, Any> {
@@ -193,11 +219,12 @@ class Journal02Controller {
                 from
                     journal02
                 where
-                    position(? in dept) > 0
-                    and position(? in group_sn) > 0
-                    and position(? in date_begin) > 0
+                    position(? in dept) = 1
+                    and position(? in group_sn) = 1
+                    and position(? in date_begin) = 1
+                order by date_begin
                 limit 1000
-            """.trimIndent(), map["dept"], map["group"], map["date_begin"])
+            """.trimIndent(), map["dept"], map["group"], map["date"])
             /* resp["content"] = mapper.filter(map) */
         } catch (e: Exception) {
             logger.error("{}", e)
