@@ -298,7 +298,45 @@ class Journal02Controller {
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
-            resp["message"] = "服务器错误。"
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /* 技术员销记列表 */
+    @RequestMapping("/verify/p_jsy", method = [RequestMethod.GET])
+    fun verifyPjsy(): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryFOrList("""
+                select
+                    *
+                from
+                    journal02 as j
+                where
+                    (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_02
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) > 0
+                    ) or (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_03
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) > 0
+                    )
+            """.trimIndent())
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
         }
         return resp
     }
@@ -958,11 +996,9 @@ class Journal02Controller {
     ): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            /*
             jdbc!!.update("""
-                update journal02_03 set where id = ? and masterId = ? limit 1
-            """.trimIndent(), body["watcher"], body["watcher_group"], id, masterId)
-            */
+                update journal02_03 set leader = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["leader"], id, masterId)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -1040,12 +1076,11 @@ class Journal02Controller {
                     component_sn_old = ?,
                     component_sn_new = ?,
                     p_bjaz = ?,
-                    operator = ?,
-                    leader = ?
+                    operator = ?
             """.trimIndent(), masterId, map["name"], map["train"], map["carriage"], map["position"],
                     map["date"], map["time"], map["production_date"], map["reason"],
                     map["p_gywj"], map["p_ljbs"], map["component_sn_old"], map["component_sn_new"],
-                    map["p_bjaz"], map["operator"], map["leader"])
+                    map["p_bjaz"], map["operator"])
             /* map["masterId"] = masterId */
             /* mapper.save03(map) */
             // mapper.updateTag("关键配件更换记录表", masterId)
@@ -1079,7 +1114,6 @@ class Journal02Controller {
 
     /**
      * 子帐单02：班组确认
-     * ？？？？？？？？？？？？？？？
      */
     @RequestMapping("/{masterId}/02/{id}/p_bz", method = [RequestMethod.PUT])
     fun update02Pbz(
@@ -1089,11 +1123,9 @@ class Journal02Controller {
     ): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            /*
             jdbc!!.update("""
-                update journal02_02 set watcher = ?, watcher_group = ? where id = ? and masterId = ? limit 1
-            """.trimIndent(), body["watcher"], body["watcher_group"], id, masterId)
-            */
+                update journal02_02 set leader = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["leader"], id, masterId)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -1139,12 +1171,11 @@ class Journal02Controller {
                     component_sn_old = ?,
                     component_sn_new = ?,
                     p_bjaz = ?,
-                    operator = ?,
-                    leader = ?
+                    operator = ?
             """.trimIndent(), masterId, map["name"], map["train"], map["carriage"], map["position"],
                     map["date"], map["time"], map["reason"], map["p_gywj"], map["p_ljbs"],
                     map["component_sn_old"], map["component_sn_new"],
-                    map["p_bjaz"], map["operator"], map["leader"])
+                    map["p_bjaz"], map["operator"])
             /* map["masterId"] = masterId */
             /* mapper.save02(map) */
             /* mapper.updateTag("一般配件更换记录表", masterId) */
