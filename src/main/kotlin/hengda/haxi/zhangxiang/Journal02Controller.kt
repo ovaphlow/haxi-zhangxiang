@@ -163,6 +163,47 @@ class Journal02Controller {
         return resp
     }
 
+    @RequestMapping("/todo/p_jsy", method = [RequestMethod.GET])
+    fun todoPjsy(): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            var qty = jdbc!!.queryForMap("""
+                select count(*) from journal02 as j where sign_p_jsy is null
+            """.trimIndent())
+            var qty1 = jdbc!!.queryForMap("""
+                select
+                    count(*) as qty
+                from
+                    journal02 as j
+                where
+                    (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_02
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) > 0
+                    ) or (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_03
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) > 0
+                    )
+            """.trimIndent())
+            resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 按车组统计一体化作业数量 */
     @RequestMapping("/stats", method = [RequestMethod.GET])
     fun stats(): Map<String, Any> {
@@ -285,9 +326,27 @@ class Journal02Controller {
         try {
             resp["content"] = jdbc!!.queryForList("""
                 select
-                    *
+                    j.*,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_02
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_02,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_03
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_03
                 from
-                    journal02
+                    journal02 as j
                 where
                     sign_verify is null
                     and sign_verify_leader is not null
@@ -308,9 +367,27 @@ class Journal02Controller {
     fun verifyPjsy(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            resp["content"] = jdbc!!.queryFOrList("""
+            resp["content"] = jdbc!!.queryForList("""
                 select
-                    *
+                    j.*,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_02
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_02,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_03
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_03
                 from
                     journal02 as j
                 where
@@ -771,13 +848,38 @@ class Journal02Controller {
 
     /**
      * 所有账单列表
+     * 包括检查值班干部带处理申请单计数
      */
     @RequestMapping("/", method = [RequestMethod.GET])
     fun list(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
             resp["content"] = jdbc!!.queryForList("""
-                select j.* from journal02 as j order by id desc limit 1000
+                select
+                    j.*,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_02
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_02,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_03
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_03
+                from
+                    journal02 as j
+                order by
+                    id desc
+                limit 1000
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -962,9 +1064,27 @@ class Journal02Controller {
         return resp
     }
 
+    /* 子帐单03：值班干部确认 */
+    @RequestMapping("/{masterId}/03/{id}/p_jsy", method = [RequestMethod.PUT])
+    fun update03Pjsy(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_03 set duty_officer = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["duty_officer"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /**
      * 子帐单03：质检确认
-     * 值班干部是什么？
      */
     @RequestMapping("/{masterId}/03/{id}/qc", method = [RequestMethod.PUT])
     fun update03Qc(
@@ -986,7 +1106,6 @@ class Journal02Controller {
 
     /**
      * 子帐单03：班组确认
-     * ???????????????????????????????????
      */
     @RequestMapping("/{masterId}/03/{id}/p_bz", method = [RequestMethod.PUT])
     fun update03Pbz(
@@ -1087,6 +1206,25 @@ class Journal02Controller {
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
+        }
+        return resp
+    }
+
+    /* 子帐单02：值班干部确认 */
+    @RequestMapping("/{masterId}/02/{id}/p_jsy", method = [RequestMethod.PUT])
+    fun update02Pjsy(
+            @PathVariable("masterId") masterId: Int,
+            @PathVariable("id") id: Int,
+            @RequestBody body: Map<String, Any>
+    ): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update journal02_02 set duty_officer = ? where id = ? and master_id = ? limit 1
+            """.trimIndent(), body["duty_officer"], id, masterId)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
         }
         return resp
     }
