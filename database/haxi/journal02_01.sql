@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `journal02_01` (
   KEY `journal02_01_master_id_IDX` (`master_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='一般部件普查记录单';
 
--- 正在导出表  haxi.journal02_01 的数据：~11 rows (大约)
+-- 正在导出表  haxi.journal02_01 的数据：~12 rows (大约)
 DELETE FROM `journal02_01`;
 /*!40000 ALTER TABLE `journal02_01` DISABLE KEYS */;
 INSERT INTO `journal02_01` (`id`, `uuid`, `master_id`, `subject`, `approval_sn`, `train_sn`, `date`, `carriage`, `carriage_subject`, `time_begin`, `time_end`, `result`, `report`, `dept`, `executor`, `watcher`, `watcher_group`, `qc`, `remark`) VALUES

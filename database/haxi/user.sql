@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   KEY `account` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- 正在导出表  haxi.user 的数据：~11 rows (大约)
+-- 正在导出表  haxi.user 的数据：~13 rows (大约)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `uuid`, `dept_id`, `username`, `password`, `name`, `phone`, `auth_admin`, `auth_01`, `auth_p_jsy`, `auth_p_zbsz`, `auth_p_dd`, `sign`) VALUES
