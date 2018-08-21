@@ -1,5 +1,6 @@
 package hengda.haxi.zhangxiang;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -7,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.BASE64Decoder;
+// import sun.misc.BASE64Decoder;
 
 import java.io.*;
 import java.util.HashMap;
@@ -93,13 +94,15 @@ public class ExcelController {
 
             sheet.getRow(67).getCell(26).setCellValue(map.get("p_yq_qt").toString());
 
-            BASE64Decoder dec = new BASE64Decoder();
+            // BASE64Decoder dec = new BASE64Decoder();
+            Base64 base64 = new Base64();
             byte[] imgData;
 
 //            调度签字
             if (map.get("sign_p_dd") != null) {
 //            sheet.getRow(77).getCell(15).setCellValue(map.get("p_dd").toString());
-                imgData = dec.decodeBuffer(map.get("sign_p_dd").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_p_dd").toString().substring(22));
+                imgData = base64.decode(map.get("sign_p_dd").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -118,7 +121,8 @@ public class ExcelController {
 //            技术员签字
             if (map.get("sign_p_jsy") != null) {
 //            sheet.getRow(77).getCell(48).setCellValue(map.get("p_jsy").toString());
-                imgData = dec.decodeBuffer(map.get("sign_p_jsy").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_p_jsy").toString().substring(22));
+                imgData = base64.decode(map.get("sign_p_jsy").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -137,7 +141,8 @@ public class ExcelController {
 //            值班所长签字
             if (map.get("sign_p_zbsz") != null) {
 //            sheet.getRow(77).getCell(75).setCellValue(map.get("p_zbsz").toString());
-                imgData = dec.decodeBuffer(map.get("sign_p_zbsz").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_p_zbsz").toString().substring(22));
+                imgData = base64.decode(map.get("sign_p_zbsz").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -161,7 +166,8 @@ public class ExcelController {
 //            作业负责人签字
             if (map.get("sign_verify_leader") != null) {
 //                sheet.getRow(104).getCell(75).setCellValue(map.get("verify_leader").toString());
-                imgData = dec.decodeBuffer(map.get("sign_verify_leader").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_verify_leader").toString().substring(22));
+                imgData = base64.decode(map.get("sign_verify_leader").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -184,7 +190,8 @@ public class ExcelController {
 //            调度员签字
             if (map.get("sign_verify") != null) {
                 sheet.getRow(110).getCell(75).setCellValue(map.get("verify").toString());
-                imgData = dec.decodeBuffer(map.get("sign_verify").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_verify").toString().substring(22));
+                imgData = base64.decode(map.get("sign_verify").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -202,7 +209,8 @@ public class ExcelController {
 
             // 班组签字
             if (map.get("sign_verify_leader_bz") != null) {
-                imgData = dec.decodeBuffer(map.get("sign_verify_leader_bz").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_verify_leader_bz").toString().substring(22));
+                imgData = base64.decode(map.get("sign_verify_leader_bz").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -217,7 +225,8 @@ public class ExcelController {
                 Picture pictVerify = drawingVerify.createPicture(anchorVerify, picIdxVerify);
                 pictVerify.resize();
             } else if (map.get("sign_p_jsy_bz") != null) {
-                imgData = dec.decodeBuffer(map.get("sign_p_jsy_bz").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_p_jsy_bz").toString().substring(22));
+                imgData = base64.decode(map.get("sign_p_jsy_bz").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -235,7 +244,8 @@ public class ExcelController {
 
             // 质检签字
             if (map.get("sign_verify_leader_qc") != null) {
-                imgData = dec.decodeBuffer(map.get("sign_verify_leader_qc").toString().substring(22));
+                // imgData = dec.decodeBuffer(map.get("sign_verify_leader_qc").toString().substring(22));
+                imgData = base64.decode(map.get("sign_verify_leader_qc").toString().substring(22));
                 for (int i = 0; i < imgData.length; ++i) {
                     if (imgData[i] < 0) {
                         imgData[i] += 256;
@@ -267,7 +277,7 @@ public class ExcelController {
             r.put("content", targetDir + map.get("uuid").toString() + ".xlsx");
             r.put("message", "");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("{}", e);
             r.put("content", "");
             r.put("message", "服务器错误。");
         } finally {
