@@ -21,8 +21,8 @@ class Journal01Controller {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
-    @Autowired
-    lateinit var mapper: Journal01Mapper
+//    @Autowired
+//    lateinit var mapper: Journal01Mapper
 
     @RequestMapping("/todo/return", method = [RequestMethod.GET])
     fun todoReturn(): Map<String, Any> {

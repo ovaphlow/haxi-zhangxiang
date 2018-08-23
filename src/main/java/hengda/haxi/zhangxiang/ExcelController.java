@@ -21,7 +21,6 @@ public class ExcelController {
 
     private Logger logger = LoggerFactory.getLogger(ExcelController.class);
 
-    private final Journal02Mapper mapper02;
 
     private final String staticPath = "../webapp/public/";
     private final String targetDir = "download/";
@@ -29,11 +28,6 @@ public class ExcelController {
 
     @Autowired
     private JdbcTemplate jdbc;
-
-    @Autowired
-    public ExcelController(Journal02Mapper mapper02) {
-        this.mapper02 = mapper02;
-    }
 
     @RequestMapping(value = "/journal02/{id}", method = RequestMethod.GET)
     public Map<String, Object> test(@PathVariable("id") int id) {

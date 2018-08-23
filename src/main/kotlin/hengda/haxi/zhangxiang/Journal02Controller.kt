@@ -19,9 +19,6 @@ class Journal02Controller {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
-    @Autowired
-    lateinit var mapper: Journal02Mapper
-
     /* 待处理任务计数：值班所长 */
     @RequestMapping(("/todo/p_zbsz"), method = [RequestMethod.GET])
     fun todoPzbsz(): Map<String, Any> {
@@ -168,9 +165,18 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             var qty = jdbc!!.queryForMap("""
-                select count(*) from journal02 as j where sign_p_jsy is null
+                select
+                    count(*) as qty
+                from
+                    journal02 as j
+                where
+                    (
+                        sign_p_jsy is null
+                        or p_jsy_content = ''
+                    )
+                    and reject = ''
             """.trimIndent())
-            var qty1 = jdbc!!.queryForMap("""
+            var qty1 = jdbc.queryForMap("""
                 select
                     count(*) as qty
                 from
@@ -219,32 +225,6 @@ class Journal02Controller {
             """.trimIndent())
         } catch (e: Exception) {
             resp["message"] = "服务器错误。"
-        }
-        return resp
-    }
-
-    /* 查询未完成申请单 */
-    @RequestMapping("/filter/notcomplete", method = [RequestMethod.POST])
-    fun filterNotComplete(@RequestBody body: Map<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    *
-                from
-                    journal02
-                where
-                    verify_id = 0
-                    and sign_verify is null
-                    and position(? in dept) = 1
-                    and position(? in group_sn) = 1
-                    and position(? in date_begin) = 1
-                order by date_begin
-                limit 1000
-            """.trimIndent(), body["dept"], body["group"], body["date"])
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
         }
         return resp
     }
@@ -304,10 +284,11 @@ class Journal02Controller {
                     verify_id = ?,
                     verify_date = now(),
                     verify_time = now(),
-                    remark = ?
+                    remark = ?,
+                    sign_verify = ?
                 where
                     id = ?
-            """.trimIndent(), body["verify"], body["verify_id"], body["remark"], id)
+            """.trimIndent(), body["verify"], body["verify_id"], body["remark"], body["sign"], id)
             /* map["id"] = id */
             /* mapper.updateVerify(map) */
         } catch (e: Exception) {
@@ -560,19 +541,6 @@ class Journal02Controller {
         }
         return resp
     }
-
-    /* todo: 检查是否有用 */
-    /* @RequestMapping("/verify/leader/", method = [RequestMethod.GET])
-    fun listVerifyLeader(): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-        try {
-            resp["content"] = mapper.listVerifyLeader()
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误。"
-        }
-        return resp
-    } */
 
     /* 调度签字 */
     @RequestMapping("/{id}/dd", method = [RequestMethod.PUT])
@@ -837,11 +805,54 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForList("""
-                select j.* from journal02 as j where p_jsy_id = 0 or p_jsy_content = '' limit 1000
+                select j.* from journal02 as j where (sign_p_jsy is null or p_jsy_content = '') and reject = '' limit 1000
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
+        }
+        return resp
+    }
+
+    /**
+     * 指定用户申请单
+     */
+    @RequestMapping("/filter/user/{id}", method = [RequestMethod.GET])
+    fun filterByUser(@PathVariable("id") id: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForList("""
+                select * from journal02 where applicant_id = ? order by id desc limit 200
+            """.trimIndent(), id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /* 查询未完成申请单 */
+    @RequestMapping("/filter/notcomplete", method = [RequestMethod.POST])
+    fun filterNotComplete(@RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForList("""
+                select
+                    *
+                from
+                    journal02
+                where
+                    verify_id = 0
+                    and sign_verify is null
+                    and position(? in dept) = 1
+                    and position(? in group_sn) = 1
+                    and position(? in date_begin) = 1
+                order by date_begin
+                limit 1000
+            """.trimIndent(), body["dept"], body["group"], body["date"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
         }
         return resp
     }
