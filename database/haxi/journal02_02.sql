@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS `journal02_02` (
   `duty_officer` varchar(20) NOT NULL DEFAULT '' COMMENT '值班干部',
   PRIMARY KEY (`id`),
   KEY `journal02_02_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
 
--- 正在导出表  haxi.journal02_02 的数据：~9 rows (大约)
+-- 正在导出表  haxi.journal02_02 的数据：~12 rows (大约)
 DELETE FROM `journal02_02`;
 /*!40000 ALTER TABLE `journal02_02` DISABLE KEYS */;
 INSERT INTO `journal02_02` (`id`, `master_id`, `name`, `train`, `carriage`, `position`, `date`, `time`, `reason`, `p_ljbs`, `p_gywj`, `component_sn_old`, `component_sn_new`, `p_bjaz`, `operator`, `leader`, `p_bjgnsy`, `qc`, `duty_officer`) VALUES
@@ -48,7 +48,10 @@ INSERT INTO `journal02_02` (`id`, `master_id`, `name`, `train`, `carriage`, `pos
 	(6, 13, '1', '5019', '01', '2', '2018-08-06', '10:00:00', '损坏', '1', '1', '1', '2', '1', '用户1', '用户2', '是', '质检1', '管理员'),
 	(8, 14, '1', '5019', '01', '1', '2018-08-09', '09:00:00', '过期', '是', '是', '11', '12', '是', '12', '34', '是', '质检1', '管理员'),
 	(9, 17, 'AC87667', '5019', '01', '位置A', '2018-08-11', '12:00:00', '过期', '是', '是', '562', '678', '是', '负责人1', '工长1', '是', '质检1', '管理员'),
-	(10, 16, '部件名称', '5019', '01', '位置', '2018-08-16', '10:00:00', '损坏', '是', '是', '123', '321', '是', '管理员', '地勤一修', '是', '质检1', '管理员');
+	(10, 16, '部件名称', '5019', '01', '位置', '2018-08-16', '10:00:00', '损坏', '是', '是', '123', '321', '是', '管理员', '地勤一修', '是', '质检1', '管理员'),
+	(11, 19, '123', '5019', '01', '131231', '2018-08-22', '09:00:00', '损坏', '是', '是', '1', '2', '是', '管理员', '', '', '', ''),
+	(12, 20, '3423', '5033', '06', '34234', '2018-08-23', '00:00:12', '破损', '是', '是', '7897897897', '4564543', '是', '管理员', '', '', '', ''),
+	(13, 21, '545645', '5019', '01', '456465', '2018-08-23', '00:00:12', '456465', '是', '是', '546564', '4564', '是', '管理员', '', '', '', '');
 /*!40000 ALTER TABLE `journal02_02` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

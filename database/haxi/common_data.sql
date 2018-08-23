@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `common_data` (
   KEY `master` (`master`),
   KEY `key` (`key`),
   KEY `category` (`category`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  haxi.common_data 的数据：~20 rows (大约)
 DELETE FROM `common_data`;

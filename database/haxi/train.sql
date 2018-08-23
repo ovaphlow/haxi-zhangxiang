@@ -21,13 +21,13 @@ CREATE TABLE IF NOT EXISTS `train` (
   KEY `uuid` (`uuid`),
   KEY `model` (`model`),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COMMENT='车组';
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COMMENT='车组';
 
--- 正在导出表  haxi.train 的数据：~71 rows (大约)
+-- 正在导出表  haxi.train 的数据：~72 rows (大约)
 DELETE FROM `train`;
 /*!40000 ALTER TABLE `train` DISABLE KEYS */;
 INSERT INTO `train` (`id`, `uuid`, `model`, `name`) VALUES
-	(1, 'd66a276c-79db-11e8-85eb-2cfda16e4afb', '测试车型', '测试车组1'),
+	(1, 'd66a276c-79db-11e8-85eb-2cfda16e4afb', '测试车型', '测试车组123'),
 	(2, 'a73ce54a-9562-11e8-a067-2cfda16e4afb', 'CRH5A', '5020'),
 	(3, 'a73ce7a2-9562-11e8-a067-2cfda16e4afb', 'CRH5A', '5019'),
 	(4, 'a73ce86a-9562-11e8-a067-2cfda16e4afb', 'CRH5A', '5022'),
@@ -97,7 +97,8 @@ INSERT INTO `train` (`id`, `uuid`, `model`, `name`) VALUES
 	(68, 'a73d170e-9562-11e8-a067-2cfda16e4afb', 'CRH380BG', '5785'),
 	(69, 'a73d1790-9562-11e8-a067-2cfda16e4afb', 'CRH380BG', '5786'),
 	(70, 'a73d181c-9562-11e8-a067-2cfda16e4afb', 'CRH380BG', '5820'),
-	(71, 'a73d18b2-9562-11e8-a067-2cfda16e4afb', 'CRH380BG', '5821');
+	(71, 'a73d18b2-9562-11e8-a067-2cfda16e4afb', 'CRH380BG', '5821'),
+	(72, '7bebb560-a5ad-11e8-90a9-2cfda16e4afb', '测试车型', '测试');
 /*!40000 ALTER TABLE `train` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
