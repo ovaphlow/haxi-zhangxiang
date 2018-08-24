@@ -1533,7 +1533,8 @@ class Journal02Controller {
                     p_yq_xdc = ?,
                     p_yq_jcw = ?,
                     p_yq_zydd = ?,
-                    p_yq_qt = ?
+                    p_yq_qt = ?,
+                    reject = ''
                 where
                     id = ?
             """.trimIndent(), body["applicant"], body["applicantId"].toString().toInt(),
