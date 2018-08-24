@@ -78,12 +78,12 @@ public class ExcelController {
                 sheet.getRow(57).getCell(26).setCellValue("             □供         □断         ✓无要求");
             }
 
-            if ("供".equals(map.get("p_yq_zydd").toString())) {
-                sheet.getRow(62).getCell(26).setCellValue("             ✓供         □断         □无要求");
-            } else if ("断".equals(map.get("p_yq_zydd").toString())) {
-                sheet.getRow(62).getCell(26).setCellValue("             □供         ✓断         □无要求");
+            if ("检查库".equals(map.get("p_yq_zydd").toString())) {
+                sheet.getRow(62).getCell(26).setCellValue("             ✓检查库     □临修库     □无要求");
+            } else if ("临修库".equals(map.get("p_yq_zydd").toString())) {
+                sheet.getRow(62).getCell(26).setCellValue("             □检查库     ✓临修库     □无要求");
             } else if ("无要求".equals(map.get("p_yq_zydd").toString())) {
-                sheet.getRow(62).getCell(26).setCellValue("             □供         □断         ✓无要求");
+                sheet.getRow(62).getCell(26).setCellValue("             □检查库     □临修库     ✓无要求");
             }
 
             sheet.getRow(67).getCell(26).setCellValue(map.get("p_yq_qt").toString());
@@ -113,7 +113,7 @@ public class ExcelController {
             }
 
 //            技术员签字
-            if (map.get("sign_p_jsy") != null) {
+            if (map.get("sign_p_jsy") != null && !"".equals(map.get("sign_p_jsy").toString())) {
 //            sheet.getRow(77).getCell(48).setCellValue(map.get("p_jsy").toString());
                 // imgData = dec.decodeBuffer(map.get("sign_p_jsy").toString().substring(22));
                 imgData = base64.decode(map.get("sign_p_jsy").toString().substring(22));

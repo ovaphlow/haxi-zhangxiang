@@ -1509,6 +1509,45 @@ class Journal02Controller {
         return resp
     }
 
+    @RequestMapping("/{id}", method = [RequestMethod.PUT])
+    fun update(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update
+                    journal02
+                set
+                    applicant = ?,
+                    applicant_id = ?,
+                    applicant_phone = ?,
+                    leader = ?,
+                    leader_phone = ?,
+                    dept = ?,
+                    group_sn = ?,
+                    date_begin = ?,
+                    time_begin = ?,
+                    date_end = ?,
+                    time_end = ?,
+                    content = ?,
+                    content_detail = ?,
+                    p_yq_xdc = ?,
+                    p_yq_jcw = ?,
+                    p_yq_zydd = ?,
+                    p_yq_qt = ?
+                where
+                    id = ?
+            """.trimIndent(), body["applicant"], body["applicantId"].toString().toInt(),
+                    body["applicantPhone"], body["leader"], body["leaderPhone"], body["dept"], body["groupSN"],
+                    body["dateBegin"], body["timeBegin"], body["dateEnd"], body["timeEnd"],
+                    body["content"], body["content_detail"],
+                    body["p_yq_xdc"], body["p_yq_jcw"], body["p_yq_zydd"], body["p_yq_qt"],
+                    id)
+        } catch (e: Exception) {
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 添加账单 */
     @RequestMapping("/", method = [RequestMethod.POST])
     fun save(@RequestBody map: Map<String, Any>): Map<String, Any> {
