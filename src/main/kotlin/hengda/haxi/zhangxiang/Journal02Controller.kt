@@ -755,30 +755,6 @@ class Journal02Controller {
         return resp
     }
 
-    /* 技术员设定 */
-    @RequestMapping("/{id}/jsy/content", method = [RequestMethod.PUT])
-    fun updateJSYContent(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "messsage" to "", "status" to 500)
-        try {
-            jdbc!!.update("""
-                update
-                    journal02
-                set
-                    p_jsy_content = ?,
-                    p_jsy_bz = ?,
-                    p_jsy_qc = ?
-                where
-                    id = ?
-            """.trimIndent(), map["p_jsy_content"], map["p_jsy_bz"], map["p_jsy_qc"], id)
-            /* map["id"] = id */
-            /* mapper.updateJSYContent(map) */
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误。"
-        }
-        return resp
-    }
-
     /* 技术员签字 */
     @RequestMapping("/{id}/jsy", method = [RequestMethod.PUT])
     fun updateJSY(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
@@ -792,10 +768,14 @@ class Journal02Controller {
                     p_jsy_id = ?,
                     p_jsy_date = now(),
                     p_jsy_time = now(),
+                    p_jsy_content = ?,
+                    p_jsy_bz = ?,
+                    p_jsy_qc = ?,
                     sign_p_jsy = ?
                 where
                     id = ?
-            """.trimIndent(), map["p_jsy"], map["p_jsy_id"].toString().toInt(), map["sign"], id)
+            """.trimIndent(), map["p_jsy"], map["p_jsy_id"].toString().toInt(),
+            map["p_jsy_content"], map["p_jsy_bz"], map["p_jsy_qc"], map["sign"], id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -906,10 +886,40 @@ class Journal02Controller {
         return resp
     }
 
+    /**
+     * 删除申请单，包括子单
+     * 物理删除
+     */
+    @RequestMapping("/{id}", method = [RequestMethod.DELETE])
+    fun remove(@PathVariable("id") id: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                delete from journal02 where id = ?
+            """.trimIndent(), id)
+            jdbc.update("""
+                delete from journal02_01 where master_id = ?
+            """.trimIndent(), id)
+            jdbc.update("""
+                delete from journal02_02 where master_id = ?
+            """.trimIndent(), id)
+            jdbc.update("""
+                delete from journal02_03 where master_id = ?
+            """.trimIndent(), id)
+            jdbc.update("""
+                delete from journal02_04 where master_id = ?
+            """.trimIndent(), id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 申请单信息 */
     @RequestMapping("/{id}", method = [RequestMethod.GET])
     fun get(@PathVariable("id") id: Int): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForMap("""
                 select
