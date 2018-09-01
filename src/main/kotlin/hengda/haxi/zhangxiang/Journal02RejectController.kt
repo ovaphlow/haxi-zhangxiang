@@ -18,12 +18,13 @@ class Journal02RejectController {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
+    // 驳回申请列表
     @RequestMapping("/reject/", method = [RequestMethod.GET])
     fun list(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForList("""
-                select * from journal02 where reject != '' order by id desc
+                select * from journal02 where reject != '' order by id desc limit 200
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -105,6 +106,62 @@ class Journal02RejectController {
         return resp
     }
 
+    // 质检驳回
+    @RequestMapping("/{id}/reject/p_jsy_qc", method = [RequestMethod.PUT])
+    fun p_jsy_qc(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update
+                    journal02
+                set
+                    p_jsy = '',
+                    p_jsy_id = 0,
+                    p_jsy_date = '1970-01-01',
+                    p_jsy_time = '00:00:00',
+                    p_jsy_content = '',
+                    p_jsy_bz = '',
+                    p_jsy_qc = '',
+                    reject = ?,
+                    sign_p_jsy = '',
+                    sign_p_jsy_bz = null,
+                    sign_p_jsy_qc = null
+            """.trimIndent(), body["reject"], id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    // 班组驳回
+    @RequestMapping("/{id}/reject/p_jsy_bz", method = [RequestMethod.PUT])
+    fun p_jsy_bz(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update
+                    journal02
+                set
+                    p_jsy = '',
+                    p_jsy_id = 0,
+                    p_jsy_date = '1970-01-01',
+                    p_jsy_time = '00:00:00',
+                    p_jsy_content = '',
+                    p_jsy_bz = '',
+                    p_jsy_qc = '',
+                    reject = ?,
+                    sign_p_jsy = null,
+                    sign_p_jsy_bz = null
+            """.trimIndent(), body["reject"], id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp;
+    }
+
+    // 技术员驳回
     @RequestMapping("/{id}/reject/p_jsy", method = [RequestMethod.PUT])
     fun p_jsy(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
@@ -118,7 +175,7 @@ class Journal02RejectController {
                     p_jsy_date = '1970-01-01',
                     p_jsy_time = '00:00:00',
                     reject = ?,
-                    sign_p_jsy = ''
+                    sign_p_jsy = null
                 where
                     id = ?
             """.trimIndent(), body["reject"], id)

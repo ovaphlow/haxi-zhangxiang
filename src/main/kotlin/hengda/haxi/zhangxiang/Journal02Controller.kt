@@ -243,11 +243,11 @@ class Journal02Controller {
                     position(? in dept) = 1
                     and position(? in group_sn) = 1
                     and date_begin between ? and ?
+                    and time_begin between ? and ?
                     and reject = ''
                 order by date_begin
                 limit 1000
-            """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["date_end"])
-            /* resp["content"] = mapper.filter(map) */
+            """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["date_end"], map["time_begin"], map["time_end"])
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -534,9 +534,8 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForList("""
-                select * from journal02 where sign_p_dd is not null and applicant_id = ? and sign_verify_leader is null
+                select * from journal02 where sign_p_dd is not null and leader_id = ? and sign_verify_leader is null
             """.trimIndent(), id)
-            /* resp["content"] = mapper.listVerifyByLeader(id) */
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -806,7 +805,7 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForList("""
-                select * from journal02 where applicant_id = ? order by id desc limit 200
+                select * from journal02 where leader_id = ? order by id desc limit 200
             """.trimIndent(), id)
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -952,9 +951,9 @@ class Journal02Controller {
                     journal02
                 set
                     applicant = ?,
-                    applicant_id = ?,
                     applicant_phone = ?,
                     leader = ?,
+                    leader_id = ?,
                     leader_phone = ?,
                     dept = ?,
                     group_sn = ?,
@@ -971,8 +970,8 @@ class Journal02Controller {
                     reject = ''
                 where
                     id = ?
-            """.trimIndent(), body["applicant"], body["applicantId"].toString().toInt(),
-                    body["applicantPhone"], body["leader"], body["leaderPhone"], body["dept"], body["groupSN"],
+            """.trimIndent(), body["applicant"], body["applicantPhone"], body["leader"], body["leaderId"].toString().toInt(),
+                    body["leaderPhone"], body["dept"], body["groupSN"],
                     body["dateBegin"], body["timeBegin"], body["dateEnd"], body["timeEnd"],
                     body["content"], body["content_detail"],
                     body["p_yq_xdc"], body["p_yq_jcw"], body["p_yq_zydd"], body["p_yq_qt"],
@@ -994,9 +993,9 @@ class Journal02Controller {
                 set
                     uuid = uuid(),
                     applicant = ?,
-                    applicant_id = ?,
                     applicant_phone = ?,
                     leader = ?,
+                    leader_id = ?,
                     leader_phone = ?,
                     dept = ?,
                     group_sn = ?,
@@ -1010,8 +1009,8 @@ class Journal02Controller {
                     p_yq_jcw = ?,
                     p_yq_zydd = ?,
                     p_yq_qt = ?
-            """.trimIndent(), map["applicant"], map["applicantId"].toString().toInt(),
-                    map["applicantPhone"], map["leader"], map["leaderPhone"], map["dept"], map["groupSN"],
+            """.trimIndent(), map["applicant"], map["applicantPhone"], map["leader"], map["leaderId"].toString().toInt(),
+                    map["leaderPhone"], map["dept"], map["groupSN"],
                     map["dateBegin"], map["timeBegin"], map["dateEnd"], map["timeEnd"],
                     map["content"], map["content_detail"],
                     map["p_yq_xdc"], map["p_yq_jcw"], map["p_yq_zydd"], map["p_yq_qt"])
