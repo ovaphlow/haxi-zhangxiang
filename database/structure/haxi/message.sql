@@ -11,24 +11,21 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- 导出  表 haxi.user 结构
-CREATE TABLE IF NOT EXISTS `user` (
+-- 导出  表 haxi.message 结构
+CREATE TABLE IF NOT EXISTS `message` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL DEFAULT '',
-  `dept_id` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '部门id',
-  `username` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` char(32) NOT NULL DEFAULT '' COMMENT '密码',
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '姓名',
-  `phone` varchar(20) NOT NULL DEFAULT '',
-  `auth_admin` tinyint(4) NOT NULL DEFAULT 0,
-  `auth_01` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '权限：01',
-  `auth_p_jsy` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '动车所技术员',
-  `auth_p_zbsz` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '值班所长',
-  `auth_p_dd` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '动车所调度',
-  `sign` text NOT NULL DEFAULT '' COMMENT '签字',
-  PRIMARY KEY (`id`),
-  KEY `account` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8;
+  `send_by` varchar(20) NOT NULL DEFAULT '',
+  `send_by_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `send_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
+  `recieve_by` varchar(20) NOT NULL DEFAULT '',
+  `recieve_by_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `recieve_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
+  `status` varchar(10) NOT NULL DEFAULT '未读',
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `content` text NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `common_data` (
   KEY `master` (`master`),
   KEY `key` (`key`),
   KEY `category` (`category`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

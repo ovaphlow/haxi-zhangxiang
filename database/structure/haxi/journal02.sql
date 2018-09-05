@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS `journal02` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL DEFAULT '',
   `applicant` varchar(20) NOT NULL DEFAULT '' COMMENT '申请人',
-  `applicant_id` int(10) unsigned NOT NULL DEFAULT 0,
   `applicant_phone` varchar(20) NOT NULL DEFAULT '',
   `leader` varchar(20) NOT NULL DEFAULT '' COMMENT '作业负责人',
+  `leader_id` int(10) unsigned NOT NULL DEFAULT 0,
   `leader_phone` varchar(20) NOT NULL DEFAULT '',
   `dept` varchar(20) NOT NULL DEFAULT '' COMMENT '部门',
   `group_sn` varchar(20) NOT NULL DEFAULT '',
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `journal02` (
   KEY `journal02_dept_IDX` (`dept`) USING BTREE,
   KEY `journal02_group_sn_IDX` (`group_sn`) USING BTREE,
   KEY `journal02_date_begin_IDX` (`date_begin`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

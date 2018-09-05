@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `journal02_02` (
   `duty_officer` varchar(20) NOT NULL DEFAULT '' COMMENT '值班干部',
   PRIMARY KEY (`id`),
   KEY `journal02_02_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
