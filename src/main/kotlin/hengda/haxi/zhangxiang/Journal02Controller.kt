@@ -716,7 +716,7 @@ class Journal02Controller {
     /* 技术员后班组签字 */
     @RequestMapping("/{id}/jsy/bz", method = [RequestMethod.PUT])
     fun updateJsyBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             jdbc!!.update("""
                 update journal02 set sign_p_jsy_bz = ? where id = ?
