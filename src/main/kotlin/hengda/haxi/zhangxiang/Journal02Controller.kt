@@ -32,6 +32,7 @@ class Journal02Controller {
                 where
                     sign_p_dd is not null
                     and sign_p_zbsz is null
+                    and reject = ''
                 limit 1000
             """.trimIndent())
         } catch (e: Exception) {
@@ -66,6 +67,7 @@ class Journal02Controller {
                             and sign_p_jsy_qc is not null
                         )
                     )
+                    and reject = ''
                 limit 1000
             """.trimIndent())
             var qty1 = jdbc.queryForMap("""
@@ -80,6 +82,7 @@ class Journal02Controller {
                         ( p_jsy_content = '无要求' )
                         or ( sign_verify_leader_qc is not null )
                     )
+                    and reject = ''
             """.trimIndent())
             resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
         } catch (e: Exception) {
@@ -104,6 +107,7 @@ class Journal02Controller {
                     and p_jsy_qc = ?
                     and sign_p_jsy_bz is not null
                     and sign_p_jsy_qc is null
+                    and reject = ''
             """.trimIndent(), qc)
             var qty1 = jdbc.queryForMap("""
                 select
@@ -116,6 +120,7 @@ class Journal02Controller {
                     and sign_verify_leader_bz is not null
                     and sign_verify_leader_qc is null
                     and p_jsy_qc = ?
+                    and reject = ''
             """.trimIndent(), qc)
             resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
         } catch (e: Exception) {
@@ -140,6 +145,7 @@ class Journal02Controller {
                     and p_jsy_bz = ?
                     and sign_p_jsy_bz is null
                     and p_jsy_id > 0
+                    and reject = ''
             """.trimIndent(), p_bz)
             var qty1 = jdbc.queryForMap("""
                 select
@@ -151,6 +157,7 @@ class Journal02Controller {
                     and position('班组' in p_jsy_content) = 1
                     and sign_verify_leader_bz is null
                     and p_jsy_bz = ?
+                    and reject = ''
             """.trimIndent(), p_bz)
             resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
         } catch (e: Exception) {
@@ -201,6 +208,7 @@ class Journal02Controller {
                                 qc != '' and duty_officer = '' and master_id = j.id
                         ) > 0
                     )
+                    and reject = ''
             """.trimIndent())
             resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
         } catch (e: Exception) {
@@ -336,6 +344,7 @@ class Journal02Controller {
                         ( p_jsy_content = '无要求' )
                         or ( sign_verify_leader_qc is not null )
                     )
+                    and reject = ''
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -392,6 +401,7 @@ class Journal02Controller {
                                 qc != '' and duty_officer = '' and master_id = j.id
                         ) > 0
                     )
+                    and reject = ''
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -433,6 +443,7 @@ class Journal02Controller {
                     and sign_verify_leader_bz is not null
                     and sign_verify_leader_qc is null
                     and p_jsy_qc = ?
+                    and reject = ''
             """.trimIndent(), qc)
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -473,6 +484,7 @@ class Journal02Controller {
                     and position('班组' in p_jsy_content) = 1
                     and sign_verify_leader_bz is null
                     and p_jsy_bz = ?
+                    and reject = ''
             """.trimIndent(), bz)
             /* resp["content"] = mapper.listVerifyLeaderBz(bz) */
         } catch (e: Exception) {
@@ -534,7 +546,15 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForList("""
-                select * from journal02 where sign_p_dd is not null and leader_id = ? and sign_verify_leader is null
+                select
+                    *
+                from
+                    journal02
+                where
+                    sign_p_dd is not null
+                    and leader_id = ?
+                    and sign_verify_leader is null
+                    and reject = ''
             """.trimIndent(), id)
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -705,6 +725,7 @@ class Journal02Controller {
                     and p_jsy_qc = ?
                     and sign_p_jsy_bz is not null
                     and sign_p_jsy_qc is null
+                    and reject = ''
             """.trimIndent(), qc)
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -745,6 +766,7 @@ class Journal02Controller {
                     and p_jsy_bz = ?
                     and sign_p_jsy_bz is null
                     and p_jsy_id > 0
+                    and reject = ''
             """.trimIndent(), bz)
             /* resp["content"] = mapper.listJsyBz(bz) */
         } catch (e: Exception) {
@@ -788,7 +810,14 @@ class Journal02Controller {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForList("""
-                select j.* from journal02 as j where (sign_p_jsy is null or p_jsy_content = '') and reject = '' limit 1000
+                select
+                    j.*
+                from
+                    journal02 as j
+                where
+                    (sign_p_jsy is null or p_jsy_content = '')
+                    and reject = ''
+                limit 1000
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
