@@ -289,6 +289,12 @@ class Journal02Controller {
                 update
                     journal02
                 set
+                    date_begin = ?,
+                    time_begin = ?,
+                    date_end = ?,
+                    time_end = ?,
+                    verify_leader_date = ?,
+                    verify_leader_time = ?,
                     verify = ?,
                     verify_id = ?,
                     verify_date = now(),
@@ -297,7 +303,9 @@ class Journal02Controller {
                     sign_verify = ?
                 where
                     id = ?
-            """.trimIndent(), body["verify"], body["verify_id"], body["remark"], body["sign"], id)
+            """.trimIndent(), body["date_begin"], body["time_begin"], body["date_end"], body["time_end"],
+                    body["verify_leader_date"], body["verify_leader_time"], body["verify"], body["verify_id"],
+                    body["remark"], body["sign"], id)
             /* map["id"] = id */
             /* mapper.updateVerify(map) */
         } catch (e: Exception) {
