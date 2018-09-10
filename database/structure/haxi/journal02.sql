@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `journal02` (
   KEY `journal02_dept_IDX` (`dept`) USING BTREE,
   KEY `journal02_group_sn_IDX` (`group_sn`) USING BTREE,
   KEY `journal02_date_begin_IDX` (`date_begin`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
