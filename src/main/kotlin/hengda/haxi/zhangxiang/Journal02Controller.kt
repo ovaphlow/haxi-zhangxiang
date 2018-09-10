@@ -289,12 +289,6 @@ class Journal02Controller {
                 update
                     journal02
                 set
-                    date_begin = ?,
-                    time_begin = ?,
-                    date_end = ?,
-                    time_end = ?,
-                    verify_leader_date = ?,
-                    verify_leader_time = ?,
                     verify = ?,
                     verify_id = ?,
                     verify_date = now(),
@@ -303,11 +297,7 @@ class Journal02Controller {
                     sign_verify = ?
                 where
                     id = ?
-            """.trimIndent(), body["date_begin"], body["time_begin"], body["date_end"], body["time_end"],
-                    body["verify_leader_date"], body["verify_leader_time"], body["verify"], body["verify_id"],
-                    body["remark"], body["sign"], id)
-            /* map["id"] = id */
-            /* mapper.updateVerify(map) */
+            """.trimIndent(), body["verify"], body["verify_id"], body["remark"], body["sign"], id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -521,13 +511,17 @@ class Journal02Controller {
 
     /* 作业负责人销记 */
     @RequestMapping("/verify/leader/{id}", method = [RequestMethod.PUT])
-    fun updateVerifyLeader(@PathVariable("id") id: Int, @RequestBody map: Map<String, Any>): Map<String, Any> {
+    fun updateVerifyLeader(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             jdbc!!.update("""
                 update
                     journal02
                 set
+                    date_begin = ?,
+                    time_begin = ?,
+                    date_end = ?,
+                    time_end = ?,
                     verify_report = ?,
                     verify_leader = ?,
                     verify_leader_id = ?,
@@ -537,8 +531,9 @@ class Journal02Controller {
                     sign_verify_leader = ?
                 where
                     id = ?
-            """.trimIndent(), map["verify_report"], map["verify_leader"], map["verify_leader_id"],
-                    map["verify_leader_date"], map["verify_leader_time"], map["remark"], map["sign"], id)
+            """.trimIndent(), body["date_begin"], body["time_begin"], body["date_end"], body["time_end"],
+                    body["verify_report"], body["verify_leader"], body["verify_leader_id"],
+                    body["date_end"], body["time_end"], body["remark"], body["sign"], id)
             /* map["id"] = id */
             /* mapper.updateVerifyLeader(map) */
         } catch (e: Exception) {
@@ -588,8 +583,6 @@ class Journal02Controller {
                 where
                     id = ?
             """.trimIndent(), map["p_dd"], map["p_dd_id"], map["sign"], id)
-            /* map["id"] = id */
-            /* mapper.updateDD(map) */
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
