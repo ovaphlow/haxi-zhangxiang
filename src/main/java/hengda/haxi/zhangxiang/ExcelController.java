@@ -22,7 +22,7 @@ public class ExcelController {
     private Logger logger = LoggerFactory.getLogger(ExcelController.class);
 
 
-    private final String staticPath = "../webapp/public/";
+    private final String staticPath = "../webapp/";
     private final String targetDir = "download/";
     private final String templateJournal02Path = "./excel/template-journal02.xlsx";
 
