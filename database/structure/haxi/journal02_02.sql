@@ -14,6 +14,7 @@
 -- 导出  表 haxi.journal02_02 结构
 CREATE TABLE IF NOT EXISTS `journal02_02` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` char(36) NOT NULL DEFAULT '',
   `master_id` int(10) unsigned NOT NULL DEFAULT 0,
   `name` varchar(20) NOT NULL DEFAULT '' COMMENT '部件名称',
   `train` varchar(20) NOT NULL DEFAULT '' COMMENT '车组',
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `journal02_02` (
   `duty_officer` varchar(20) NOT NULL DEFAULT '' COMMENT '值班干部',
   PRIMARY KEY (`id`),
   KEY `journal02_02_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='动车组一般配件更换记录表';
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

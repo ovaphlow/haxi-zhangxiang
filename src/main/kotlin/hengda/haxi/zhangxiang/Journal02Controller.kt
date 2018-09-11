@@ -33,7 +33,6 @@ class Journal02Controller {
                     sign_p_dd is not null
                     and sign_p_zbsz is null
                     and reject = ''
-                limit 1000
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -68,7 +67,6 @@ class Journal02Controller {
                         )
                     )
                     and reject = ''
-                limit 1000
             """.trimIndent())
             var qty1 = jdbc.queryForMap("""
                 select
@@ -274,7 +272,7 @@ class Journal02Controller {
                     and time_begin between ? and ?
                     and reject = ''
                 order by date_begin
-                limit 1000
+                limit 200
             """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["date_end"], map["time_begin"], map["time_end"])
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -657,12 +655,8 @@ class Journal02Controller {
                         )
                     )
                     and reject = ''
-                limit 1000
+                limit 200
             """.trimIndent())
-            /* 原 调度/值班所长 顺序 */
-            /* resp["content"] = jdbc!!.queryForList("""
-                select * from journal02 where p_dd_id = 0 and p_zbsz_id != 0 limit 1000
-            """.trimIndent()) */
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -710,25 +704,8 @@ class Journal02Controller {
                     sign_p_dd is not null
                     and sign_p_zbsz is null
                     and reject = ''
-                limit 1000
+                limit 200
             """.trimIndent())
-            /* 原 调度/值班所长 顺序 */
-            /* resp["content"] = jdbc!!.queryForList("""
-                select
-                    j.*
-                from
-                    journal02 as j
-                where
-                    p_zbsz_id = 0
-                    and sign_p_jsy is not null
-                    and p_jsy_content != ''
-                    and (
-                        (p_jsy_content = '无要求')
-                        or (position('班组跟踪' in p_jsy_content) = 1 and sign_p_jsy_bz is not null)
-                        or (position('质检跟踪' in p_jsy_content) > 0 and sign_p_jsy_qc is not null)
-                    )
-                limit 1000
-            """.trimIndent()) */
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -860,7 +837,7 @@ class Journal02Controller {
                 where
                     (sign_p_jsy is null or p_jsy_content = '')
                     and reject = ''
-                limit 1000
+                limit 200
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -904,7 +881,7 @@ class Journal02Controller {
                     and position(? in date_begin) = 1
                     and reject = ''
                 order by date_begin
-                limit 1000
+                limit 200
             """.trimIndent(), body["dept"], body["group"], body["date"])
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -948,7 +925,7 @@ class Journal02Controller {
                     reject = ''
                 order by
                     id desc
-                limit 1000
+                limit 200
             """.trimIndent())
         } catch (e: Exception) {
             logger.error("{}", e)
@@ -998,9 +975,29 @@ class Journal02Controller {
                     date_format(date_begin, '%Y年%m月%d日') as date_begin_alt,
                     date_format(time_begin, '%k时%i分') as time_begin_alt,
                     date_format(date_end, '%Y年%m月%d日') as date_end_alt,
-                    date_format(time_end, '%k时%i分') as time_end_alt
+                    date_format(time_end, '%k时%i分') as time_end_alt,
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_02
+                        where
+                            qc != ''
+                            and duty_officer = ''
+                            and master_id = j.id
+                    ) as qty_verify_p_jsy_02,
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_03
+                        where
+                            qc != ''
+                            and duty_officer = ''
+                            and master_id = j.id
+                    ) as qty_verify_p_jsy_03
                 from
-                    journal02
+                    journal02 as j
                 where
                     id = ?
             """.trimIndent(), id)

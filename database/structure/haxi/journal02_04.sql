@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `journal02_04` (
   PRIMARY KEY (`id`),
   KEY `journal02_04_uuid_IDX` (`uuid`) USING BTREE,
   KEY `journal02_04_master_id_IDX` (`master_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='动车组加装改造（软件升级）记录单';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='动车组加装改造（软件升级）记录单';
 
 -- 数据导出被取消选择。
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
