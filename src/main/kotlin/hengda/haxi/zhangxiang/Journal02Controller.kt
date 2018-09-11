@@ -924,7 +924,7 @@ class Journal02Controller {
                 where
                     reject = ''
                 order by
-                    id desc
+                    sign_verify, id desc
                 limit 200
             """.trimIndent())
         } catch (e: Exception) {
