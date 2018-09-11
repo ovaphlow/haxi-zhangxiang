@@ -29,8 +29,33 @@ public class ExcelController {
     @Autowired
     private JdbcTemplate jdbc;
 
+    @GetMapping(value = "/journal02/{id}/04")
+    public Map<String, Object> exportDetail04Excel(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        return resp;
+    }
+
+    @GetMapping(value = "/journal02/{id}/03")
+    public Map<String, Object> exportDetail03Excel(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        return resp;
+    }
+
+
+    @GetMapping(value = "/journal02/{id}/02")
+    public Map<String, Object> exportDetail02Excel(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        return resp;
+    }
+
+    @GetMapping(value = "/journal02/{id}/01")
+    public Map<String, Object> exportDetail01Excel(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        return resp;
+    }
+
     @RequestMapping(value = "/journal02/{id}", method = RequestMethod.GET)
-    public Map<String, Object> test(@PathVariable("id") int id) {
+    public Map<String, Object> exportMasterExcel(@PathVariable("id") int id) {
         Map<String, Object> r = new HashMap();
         OutputStream out = null;
         try {
