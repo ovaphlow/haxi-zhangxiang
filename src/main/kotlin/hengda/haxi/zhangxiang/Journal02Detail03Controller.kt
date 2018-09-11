@@ -136,6 +136,7 @@ class Journal02Detail03Controller {
                 insert into
                     journal02_03
                 set
+                    uuid = uuid(),
                     master_id = ?,
                     name = ?,
                     train = ?,
