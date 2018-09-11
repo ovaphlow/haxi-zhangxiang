@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +26,10 @@ public class ExcelController {
     private final String staticPath = "../webapp/";
     private final String targetDir = "download/";
     private final String templateJournal02Path = "./excel/template-journal02.xlsx";
+    private final String templateJournal02Detail01Path = "./excel/template-journal02.01.xlsx";
+    private final String templateJournal02Detail02Path = "./excel/template-journal02.02.xlsx";
+    private final String templateJournal02Detail03Path = "./excel/template-journal02.03.xlsx";
+    private final String templateJournal02Detail04Path = "./excel/template-journal02.04.xlsx";
 
     @Autowired
     private JdbcTemplate jdbc;
@@ -32,25 +37,204 @@ public class ExcelController {
     @GetMapping(value = "/journal02/{id}/04")
     public Map<String, Object> exportDetail04Excel(@PathVariable("id") int id) {
         Map<String, Object> resp = new HashMap();
+        try {
+            OutputStream out = null;
+            String sql = "select * from journal02_04 where master_id = ?";
+            List<Map<String, Object>> result = jdbc.queryForList(sql, id);
+
+            File buffer = new File(templateJournal02Detail04Path);
+            InputStream fis = new FileInputStream(buffer);
+            Workbook wb = new XSSFWorkbook(fis);
+            Sheet sheet = wb.getSheetAt(0);
+
+            if (result.size() == 0) {
+                resp.put("content", "");
+                resp.put("message", "没有对应的数据");
+                return resp;
+            }
+
+            sheet.getRow(1).getCell(1).setCellValue(result.get(0).get("subject").toString());
+            sheet.getRow(2).getCell(3).setCellValue(result.get(0).get("software_version_new").toString());
+            sheet.getRow(2).getCell(7).setCellValue(result.get(0).get("software_version_old").toString());
+            sheet.getRow(2).getCell(10).setCellValue(result.get(0).get("approval_sn").toString());
+            sheet.getRow(3).getCell(1).setCellValue(result.get(0).get("train").toString());
+            sheet.getRow(3).getCell(10).setCellValue(result.get(0).get("date").toString());
+
+            for (Map<String, Object> item : result) {
+                int carriage = Integer.parseInt(item.get("carriage").toString());
+                sheet.getRow(carriage + 4).getCell(1).setCellValue(item.get("time_begin").toString());
+                sheet.getRow(carriage + 4).getCell(2).setCellValue(item.get("time_end").toString());
+                sheet.getRow(carriage + 4).getCell(4).setCellValue(item.get("dept").toString());
+                sheet.getRow(carriage + 4).getCell(6).setCellValue(item.get("operator").toString());
+                sheet.getRow(carriage + 4).getCell(8).setCellValue(item.get("watcher").toString());
+                sheet.getRow(carriage + 4).getCell(9).setCellValue(item.get("watcher_group").toString());
+                sheet.getRow(carriage + 4).getCell(10).setCellValue(item.get("qc").toString());
+                sheet.getRow(carriage + 4).getCell(11).setCellValue(item.get("remark").toString());
+            }
+
+            out = new FileOutputStream(staticPath + targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            wb.write(out);
+
+            resp.put("content", targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
         return resp;
     }
 
     @GetMapping(value = "/journal02/{id}/03")
     public Map<String, Object> exportDetail03Excel(@PathVariable("id") int id) {
         Map<String, Object> resp = new HashMap();
+        try {
+            OutputStream out = null;
+            String sql = "select * from journal02_03 where master_id = ?";
+            List<Map<String, Object>> result = jdbc.queryForList(sql, id);
+
+            File buffer = new File(templateJournal02Detail03Path);
+            InputStream fis = new FileInputStream(buffer);
+            Workbook wb = new XSSFWorkbook(fis);
+            Sheet sheet = wb.getSheetAt(0);
+
+            if (result.size() == 0) {
+                resp.put("content", "");
+                resp.put("message", "没有对应的数据");
+                return resp;
+            }
+
+            for (int i = 0; i < result.size(); i++) {
+                sheet.getRow(i + 3).getCell(0).setCellValue(result.get(i).get("name").toString());
+                sheet.getRow(i + 3).getCell(1).setCellValue(result.get(i).get("train").toString());
+                sheet.getRow(i + 3).getCell(2).setCellValue(result.get(i).get("carriage").toString());
+                sheet.getRow(i + 3).getCell(3).setCellValue(result.get(i).get("position").toString());
+                sheet.getRow(i + 3).getCell(4).setCellValue(result.get(i).get("date").toString());
+                sheet.getRow(i + 3).getCell(5).setCellValue(result.get(i).get("time").toString());
+                sheet.getRow(i + 3).getCell(6).setCellValue(result.get(i).get("production_date").toString());
+                sheet.getRow(i + 3).getCell(7).setCellValue(result.get(i).get("reason").toString());
+                sheet.getRow(i + 3).getCell(8).setCellValue(result.get(i).get("p_gywj").toString());
+                sheet.getRow(i + 3).getCell(9).setCellValue(result.get(i).get("p_ljbs").toString());
+                sheet.getRow(i + 3).getCell(10).setCellValue(result.get(i).get("component_sn_old").toString());
+                sheet.getRow(i + 3).getCell(11).setCellValue(result.get(i).get("component_sn_new").toString());
+                sheet.getRow(i + 3).getCell(12).setCellValue(result.get(i).get("p_bjaz").toString());
+                sheet.getRow(i + 3).getCell(13).setCellValue(result.get(i).get("operator").toString());
+                sheet.getRow(i + 3).getCell(14).setCellValue(result.get(i).get("leader").toString());
+                sheet.getRow(i + 3).getCell(15).setCellValue(result.get(i).get("p_bjgnsy").toString());
+                sheet.getRow(i + 3).getCell(16).setCellValue(result.get(i).get("qc").toString());
+                sheet.getRow(i + 3).getCell(17).setCellValue(result.get(i).get("duty_officer").toString());
+            }
+
+            out = new FileOutputStream(staticPath + targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            wb.write(out);
+
+            resp.put("content", targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
         return resp;
     }
-
 
     @GetMapping(value = "/journal02/{id}/02")
     public Map<String, Object> exportDetail02Excel(@PathVariable("id") int id) {
         Map<String, Object> resp = new HashMap();
+        try {
+            OutputStream out = null;
+            String sql = "select * from journal02_02 where master_id = ?";
+            List<Map<String, Object>> result = jdbc.queryForList(sql, id);
+
+            File buffer = new File(templateJournal02Detail02Path);
+            InputStream fis = new FileInputStream(buffer);
+            Workbook wb = new XSSFWorkbook(fis);
+            Sheet sheet = wb.getSheetAt(0);
+
+            if (result.size() == 0) {
+                resp.put("content", "");
+                resp.put("message", "没有对应的数据");
+                return resp;
+            }
+
+            for (int i = 0; i < result.size(); i++) {
+                sheet.getRow(i + 3).getCell(0).setCellValue(result.get(i).get("name").toString());
+                sheet.getRow(i + 3).getCell(1).setCellValue(result.get(i).get("train").toString());
+                sheet.getRow(i + 3).getCell(2).setCellValue(result.get(i).get("carriage").toString());
+                sheet.getRow(i + 3).getCell(3).setCellValue(result.get(i).get("position").toString());
+                sheet.getRow(i + 3).getCell(4).setCellValue(result.get(i).get("date").toString());
+                sheet.getRow(i + 3).getCell(5).setCellValue(result.get(i).get("time").toString());
+                sheet.getRow(i + 3).getCell(6).setCellValue(result.get(i).get("reason").toString());
+                sheet.getRow(i + 3).getCell(7).setCellValue(result.get(i).get("p_gywj").toString());
+                sheet.getRow(i + 3).getCell(8).setCellValue(result.get(i).get("p_ljbs").toString());
+                sheet.getRow(i + 3).getCell(9).setCellValue(result.get(i).get("component_sn_old").toString());
+                sheet.getRow(i + 3).getCell(10).setCellValue(result.get(i).get("component_sn_new").toString());
+                sheet.getRow(i + 3).getCell(11).setCellValue(result.get(i).get("p_bjaz").toString());
+                sheet.getRow(i + 3).getCell(12).setCellValue(result.get(i).get("operator").toString());
+                sheet.getRow(i + 3).getCell(13).setCellValue(result.get(i).get("leader").toString());
+                sheet.getRow(i + 3).getCell(14).setCellValue(result.get(i).get("p_bjgnsy").toString());
+                sheet.getRow(i + 3).getCell(15).setCellValue(result.get(i).get("qc").toString());
+                sheet.getRow(i + 3).getCell(16).setCellValue(result.get(i).get("duty_officer").toString());
+            }
+
+            out = new FileOutputStream(staticPath + targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            wb.write(out);
+
+            resp.put("content", targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
         return resp;
     }
 
     @GetMapping(value = "/journal02/{id}/01")
     public Map<String, Object> exportDetail01Excel(@PathVariable("id") int id) {
         Map<String, Object> resp = new HashMap();
+        try {
+            OutputStream out = null;
+            String sql = "select * from journal02_01 where master_id = ?";
+            List<Map<String, Object>> result = jdbc.queryForList(sql, id);
+
+            File buffer = new File(templateJournal02Detail01Path);
+            InputStream fis = new FileInputStream(buffer);
+            Workbook wb = new XSSFWorkbook(fis);
+            Sheet sheet = wb.getSheetAt(0);
+
+            if (result.size() == 0) {
+                resp.put("content", "");
+                resp.put("message", "没有对应的数据");
+                return resp;
+            }
+
+            sheet.getRow(1).getCell(1).setCellValue(result.get(0).get("subject").toString());
+            sheet.getRow(1).getCell(8).setCellValue(result.get(0).get("approval_sn").toString());
+            sheet.getRow(2).getCell(1).setCellValue(result.get(0).get("train_sn").toString());
+            sheet.getRow(2).getCell(8).setCellValue(result.get(0).get("date").toString());
+
+            for (Map<String, Object> item : result) {
+                int carriage = Integer.parseInt(item.get("carriage").toString());
+                sheet.getRow(carriage + 3).getCell(1).setCellValue(result.get(0).get("carriage_subject").toString());
+                sheet.getRow(carriage + 3).getCell(2).setCellValue(result.get(0).get("time_begin").toString());
+                sheet.getRow(carriage + 3).getCell(3).setCellValue(result.get(0).get("time_end").toString());
+                sheet.getRow(carriage + 3).getCell(4).setCellValue(result.get(0).get("result").toString());
+                sheet.getRow(carriage + 3).getCell(5).setCellValue(result.get(0).get("report").toString());
+                sheet.getRow(carriage + 3).getCell(6).setCellValue(result.get(0).get("dept").toString());
+                sheet.getRow(carriage + 3).getCell(7).setCellValue(result.get(0).get("executor").toString());
+                sheet.getRow(carriage + 3).getCell(8).setCellValue(result.get(0).get("watcher").toString());
+                sheet.getRow(carriage + 3).getCell(9).setCellValue(result.get(0).get("watcher_group").toString());
+                sheet.getRow(carriage + 3).getCell(10).setCellValue(result.get(0).get("qc").toString());
+                sheet.getRow(carriage + 3).getCell(11).setCellValue(result.get(0).get("remark").toString());
+            }
+
+            out = new FileOutputStream(staticPath + targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            wb.write(out);
+
+            resp.put("content", targetDir + result.get(0).get("uuid").toString() + ".xlsx");
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
         return resp;
     }
 
