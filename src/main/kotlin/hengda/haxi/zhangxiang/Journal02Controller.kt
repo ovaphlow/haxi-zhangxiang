@@ -74,13 +74,33 @@ class Journal02Controller {
                 select
                     count(*) as qty
                 from
-                    journal02
+                    journal02 as j
                 where
                     sign_verify is null
                     and sign_verify_leader is not null
                     and (
                         ( p_jsy_content = '无要求' )
                         or ( sign_verify_leader_qc is not null )
+                    )
+                    and (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_02
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) = 0
+                    )
+                    and (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_03
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) = 0
                     )
                     and reject = ''
             """.trimIndent())
@@ -316,23 +336,25 @@ class Journal02Controller {
                 select
                     j.*,
                     (
-                    select
-                        count(*)
-                    from
-                        journal02_02
-                    where
-                        qc != ''
-                        and duty_officer = ''
-                        and master_id = j.id ) as qty_verify_p_jsy_02,
+                        select
+                            count(*)
+                        from
+                            journal02_02
+                        where
+                            qc != ''
+                            and duty_officer = ''
+                            and master_id = j.id
+                    ) as qty_verify_p_jsy_02,
                     (
-                    select
-                        count(*)
-                    from
-                        journal02_03
-                    where
-                        qc != ''
-                        and duty_officer = ''
-                        and master_id = j.id ) as qty_verify_p_jsy_03
+                        select
+                            count(*)
+                        from
+                            journal02_03
+                        where
+                            qc != ''
+                            and duty_officer = ''
+                            and master_id = j.id )
+                    as qty_verify_p_jsy_03
                 from
                     journal02 as j
                 where
@@ -340,7 +362,27 @@ class Journal02Controller {
                     and sign_verify_leader is not null
                     and (
                         ( p_jsy_content = '无要求' )
-                        or ( sign_verify_leader_qc is not null )
+                        or ( sign_verify_leader_qc is not null)
+                    )
+                    and (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_02
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) = 0
+                    )
+                    and (
+                        (
+                            select
+                                count(*)
+                            from
+                                journal02_03
+                            where
+                                qc != '' and duty_officer = '' and master_id = j.id
+                        ) = 0
                     )
                     and reject = ''
             """.trimIndent())
