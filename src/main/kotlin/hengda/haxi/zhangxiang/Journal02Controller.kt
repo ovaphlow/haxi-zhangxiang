@@ -47,6 +47,27 @@ class Journal02Controller {
     fun todoPdd(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
+//            var qty = jdbc!!.queryForMap("""
+//                select
+//                    count(*) as qty
+//                from
+//                    journal02 as j
+//                where
+//                    sign_p_dd is null
+//                    and sign_p_jsy is not null
+//                    and (
+//                        ( p_jsy_content = '无要求' )
+//                        or (
+//                            position( '班组跟踪' in p_jsy_content ) = 1
+//                            and sign_p_jsy_bz is not null
+//                        )
+//                        or (
+//                            position( '质检跟踪' in p_jsy_content ) > 0
+//                            and sign_p_jsy_qc is not null
+//                        )
+//                    )
+//                    and reject = ''
+//            """.trimIndent())
             var qty = jdbc!!.queryForMap("""
                 select
                     count(*) as qty
@@ -58,15 +79,12 @@ class Journal02Controller {
                     and (
                         ( p_jsy_content = '无要求' )
                         or (
-                            position( '班组跟踪' in p_jsy_content ) = 1
+                            p_jsy_content != '无要求'
                             and sign_p_jsy_bz is not null
-                        )
-                        or (
-                            position( '质检跟踪' in p_jsy_content ) > 0
-                            and sign_p_jsy_qc is not null
                         )
                     )
                     and reject = ''
+
             """.trimIndent())
             var qty1 = jdbc.queryForMap("""
                 select
@@ -115,19 +133,19 @@ class Journal02Controller {
     fun todoQc(@PathVariable("qc") qc: String): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            var qty = jdbc!!.queryForMap("""
-                select
-                    count(*) as qty
-                from
-                    journal02
-                where
-                    position('质检跟踪' in p_jsy_content) > 0
-                    and p_jsy_qc = ?
-                    and sign_p_jsy_bz is not null
-                    and sign_p_jsy_qc is null
-                    and reject = ''
-            """.trimIndent(), qc)
-            var qty1 = jdbc.queryForMap("""
+//            var qty = jdbc!!.queryForMap("""
+//                select
+//                    count(*) as qty
+//                from
+//                    journal02
+//                where
+//                    position('质检跟踪' in p_jsy_content) > 0
+//                    and p_jsy_qc = ?
+//                    and sign_p_jsy_bz is not null
+//                    and sign_p_jsy_qc is null
+//                    and reject = ''
+//            """.trimIndent(), qc)
+            var qty1 = jdbc!!.queryForMap("""
                 select
                     count(*) as qty
                 from
@@ -140,7 +158,8 @@ class Journal02Controller {
                     and p_jsy_qc = ?
                     and reject = ''
             """.trimIndent(), qc)
-            resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
+//            resp["content"] = hashMapOf("qty" to qty["qty"], "qty1" to qty1["qty"])
+            resp["content"] = hashMapOf("qty1" to qty1["qty"])
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -635,6 +654,29 @@ class Journal02Controller {
     fun listDD(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
+//            20180912 修改
+//            resp["content"] = jdbc!!.queryForList("""
+//                select
+//                    j.*
+//                from
+//                    journal02 as j
+//                where
+//                    sign_p_dd is null
+//                    and sign_p_jsy is not null
+//                    and (
+//                        ( p_jsy_content = '无要求' )
+//                        or (
+//                            position( '班组跟踪' in p_jsy_content ) = 1
+//                            and sign_p_jsy_bz is not null
+//                        )
+//                        or (
+//                            position( '质检跟踪' in p_jsy_content ) > 0
+//                            and sign_p_jsy_qc is not null
+//                        )
+//                    )
+//                    and reject = ''
+//                limit 200
+//            """.trimIndent())
             resp["content"] = jdbc!!.queryForList("""
                 select
                     j.*
@@ -646,12 +688,8 @@ class Journal02Controller {
                     and (
                         ( p_jsy_content = '无要求' )
                         or (
-                            position( '班组跟踪' in p_jsy_content ) = 1
+                            p_jsy_content != '无要求'
                             and sign_p_jsy_bz is not null
-                        )
-                        or (
-                            position( '质检跟踪' in p_jsy_content ) > 0
-                            and sign_p_jsy_qc is not null
                         )
                     )
                     and reject = ''
@@ -713,7 +751,10 @@ class Journal02Controller {
         return resp
     }
 
-    /* 质检签字 */
+    /**
+     * 质检签字
+     * 20180912 停用
+     */
     @RequestMapping("/{id}/jsy/qc", method = [RequestMethod.PUT])
     fun updateJsyQc(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
@@ -730,7 +771,10 @@ class Journal02Controller {
         return resp
     }
 
-    /* 技术员后质检确认列表 */
+    /**
+     * 技术员后质检确认列表
+     * 20180912 停用
+     */
     @RequestMapping("/jsy/qc/{qc}", method = [RequestMethod.GET])
     fun listJsyQc(@PathVariable("qc") qc: String): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
