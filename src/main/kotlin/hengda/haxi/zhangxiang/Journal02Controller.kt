@@ -1066,7 +1066,6 @@ class Journal02Controller {
                     applicant = ?,
                     applicant_phone = ?,
                     leader = ?,
-                    leader_id = ?,
                     leader_phone = ?,
                     dept = ?,
                     group_sn = ?,
@@ -1083,7 +1082,7 @@ class Journal02Controller {
                     reject = ''
                 where
                     id = ?
-            """.trimIndent(), body["applicant"], body["applicantPhone"], body["leader"], body["leaderId"].toString().toInt(),
+            """.trimIndent(), body["applicant"], body["applicantPhone"], body["leader"],
                     body["leaderPhone"], body["dept"], body["groupSN"],
                     body["dateBegin"], body["timeBegin"], body["dateEnd"], body["timeEnd"],
                     body["content"], body["content_detail"],
