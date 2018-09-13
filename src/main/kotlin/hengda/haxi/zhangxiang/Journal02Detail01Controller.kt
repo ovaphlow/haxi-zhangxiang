@@ -4,11 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/journal02")
@@ -109,6 +105,57 @@ class Journal02Detail01Controller {
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
+        }
+        return resp
+    }
+
+    @PutMapping("/detail/01/{id}")
+    fun put(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update
+                    journal02_01
+                set
+                    subject = ?,
+                    approval_sn = ?,
+                    train_sn = ?,
+                    date = ?,
+                    carriage = ?,
+                    carriage_subject = ?,
+                    time_begin = ?,
+                    time_end = ?,
+                    result = ?,
+                    report = ?,
+                    dept = ?,
+                    executor = ?,
+                    watcher = ?,
+                    watcher_group = ?,
+                    qc = ?,
+                    remark = ?
+                where
+                    id = ?
+            """.trimIndent(), body["subject"], body["approval_sn"], body["train_sn"], body["date"],
+                    body["carriage"], body["carriage_subject"], body["time_begin"], body["time_end"],
+                    body["result"], body["report"], body["dept"], body["executor"],
+                    body["watcher"], body["watcher_group"], body["qc"], body["remark"], id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    @GetMapping("/detail/01/{id}")
+    fun get(@PathVariable("id") id: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForMap("""
+                select * from journal02_01 where id = ? limit 1
+            """.trimIndent(), id)
+        } catch(e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
         }
         return resp
     }
