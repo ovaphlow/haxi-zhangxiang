@@ -47,27 +47,6 @@ class Journal02Controller {
     fun todoPdd(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            var qty = jdbc!!.queryForMap("""
-//                select
-//                    count(*) as qty
-//                from
-//                    journal02 as j
-//                where
-//                    sign_p_dd is null
-//                    and sign_p_jsy is not null
-//                    and (
-//                        ( p_jsy_content = '无要求' )
-//                        or (
-//                            position( '班组跟踪' in p_jsy_content ) = 1
-//                            and sign_p_jsy_bz is not null
-//                        )
-//                        or (
-//                            position( '质检跟踪' in p_jsy_content ) > 0
-//                            and sign_p_jsy_qc is not null
-//                        )
-//                    )
-//                    and reject = ''
-//            """.trimIndent())
             var qty = jdbc!!.queryForMap("""
                 select
                     count(*) as qty
@@ -76,15 +55,8 @@ class Journal02Controller {
                 where
                     sign_p_dd is null
                     and sign_p_jsy is not null
-                    and (
-                        ( p_jsy_content = '无要求' )
-                        or (
-                            p_jsy_content != '无要求'
-                            and sign_p_jsy_bz is not null
-                        )
-                    )
-                    and reject = ''
 
+                    and reject = ''
             """.trimIndent())
             var qty1 = jdbc.queryForMap("""
                 select
@@ -179,9 +151,9 @@ class Journal02Controller {
                     journal02
                 where
                     position('班组' in p_jsy_content) > 0
+                    and sign_p_zbsz is not null
                     and p_jsy_bz = ?
                     and sign_p_jsy_bz is null
-                    and p_jsy_id > 0
                     and reject = ''
             """.trimIndent(), p_bz)
             var qty1 = jdbc.queryForMap("""
@@ -290,7 +262,7 @@ class Journal02Controller {
                     and date_begin between ? and ?
                     and time_begin between ? and ?
                     and reject = ''
-                order by date_begin
+                order by date_begin desc, time_begin desc
                 limit 200
             """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["date_end"], map["time_begin"], map["time_end"])
         } catch (e: Exception) {
@@ -613,8 +585,15 @@ class Journal02Controller {
                 from
                     journal02
                 where
-                    sign_p_dd is not null
-                    and leader_id = ?
+                    leader_id = ?
+                    and sign_p_zbsz is not null
+                    and (
+                        ( p_jsy_content = '无要求' )
+                        or (
+                            p_jsy_content != '无要求'
+                            and sign_p_jsy_bz is not null
+                        )
+                    )
                     and sign_verify_leader is null
                     and reject = ''
             """.trimIndent(), id)
@@ -654,29 +633,6 @@ class Journal02Controller {
     fun listDD(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            20180912 修改
-//            resp["content"] = jdbc!!.queryForList("""
-//                select
-//                    j.*
-//                from
-//                    journal02 as j
-//                where
-//                    sign_p_dd is null
-//                    and sign_p_jsy is not null
-//                    and (
-//                        ( p_jsy_content = '无要求' )
-//                        or (
-//                            position( '班组跟踪' in p_jsy_content ) = 1
-//                            and sign_p_jsy_bz is not null
-//                        )
-//                        or (
-//                            position( '质检跟踪' in p_jsy_content ) > 0
-//                            and sign_p_jsy_qc is not null
-//                        )
-//                    )
-//                    and reject = ''
-//                limit 200
-//            """.trimIndent())
             resp["content"] = jdbc!!.queryForList("""
                 select
                     j.*
@@ -685,13 +641,6 @@ class Journal02Controller {
                 where
                     sign_p_dd is null
                     and sign_p_jsy is not null
-                    and (
-                        ( p_jsy_content = '无要求' )
-                        or (
-                            p_jsy_content != '无要求'
-                            and sign_p_jsy_bz is not null
-                        )
-                    )
                     and reject = ''
                 limit 200
             """.trimIndent())
@@ -827,9 +776,9 @@ class Journal02Controller {
                     journal02
                 where
                     position('班组' in p_jsy_content) > 0
+                    and sign_p_zbsz is not null
                     and p_jsy_bz = ?
                     and sign_p_jsy_bz is null
-                    and p_jsy_id > 0
                     and reject = ''
             """.trimIndent(), bz)
             /* resp["content"] = mapper.listJsyBz(bz) */
@@ -967,6 +916,7 @@ class Journal02Controller {
                     journal02 as j
                 where
                     reject = ''
+                    and sign_verify is null
                 order by
                     sign_verify, id desc
                 limit 200
