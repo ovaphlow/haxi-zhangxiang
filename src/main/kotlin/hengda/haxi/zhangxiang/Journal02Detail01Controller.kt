@@ -1,5 +1,6 @@
 package hengda.haxi.zhangxiang
 
+import hengda.haxi.zhangxiang.model.Journal02Detail01
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +15,9 @@ class Journal02Detail01Controller {
 
     @Autowired
     private val jdbc: JdbcTemplate? = null
+
+    @Autowired
+    private val service: Journal02Service? = null
 
     /* 子帐单01计数 */
     @RequestMapping("/{masterId}/01/qty", method = [RequestMethod.GET])
@@ -139,6 +143,16 @@ class Journal02Detail01Controller {
                     body["carriage"], body["carriage_subject"], body["time_begin"], body["time_end"],
                     body["result"], body["report"], body["dept"], body["executor"],
                     body["watcher"], body["watcher_group"], body["qc"], body["remark"], id)
+            jdbc.update("""
+                update
+                    journal02
+                set
+                    time_begin = ?,
+                    time_end = ?
+                where
+                    id = (select master_id from journal02_01 where id = ?)
+                limit 1
+            """.trimIndent(), body["time_begin"], body["time_end"], id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -162,31 +176,29 @@ class Journal02Detail01Controller {
 
     /* 子帐单01：添加 */
     @RequestMapping("/{id}/01/", method = [RequestMethod.POST])
-    fun save01(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    fun save01(@PathVariable("id") id: Int, @RequestBody body: Journal02Detail01): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
+            body.master_id = id
+            if (body.carriage_01 == true) service!!.save2Detail01("01", body)
+            if (body.carriage_02 == true) service!!.save2Detail01("02", body)
+            if (body.carriage_03 == true) service!!.save2Detail01("03", body)
+            if (body.carriage_04 == true) service!!.save2Detail01("04", body)
+            if (body.carriage_05 == true) service!!.save2Detail01("05", body)
+            if (body.carriage_06 == true) service!!.save2Detail01("06", body)
+            if (body.carriage_07 == true) service!!.save2Detail01("07", body)
+            if (body.carriage_08 == true) service!!.save2Detail01("08", body)
+
             jdbc!!.update("""
-                insert into
-                    journal02_01
+                update
+                    journal02
                 set
-                    uuid = uuid(),
-                    master_id = ?,
-                    subject = ?,
-                    approval_sn = ?,
-                    train_sn = ?,
-                    date = ?,
-                    carriage = ?,
-                    carriage_subject = ?,
                     time_begin = ?,
-                    time_end = ?,
-                    result = ?,
-                    report = ?,
-                    dept = ?,
-                    executor = ?,
-                    remark = ?
-            """.trimIndent(), id, map["subject"], map["approval_sn"], map["train_sn"], map["date"],
-                    map["carriage"], map["carriage_subject"], map["time_begin"], map["time_end"],
-                    map["result"], map["report"], map["dept"], map["executor"], map["remark"])
+                    time_end = ?
+                where
+                    id = ?
+                limit 1
+            """.trimIndent(), body.time_begin, body.time_end, id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"

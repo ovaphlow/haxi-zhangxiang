@@ -173,9 +173,6 @@ class Journal02Detail02Controller {
                     map["date"], map["time"], map["reason"], map["p_gywj"], map["p_ljbs"],
                     map["component_sn_old"], map["component_sn_new"],
                     map["p_bjaz"], map["operator"])
-            /* map["masterId"] = masterId */
-            /* mapper.save02(map) */
-            /* mapper.updateTag("一般配件更换记录表", masterId) */
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"

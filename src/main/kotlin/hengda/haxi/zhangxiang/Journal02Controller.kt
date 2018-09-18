@@ -4,11 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/journal02")
@@ -259,8 +255,9 @@ class Journal02Controller {
                 where
                     position(? in dept) = 1
                     and position(? in group_sn) = 1
-                    and date_begin between ? and ?
-                    and time_begin between ? and ?
+                    and concat(date_begin,
+                    ' ',
+                    time_begin) between concat(?, ' ', ?) and concat(?, ' ', ?)
                     and reject = ''
                 order by date_begin desc, time_begin desc
                 limit 200
@@ -856,7 +853,60 @@ class Journal02Controller {
         return resp
     }
 
-    /* 查询未完成申请单 */
+    /**
+     * 查询已完成申请单
+     */
+    @PostMapping("/filter/fin")
+    fun filterFin(@RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForList("""
+                select
+                    j.*,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_02
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_02,
+                    (
+                    select
+                        count(*)
+                    from
+                        journal02_03
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id ) as qty_verify_p_jsy_03,
+                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
+                from
+                    journal02 as j
+                where
+                    sign_verify is not null
+                    and position(? in dept) > 0
+                    and position(? in group_sn) > 0
+                    and concat(date_begin,
+                    ' ',
+                    time_begin) between concat(?, ' ', ?) and concat(?, ' ', ?)
+                order by
+                    diff
+                limit 200
+            """.trimIndent(), body["dept"], body["train"], body["date_begin"], body["time_begin"],
+                    body["date_end"], body["time_end"])
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /**
+     * 查询未完成申请单
+     * 20180917 停用
+     */
     @RequestMapping("/filter/notcomplete", method = [RequestMethod.POST])
     fun filterNotComplete(@RequestBody body: Map<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
@@ -884,8 +934,9 @@ class Journal02Controller {
     }
 
     /**
-     * 所有账单列表
-     * 包括检查值班干部带处理申请单计数
+     * 首页显示列表
+     * 默认只显示未完成项目
+     * 包括检查值班干部带处理申请单计数和超期时间
      */
     @RequestMapping("/", method = [RequestMethod.GET])
     fun list(): Map<String, Any> {
@@ -911,14 +962,15 @@ class Journal02Controller {
                     where
                         qc != ''
                         and duty_officer = ''
-                        and master_id = j.id ) as qty_verify_p_jsy_03
+                        and master_id = j.id ) as qty_verify_p_jsy_03,
+                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
                 from
                     journal02 as j
                 where
                     reject = ''
                     and sign_verify is null
                 order by
-                    sign_verify, id desc
+                    diff desc
                 limit 200
             """.trimIndent())
         } catch (e: Exception) {
@@ -966,10 +1018,6 @@ class Journal02Controller {
             resp["content"] = jdbc!!.queryForMap("""
                 select
                     *,
-                    date_format(date_begin, '%Y年%m月%d日') as date_begin_alt,
-                    date_format(time_begin, '%k时%i分') as time_begin_alt,
-                    date_format(date_end, '%Y年%m月%d日') as date_end_alt,
-                    date_format(time_end, '%k时%i分') as time_end_alt,
                     (
                         select
                             count(*)
