@@ -261,7 +261,7 @@ class Journal02Controller {
                     and reject = ''
                 order by date_begin desc, time_begin desc
                 limit 200
-            """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["date_end"], map["time_begin"], map["time_end"])
+            """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["time_begin"], map["date_end"], map["time_end"])
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"

@@ -1,5 +1,6 @@
 package hengda.haxi.zhangxiang
 
+import hengda.haxi.zhangxiang.model.Journal02Detail02
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +15,9 @@ class Journal02Detail02Controller {
 
     @Autowired
     private val jdbc: JdbcTemplate? = null
+
+    @Autowired
+    private val service: Journal02Service? = null
 
     /* 子帐单02：值班干部确认 */
     @RequestMapping("/{masterId}/02/{id}/p_jsy", method = [RequestMethod.PUT])
@@ -145,34 +149,22 @@ class Journal02Detail02Controller {
         return resp
     }
 
-    /* 子帐单02：添加 */
-    @RequestMapping("/{masterId}/02/", method = [RequestMethod.POST])
-    fun save02(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    /**
+     * 子帐单02：添加
+     */
+    @PostMapping("/{masterId}/02/")
+    fun save02(@PathVariable("masterId") masterId: Int, @RequestBody body: Journal02Detail02): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            jdbc!!.update("""
-                insert into
-                    journal02_02
-                set
-                    uuid = uuid(),
-                    master_id = ?,
-                    name = ?,
-                    train = ?,
-                    carriage = ?,
-                    position = ?,
-                    date = ?,
-                    time = ?,
-                    reason = ?,
-                    p_gywj = ?,
-                    p_ljbs = ?,
-                    component_sn_old = ?,
-                    component_sn_new = ?,
-                    p_bjaz = ?,
-                    operator = ?
-            """.trimIndent(), masterId, map["name"], map["train"], map["carriage"], map["position"],
-                    map["date"], map["time"], map["reason"], map["p_gywj"], map["p_ljbs"],
-                    map["component_sn_old"], map["component_sn_new"],
-                    map["p_bjaz"], map["operator"])
+            body.master_id = masterId
+            if (body.carriage_01 == true) service!!.save2Detail02("01", body)
+            if (body.carriage_02 == true) service!!.save2Detail02("02", body)
+            if (body.carriage_03 == true) service!!.save2Detail02("03", body)
+            if (body.carriage_04 == true) service!!.save2Detail02("04", body)
+            if (body.carriage_05 == true) service!!.save2Detail02("05", body)
+            if (body.carriage_06 == true) service!!.save2Detail02("06", body)
+            if (body.carriage_07 == true) service!!.save2Detail02("07", body)
+            if (body.carriage_08 == true) service!!.save2Detail02("08", body)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
