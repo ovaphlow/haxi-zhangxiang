@@ -1,14 +1,11 @@
 package hengda.haxi.zhangxiang
 
+import hengda.haxi.zhangxiang.model.Journal02Detail04
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/journal02")
@@ -18,6 +15,9 @@ class Journal02Detail04Controller {
 
     @Autowired
     private val jdbc: JdbcTemplate? = null
+
+    @Autowired
+    private val service: Journal02Service? = null
 
     /**
      * 子帐单04：质检确认
@@ -61,7 +61,10 @@ class Journal02Detail04Controller {
         return resp
     }
 
-    /* 保存同一账单下所有04子帐单的表头 */
+    /**
+     * 保存同一账单下所有04子帐单的表头
+     * 20180918 停用
+     */
     @RequestMapping("/{masterId}/04/", method = [RequestMethod.PUT])
     fun update04(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
@@ -106,34 +109,30 @@ class Journal02Detail04Controller {
     }
 
     /* 子帐单04：添加 */
-    @RequestMapping("/{masterId}/04/", method = [RequestMethod.POST])
-    fun save04(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    @PostMapping("/{masterId}/04/")
+    fun save04(@PathVariable("masterId") masterId: Int, @RequestBody body: Journal02Detail04): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
+            body.master_id = masterId
+            if (body.carriage_01 == true) service!!.save2Detail04("01", body)
+            if (body.carriage_02 == true) service!!.save2Detail04("02", body)
+            if (body.carriage_03 == true) service!!.save2Detail04("03", body)
+            if (body.carriage_04 == true) service!!.save2Detail04("04", body)
+            if (body.carriage_05 == true) service!!.save2Detail04("05", body)
+            if (body.carriage_06 == true) service!!.save2Detail04("06", body)
+            if (body.carriage_07 == true) service!!.save2Detail04("07", body)
+            if (body.carriage_08 == true) service!!.save2Detail04("08", body)
+
             jdbc!!.update("""
-                insert into
-                    journal02_04
+                update
+                    journal02
                 set
-                    uuid = uuid(),
-                    master_id = ?,
-                    subject = ?,
-                    software_version_new = ?,
-                    software_version_old = ?,
-                    approval_sn = ?,
-                    train = ?,
-                    date = ?,
-                    carriage = ?,
                     time_begin = ?,
-                    time_end = ?,
-                    dept = ?,
-                    operator = ?,
-                    remark = ?
-            """.trimIndent(), masterId, map["subject"], map["software_version_new"], map["software_version_old"],
-                    map["approval_sn"], map["train"], map["date"],
-                    map["carriage"], map["time_begin"], map["time_end"], map["dept"], map["operator"], map["remark"])
-            /* map["masterId"] = masterId */
-            /* mapper.save04(map) */
-            /* mapper.updateTag("加装改造（软件升级）记录单", masterId) */
+                    time_end = ?
+                where
+                    id = ?
+                limit 1
+            """.trimIndent(), body.time_begin, body.time_end, masterId)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"

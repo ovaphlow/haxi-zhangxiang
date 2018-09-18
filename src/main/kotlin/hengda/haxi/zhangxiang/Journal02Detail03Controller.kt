@@ -1,5 +1,6 @@
 package hengda.haxi.zhangxiang
 
+import hengda.haxi.zhangxiang.model.Journal02Detail03
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +15,9 @@ class Journal02Detail03Controller {
 
     @Autowired
     private val jdbc: JdbcTemplate? = null
+
+    @Autowired
+    private val service: Journal02Service? = null
 
     /* 子帐单03：值班干部确认 */
     @RequestMapping("/{masterId}/03/{id}/p_jsy", method = [RequestMethod.PUT])
@@ -174,37 +178,19 @@ class Journal02Detail03Controller {
     }
 
     /* 子帐单03：添加 */
-    @RequestMapping("/{masterId}/03/", method = [RequestMethod.POST])
-    fun save03(@PathVariable("masterId") masterId: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    @PostMapping("/{masterId}/03/")
+    fun save03(@PathVariable("masterId") masterId: Int, @RequestBody body: Journal02Detail03): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            jdbc!!.update("""
-                insert into
-                    journal02_03
-                set
-                    uuid = uuid(),
-                    master_id = ?,
-                    name = ?,
-                    train = ?,
-                    carriage = ?,
-                    position = ?,
-                    date = ?,
-                    time = ?,
-                    production_date = ?,
-                    reason = ?,
-                    p_gywj = ?,
-                    p_ljbs = ?,
-                    component_sn_old = ?,
-                    component_sn_new = ?,
-                    p_bjaz = ?,
-                    operator = ?
-            """.trimIndent(), masterId, map["name"], map["train"], map["carriage"], map["position"],
-                    map["date"], map["time"], map["production_date"], map["reason"],
-                    map["p_gywj"], map["p_ljbs"], map["component_sn_old"], map["component_sn_new"],
-                    map["p_bjaz"], map["operator"])
-            /* map["masterId"] = masterId */
-            /* mapper.save03(map) */
-            // mapper.updateTag("关键配件更换记录表", masterId)
+            body.master_id = masterId
+            if (body.carriage_01 == true) service!!.save2Detail03("01", body)
+            if (body.carriage_02 == true) service!!.save2Detail03("02", body)
+            if (body.carriage_03 == true) service!!.save2Detail03("03", body)
+            if (body.carriage_04 == true) service!!.save2Detail03("04", body)
+            if (body.carriage_05 == true) service!!.save2Detail03("05", body)
+            if (body.carriage_06 == true) service!!.save2Detail03("06", body)
+            if (body.carriage_07 == true) service!!.save2Detail03("07", body)
+            if (body.carriage_08 == true) service!!.save2Detail03("08", body)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
