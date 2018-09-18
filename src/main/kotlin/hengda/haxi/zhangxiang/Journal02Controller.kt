@@ -242,7 +242,9 @@ class Journal02Controller {
         return resp
     }
 
-    /* 查询 */
+    /**
+     * 查询
+     */
     @RequestMapping("/filter/", method = [RequestMethod.POST])
     fun filter(@RequestBody map: Map<String, Any>): MutableMap<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
@@ -258,10 +260,16 @@ class Journal02Controller {
                     and concat(date_begin,
                     ' ',
                     time_begin) between concat(?, ' ', ?) and concat(?, ' ', ?)
+                    and position(? in content) = 1
+                    and position(? in content_detail) > 0
+                    and position(? in p_yq_xdc) = 1
+                    and position(? in p_yq_jcw) = 1
                     and reject = ''
                 order by date_begin desc, time_begin desc
                 limit 200
-            """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["time_begin"], map["date_end"], map["time_end"])
+            """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["time_begin"],
+                    map["date_end"], map["time_end"],
+                    map["content"],map["content_detail"], map["p_xdc"], map["p_jcw"])
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
@@ -277,8 +285,6 @@ class Journal02Controller {
             jdbc!!.update("""
                 update journal02 set sign_verify = ? where id = ?
             """.trimIndent(), body["sign"], id)
-            /* map["id"] = id */
-            /* mapper.updateVerifySign(map) */
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误。"
