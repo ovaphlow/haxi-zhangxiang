@@ -940,13 +940,41 @@ class Journal02Controller {
     }
 
     /**
+     * 报警列表
+     */
+    @GetMapping("/warning")
+    fun warning(): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForList("""
+                select
+                    j.*,
+                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
+                from
+                    journal02 as j
+                where
+                    reject = ''
+                    and timestampdiff(second, concat(date_end, ' ', time_end), now()) > 0
+                    and sign_verify_leader is null
+                order by
+                    diff desc
+                limit 200
+            """.trimIndent())
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /**
      * 首页显示列表
      * 默认只显示未完成项目
      * 包括检查值班干部带处理申请单计数和超期时间
      */
     @GetMapping("/")
     fun list(): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
             resp["content"] = jdbc!!.queryForList("""
                 select
@@ -974,6 +1002,10 @@ class Journal02Controller {
                     journal02 as j
                 where
                     reject = ''
+                    and (
+                        timestampdiff(second, concat(date_end, ' ', time_end), now()) < 0
+                        or sign_verify_leader is not null
+                    )
                     and sign_verify is null
                 order by
                     diff desc
