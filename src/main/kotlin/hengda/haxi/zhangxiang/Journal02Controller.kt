@@ -944,7 +944,7 @@ class Journal02Controller {
      * 默认只显示未完成项目
      * 包括检查值班干部带处理申请单计数和超期时间
      */
-    @RequestMapping("/", method = [RequestMethod.GET])
+    @GetMapping("/")
     fun list(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
         try {
