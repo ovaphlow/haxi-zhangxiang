@@ -843,6 +843,38 @@ class Journal02Controller {
     }
 
     /**
+     * 指定用户审核或销记的申请单
+     * 未测试
+     */
+    @GetMapping("/filter/user/{id}/flow")
+    fun filterByUserFlow(@PathVariable("id") id: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForList("""
+                select
+                    *,
+                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
+                from
+                    journal02 as j
+                where
+                    (
+                        p_jsy_id = ?
+                        or p_dd_id = ?
+                        or p_zbsz_id = ?
+                        or verify_id = ?
+                    )
+                    and leader_id != ?
+                order by diff desc
+                limit 200
+            """.trimIndent(), id, id, id, id, id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /**
      * 指定用户申请单
      */
     @RequestMapping("/filter/user/{id}", method = [RequestMethod.GET])
@@ -940,7 +972,9 @@ class Journal02Controller {
     }
 
     /**
+     * 首页置顶显示
      * 报警列表
+     * 未测试
      */
     @GetMapping("/warning")
     fun warning(): Map<String, Any> {
@@ -969,8 +1003,9 @@ class Journal02Controller {
 
     /**
      * 首页显示列表
-     * 默认只显示未完成项目
+     * 默认只显示非报警状态的未完成项目
      * 包括检查值班干部带处理申请单计数和超期时间
+     * 未测试
      */
     @GetMapping("/")
     fun list(): Map<String, Any> {
