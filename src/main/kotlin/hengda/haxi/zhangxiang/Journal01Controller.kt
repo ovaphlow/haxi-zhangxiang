@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
-/* todo: 移除MyBatis，加入Spring JDBC */
-
 @RestController
 @RequestMapping("/api/journal01")
 class Journal01Controller {
@@ -21,16 +19,14 @@ class Journal01Controller {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
-//    @Autowired
-//    lateinit var mapper: Journal01Mapper
+    @Autowired
+    private val repos: Journal01Repos? = null
 
     @RequestMapping("/todo/return", method = [RequestMethod.GET])
     fun todoReturn(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            resp["content"] = jdbc!!.queryForMap("""
-                select count(*) as qty from journal01 where borrow_id != 0 and return_by_id = 0
-            """.trimIndent())
+            resp["content"] = repos!!.returnQty()
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -42,9 +38,7 @@ class Journal01Controller {
     fun todoBorrow(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            resp["content"] = jdbc!!.queryForMap("""
-                select count(*) as qty from journal01 where borrow_date <= '0001-01-01'
-            """.trimIndent())
+            resp["content"] = repos!!.reviewQty()
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -56,9 +50,7 @@ class Journal01Controller {
     fun stats(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            resp["content"] = jdbc!!.queryForList("""
-                select applicant as name, count(*) as value from journal01 group by applicant order by value desc
-            """.trimIndent())
+            resp["content"] = repos!!.stats()
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -68,20 +60,10 @@ class Journal01Controller {
 
     /* 查询 */
     @RequestMapping("/filter", method = [RequestMethod.POST])
-    fun filter(@RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    fun filter(@RequestBody body: MutableMap<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            resp["content"] = mapper.filter(map)
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    *
-                from
-                    journal01
-                where
-                    position(? in date) = 1
-                    and position(? in dept) = 1
-                    and position(? in applicant) = 1
-            """.trimIndent(), map["date"], map["dept"], map["user"])
+            resp["content"] = repos!!.filter(body)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -94,16 +76,7 @@ class Journal01Controller {
     fun list(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            resp["content"] = mapper.list()
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    *
-                from
-                    journal01
-                order by
-                    id desc
-                limit 1000
-            """.trimIndent())
+            resp["content"] = repos!!.list()
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -113,24 +86,11 @@ class Journal01Controller {
 
     /* 返还 */
     @RequestMapping("/return/{id}", method = arrayOf(RequestMethod.PUT))
-    fun returnSubmit(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+    fun returnSubmit(@PathVariable("id") id: Int, @RequestBody body: MutableMap<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-            map["id"] = id
-//            mapper.returnSubmit(map)
-            jdbc!!.update("""
-                update
-                    journal01
-                set
-                    return_name = ?,
-                    return_by = ?,
-                    return_by_id = ?,
-                    return_date = now(),
-                    return_time = now(),
-                    remark = ?
-                where
-                    id = ?
-            """.trimIndent(), map["return_name"], map["return_by"], map["return_by_id"], map["remark"], id)
+            body["id"] = id
+            repos!!.returnHandler(body)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -143,10 +103,7 @@ class Journal01Controller {
     fun listUserReturn(@PathVariable("id") id: Int): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            resp["content"] = mapper.listUserReturn(id)
-            resp["content"] = jdbc!!.queryForList("""
-                select * from journal01 where applicant_id = ? and return_by_id != 0
-            """.trimIndent(), id)
+            resp["content"] = repos!!.returnListByUser(id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -159,22 +116,7 @@ class Journal01Controller {
     fun listReturn(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            resp["content"] = mapper.listReturn()
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    id, uuid,
-                    date, time, quantity, applicant, applicant_id, dept,
-                    borrow_date, borrow_time, borrow, borrow_id,
-                    remark
-                from
-                    journal01
-                where
-                    borrow_id != 0
-                    and return_by_id = 0
-                order by
-                    id desc
-                limit 1000
-            """.trimIndent())
+            resp["content"] = repos!!.returnList()
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -190,15 +132,7 @@ class Journal01Controller {
     fun listByAdmin(): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            resp["content"] = mapper.listByAdmin()
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    j.id, j.uuid, date, time, quantity, applicant_id, applicant, dept
-                from
-                    journal01 as j
-                where
-                    borrow_date <= '0001-01-01'
-            """.trimIndent())
+            resp["content"] = repos!!.reviewList()
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -211,16 +145,7 @@ class Journal01Controller {
     fun listByApplicant(@PathVariable("id") id: Int): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            resp["content"] = mapper.listByApplicant(id)
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    j.id, j.uuid, date, time, quantity, applicant_id, applicant, dept
-                from
-                    journal01 as j
-                where
-                    applicant_id = ?
-                    and borrow_id = 0
-            """.trimIndent(), id)
+            resp["content"] = repos!!.listByBorrower(id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -230,21 +155,11 @@ class Journal01Controller {
 
     /* 发放 */
     @RequestMapping("/{id}/borrow", method = arrayOf(RequestMethod.PUT))
-    fun borrow(@PathVariable("id") id: Int, @RequestBody map: Map<String, Any>): Map<String, Any> {
+    fun borrow(@PathVariable("id") id: Int, @RequestBody body: MutableMap<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            mapper.borrow(map["borrow"].toString(), map["borrowId"].toString().toInt(), id)
-            jdbc!!.update("""
-                update
-                    journal01
-                set
-                    borrow_date = now(),
-                    borrow_time = now(),
-                    borrow = ?,
-                    borrow_id = ?
-                where
-                    id = ?
-            """.trimIndent(), map["borrow"], map["borrowId"], id)
+            body["id"] = id
+            repos!!.borrow(body)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -257,10 +172,7 @@ class Journal01Controller {
     fun info(@PathVariable("id") id: Int): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            resp["content"] = mapper.info(id)
-            resp["content"] = jdbc!!.queryForMap("""
-                select * from journal01 where id = ?
-            """.trimIndent(), id)
+            resp["content"] = repos!!.get(id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
@@ -270,23 +182,10 @@ class Journal01Controller {
 
     /* 新增申请 */
     @RequestMapping("/", method = arrayOf(RequestMethod.POST))
-    fun save(@RequestBody map: Map<String, Any>): Map<String, Any> {
+    fun save(@RequestBody body: Map<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
         try {
-//            mapper.save(map)
-            jdbc!!.update("""
-                insert into
-                    journal01
-                set
-                    uuid = uuid(),
-                    date = now(),
-                    time = now(),
-                    quantity = ?,
-                    applicant_id = ?,
-                    applicant = ?,
-                    dept = ?,
-                    remark = ?
-            """.trimIndent(), map["quantity"], map["applicantId"], map["applicant"], map["dept"], map["remark"])
+            repos!!.save(body)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"
