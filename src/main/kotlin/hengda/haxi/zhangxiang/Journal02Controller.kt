@@ -266,7 +266,7 @@ class Journal02Controller {
                     and position(? in p_yq_jcw) = 1
                     and reject = ''
                 order by date_begin desc, time_begin desc
-                limit 200
+                limit 2000
             """.trimIndent(), map["dept"], map["group"], map["date_begin"], map["time_begin"],
                     map["date_end"], map["time_end"],
                     map["content"],map["content_detail"], map["p_xdc"], map["p_jcw"])
