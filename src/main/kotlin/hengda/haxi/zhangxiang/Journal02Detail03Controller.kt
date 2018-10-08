@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/journal02")
 class Journal02Detail03Controller {
 
-    val logger: Logger = LoggerFactory.getLogger(Journal02Controller::class.java)
+    val logger: Logger = LoggerFactory.getLogger(Journal02Detail03Controller::class.java)
 
     @Autowired
     private val jdbc: JdbcTemplate? = null
@@ -155,7 +155,10 @@ class Journal02Detail03Controller {
                     duty_officer = ?
                 where
                     id = ?
-            """.trimIndent())
+            """.trimIndent(), body["name"], body["train"], body["carriage"], body["position"], body["date"],
+                    body["time"], body["production_date"], body["reason"], body["p_gywj"], body["p_ljbs"],
+                    body["component_sn_old"], body["component_sn_new"], body["p_bjaz"], body["operator"],
+                    body["leader"], body["p_bjgnsy"], body["qc"], body["duty_officer"], id)
         } catch (e: Exception) {
             logger.error("{}", e)
             resp["message"] = "服务器错误"

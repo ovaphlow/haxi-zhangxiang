@@ -155,6 +155,62 @@ class Journal02Detail04Controller {
         return resp
     }
 
+    /**
+     * 子帐单04：修改
+     */
+    @PutMapping("/detail/04/{id}")
+    fun update04Detail(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            jdbc!!.update("""
+                update
+                    journal02_04
+                set
+                    subject = ?,
+                    software_version_new = ?,
+                    software_version_old = ?,
+                    approval_sn = ?,
+                    train = ?,
+                    date = ?,
+                    carriage = ?,
+                    time_begin = ?,
+                    time_end = ?,
+                    dept = ?,
+                    operator = ?,
+                    watcher = ?,
+                    watcher_group = ?,
+                    qc = ?,
+                    remark = ?
+                where
+                    id = ?
+            """.trimIndent(), body["subject"], body["software_version_new"], body["software_version_old"],
+                    body["approval_sn"], body["train"], body["date"], body["carriage"], body["time_begin"],
+                    body["time_end"], body["dept"], body["operator"], body["watcher"], body["watcher_group"],
+                    body["qc"], body["remark"], id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
+    /**
+     * 子帐单04信息
+     */
+    @GetMapping("/detail/04/{id}")
+    fun get04(@PathVariable("id") id: Int): Map<String, Any> {
+        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+        try {
+            resp["content"] = jdbc!!.queryForMap("""
+                select * from journal02_04 where id = ?
+            """.trimIndent(), id)
+        } catch (e: Exception) {
+            logger.error("{}", e)
+            resp["message"] = "服务器错误"
+        }
+        return resp
+    }
+
     /* 子帐单04列表 */
     @RequestMapping("/{masterId}/04/", method = [RequestMethod.GET])
     fun list04(@PathVariable("masterId") masterId: Int): Map<String, Any> {
