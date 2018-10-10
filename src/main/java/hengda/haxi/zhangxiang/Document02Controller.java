@@ -26,7 +26,11 @@ public class Document02Controller {
         this.repos = repos;
     }
 
-    // 检查供电状态是否冲突
+    /**
+     * 检查供电状态是否冲突，列出所有冲突的申请。
+     * @param id
+     * @return Map
+     */
     @GetMapping(value = "/check/power/{id}")
     public Map<String, Object> checkPowerStatus(@PathVariable("id") int id) {
         Map<String, Object> resp = new HashMap();

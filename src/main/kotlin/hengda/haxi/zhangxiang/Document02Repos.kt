@@ -14,6 +14,9 @@ class Document02Repos {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
+    /**
+     * 检查供电状态是否冲突
+     */
     fun checkPower(id: Int): List<Map<String, Any>> {
         return jdbc!!.queryForList("""
             select
