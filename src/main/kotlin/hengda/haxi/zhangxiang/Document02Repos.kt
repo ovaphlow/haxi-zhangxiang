@@ -27,7 +27,8 @@ class Document02Repos {
                 group_sn = (select group_sn from journal02 where id = ? limit 1)
                 and id != ?
                 and sign_p_jsy is not null
-                and sign_p_zbsz is null
+                -- and sign_p_zbsz is null
+                and sign_verify_leader is null
                 and p_yq_xdc != (select p_yq_xdc from journal02 where id = ? limit 1)
                 and p_yq_jcw != (select p_yq_jcw from journal02 where id = ? limit 1)
         """.trimIndent(), id, id, id, id)
