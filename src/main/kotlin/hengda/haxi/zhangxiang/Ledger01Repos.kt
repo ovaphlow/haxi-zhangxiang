@@ -7,9 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class Journal01Repos {
+class Ledger01Repos {
 
-    val logger: Logger = LoggerFactory.getLogger(Journal01Repos::class.java)
+    val logger: Logger = LoggerFactory.getLogger(Ledger01Repos::class.java)
 
     @Autowired
     private val jdbc: JdbcTemplate? = null
