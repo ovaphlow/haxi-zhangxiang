@@ -15,6 +15,194 @@ class Document02Repos {
     private val jdbc: JdbcTemplate? = null
 
     /**
+     * 待处理任务数量：值班所长（approve）
+     */
+    fun todoPzbszApprove(): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02
+            where
+                sign_p_dd is not null
+                and sign_p_zbsz is null
+                and reject = ''
+        """.trimIndent())
+    }
+
+    /**
+     * 待处理任务数量：调度（review）
+     */
+    fun todoPddReview(): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02 as j
+            where
+                sign_verify is null
+                and sign_verify_leader is not null
+                and (
+                    ( p_jsy_content = '无要求' )
+                    or ( sign_verify_leader_qc is not null )
+                )
+                and (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_02
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) = 0
+                )
+                and (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_03
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) = 0
+                )
+                and reject = ''
+        """.trimIndent())
+    }
+
+    /**
+     * 待处理任务数量：调度（approve）
+     */
+    fun todoPddApprove(): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02 as j
+            where
+                sign_p_dd is null
+                and sign_p_jsy is not null
+
+                and reject = ''
+        """.trimIndent())
+    }
+
+    /**
+     * 待处理任务数量：质检（review）
+     */
+    fun todoQcReview(qc: String): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty1
+            from
+                journal02
+            where
+                verify_leader_id > 0
+                and position('班组' in p_jsy_content) = 1
+                and sign_verify_leader_bz is not null
+                and sign_verify_leader_qc is null
+                and p_jsy_qc = ?
+                and reject = ''
+        """.trimIndent(), qc)
+    }
+
+    /**
+     * 待处理任务数量：班组（review）
+     */
+    fun todoPbzReview(p_bz: String): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02
+            where
+                verify_leader_id > 0
+                and position('班组' in p_jsy_content) = 1
+                and sign_verify_leader_bz is null
+                and p_jsy_bz = ?
+                and reject = ''
+        """.trimIndent(), p_bz)
+    }
+
+    /**
+     * 待处理任务数量：班组（approve）
+     */
+    fun todoPbzApprove(p_bz: String): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02
+            where
+                position('班组' in p_jsy_content) > 0
+                and sign_p_zbsz is not null
+                and p_jsy_bz = ?
+                and sign_p_jsy_bz is null
+                and reject = ''
+        """.trimIndent(), p_bz)
+    }
+
+    /**
+     * 待处理数量：技术员（review）
+     */
+    fun todoPjsyReview(): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02 as j
+            where
+                (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_02
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) > 0
+                ) or (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_03
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) > 0
+                )
+                and reject = ''
+        """.trimIndent())
+    }
+
+    /**
+     * 待处理数量：技术员（approve）
+     */
+    fun todoPjsyApprove(): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02 as j
+            where
+                (
+                    sign_p_jsy is null
+                    or p_jsy_content = ''
+                )
+                and reject = ''
+        """.trimIndent())
+    }
+
+    /**
+     * 按车组统计作业数量
+     */
+    fun stats(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select group_sn as name, count(*) as value from journal02 group by group_sn
+        """.trimIndent())
+    }
+
+    /**
      * 一般配件和关键配件的更换记录单销记时触发
      * 检修工长销记列表
      */
@@ -59,6 +247,230 @@ class Document02Repos {
     }
 
     /**
+     * 调度销记列表
+     */
+    fun listReviewPdd(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                j.*,
+                (
+                    select
+                        count(*)
+                    from
+                        journal02_02
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id
+                ) as qty_verify_p_jsy_02,
+                (
+                    select
+                        count(*)
+                    from
+                        journal02_03
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id )
+                as qty_verify_p_jsy_03
+            from
+                journal02 as j
+            where
+                sign_verify is null
+                and sign_verify_leader is not null
+                and (
+                    ( p_jsy_content = '无要求' )
+                    or ( sign_verify_leader_qc is not null)
+                )
+                and (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_02
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) = 0
+                )
+                and (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_03
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) = 0
+                )
+                and reject = ''
+        """.trimIndent())
+    }
+
+    /**
+     * 技术员销记列表
+     */
+    fun listReviewPjsy(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                j.*,
+                (
+                select
+                    count(*)
+                from
+                    journal02_02
+                where
+                    qc != ''
+                    and duty_officer = ''
+                    and master_id = j.id ) as qty_verify_p_jsy_02,
+                (
+                select
+                    count(*)
+                from
+                    journal02_03
+                where
+                    qc != ''
+                    and duty_officer = ''
+                    and master_id = j.id ) as qty_verify_p_jsy_03
+            from
+                journal02 as j
+            where
+                (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_02
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) > 0
+                ) or (
+                    (
+                        select
+                            count(*)
+                        from
+                            journal02_03
+                        where
+                            qc != '' and duty_officer = '' and master_id = j.id
+                    ) > 0
+                )
+                and reject = ''
+        """.trimIndent())
+    }
+
+    /**
+     * 质检销记列表
+     */
+    fun listReviewQc(qc: String): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                verify_leader_id > 0
+                and position('班组' in p_jsy_content) = 1
+                and sign_verify_leader_bz is not null
+                and sign_verify_leader_qc is null
+                and p_jsy_qc = ?
+                and reject = ''
+        """.trimIndent(), qc)
+    }
+
+    /**
+     * 班组销记列表
+     */
+    fun listReviewPbz(p_bz: String): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                verify_leader_id > 0
+                and position('班组' in p_jsy_content) = 1
+                and sign_verify_leader_bz is null
+                and p_jsy_bz = ?
+                and reject = ''
+        """.trimIndent(), p_bz)
+    }
+
+    /**
+     * 作业负责人销记列表
+     */
+    fun listReviewApplicant(id: Int): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                leader_id = ?
+                and sign_p_zbsz is not null
+                and (
+                    ( p_jsy_content = '无要求' )
+                    or (
+                        p_jsy_content != '无要求'
+                        and sign_p_jsy_bz is not null
+                    )
+                )
+                and sign_verify_leader is null
+                and reject = ''
+        """.trimIndent(), id)
+    }
+
+    /**
+     * 值班所长确认列表
+     */
+    fun listApprovePzbsz(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                sign_p_dd is not null
+                and sign_p_zbsz is null
+                and reject = ''
+            limit 200
+        """.trimIndent())
+    }
+
+    /**
+     * 调度确认列表
+     */
+    fun listApprovePdd(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                j.*
+            from
+                journal02 as j
+            where
+                sign_p_dd is null
+                and sign_p_jsy is not null
+                and reject = ''
+            limit 200
+        """.trimIndent())
+    }
+
+    /**
+     * 班组确认列表
+     */
+    fun listApprovePbz(p_bz: String): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                position('班组' in p_jsy_content) > 0
+                and sign_p_zbsz is not null
+                and p_jsy_bz = ?
+                and sign_p_jsy_bz is null
+                and reject = ''
+        """.trimIndent(), p_bz)
+    }
+
+    /**
      * 技术员签字
      */
     fun submitApprovePjsy(body: Map<String, Any>) {
@@ -94,6 +506,33 @@ class Document02Repos {
                 and reject = ''
             limit 200
         """.trimIndent())
+    }
+
+    /**
+     * 查询
+     */
+    fun filter(body: Map<String, Any>): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                position(? in dept) = 1
+                and position(? in group_sn) = 1
+                and concat(date_begin,
+                ' ',
+                time_begin) between concat(?, ' ', ?) and concat(?, ' ', ?)
+                and position(? in content) = 1
+                and position(? in content_detail) > 0
+                and position(? in p_yq_xdc) = 1
+                and position(? in p_yq_jcw) = 1
+                and reject = ''
+            order by date_begin desc, time_begin desc
+            limit 2000
+        """.trimIndent(), body["dept"], body["group"], body["date_begin"], body["time_begin"],
+            body["date_end"], body["time_end"],
+            body["content"], body["content_detail"], body["p_xdc"], body["p_jcw"])
     }
 
     /**

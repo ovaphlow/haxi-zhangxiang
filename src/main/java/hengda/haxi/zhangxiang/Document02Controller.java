@@ -24,6 +24,126 @@ public class Document02Controller {
     }
 
     /**
+     * 待处理任务数量：值班所长
+     * @return
+     */
+    @GetMapping(value = "/todo/p_zbsz")
+    public Map<String, Object> todoPzbsz() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.todoPzbszApprove());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 待处理任务数量：调度
+     * @return
+     */
+    @GetMapping(value = "/todo/p_dd")
+    public Map<String, Object> todoPdd() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            Map<String, Object> result = repos.todoPddApprove();
+            Map<String, Object> result1 = repos.todoPddReview();
+            Map<String, Object> qty = new HashMap();
+            qty.put("qty", Integer.parseInt(result.get("qty").toString()));
+            qty.put("qty1", Integer.parseInt(result1.get("qty").toString()));
+            resp.put("content", qty);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 待处理任务数量：质检
+     * @param qc
+     * @return
+     */
+    @GetMapping(value = "/todo/qc/{qc}")
+    public Map<String, Object> todoQc(@PathVariable("qc") String qc) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.todoQcReview(qc));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 待处理任务数量：班组
+     * @param p_bz
+     * @return
+     */
+    @GetMapping(value = "/todo/p_bz/{p_bz}")
+    public Map<String, Object> todoPbz(@PathVariable("p_bz") String p_bz) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            Map<String, Object> result = repos.todoPbzApprove(p_bz);
+            Map<String, Object> result1 = repos.todoPbzReview(p_bz);
+            Map<String, Object> qty = new HashMap();
+            qty.put("qty", Integer.parseInt(result.get("qty").toString()));
+            qty.put("qty1", Integer.parseInt(result1.get("qty").toString()));
+            resp.put("content", qty);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 待处理任务数量：技术员
+     * @return
+     */
+    @GetMapping(value = "/todo/p_jsy")
+    public Map<String, Object> todoPjsy() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            Map<String, Object> result = repos.todoPjsyApprove();
+            Map<String, Object> result1 = repos.todoPjsyReview();
+            Map<String, Object> qty = new HashMap();
+            qty.put("qty", Integer.parseInt(result.get("qty").toString()));
+            qty.put("qty1", Integer.parseInt(result.get("qty").toString()));
+            resp.put("content", qty);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+
+    /**
+     * 按车组统计作业数量
+     * @return
+     */
+    @GetMapping(value = "/stats/")
+    public Map<String, Object> stats() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.stats());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 一般配件和关键配件的更换记录单销记时触发
      * 检修工长销记列表
      * @return
@@ -50,6 +170,146 @@ public class Document02Controller {
         Map<String, Object> resp = new HashMap();
         try {
             resp.put("content", repos.checkPower(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 调度销记列表
+     * @return
+     */
+    @GetMapping(value = "/review/p_dd/")
+    public Map<String, Object> listReviewPdd() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listReviewPdd());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 技术员销记列表
+     * @return
+     */
+    @GetMapping(value = "/review/p_jsy/")
+    public Map<String, Object> listReviewPjsy() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listReviewPjsy());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 质检销记列表
+     * @param qc
+     * @return
+     */
+    @GetMapping(value = "/review/qc/{qc}/")
+    public Map<String, Object> listReviewQc(@PathVariable("qc") String qc) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listReviewQc(qc));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 班组销记列表
+     * @param p_bz
+     * @return
+     */
+    @GetMapping(value = "/review/p_bz/{p_bz}/")
+    public Map<String, Object> listReviewPbz(@PathVariable("p_bz") String p_bz) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listReviewPbz(p_bz));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 作业负责人销记
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/review/applicant/{id}/")
+    public Map<String, Object> listReviewApplicant(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listReviewApplicant(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 值班所长确认列表
+     * @return
+     */
+    @GetMapping(value = "/approve/p_zbsz/")
+    public Map<String, Object> listApprovePzbsz() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listApprovePzbsz());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 调度确认列表
+     * @return
+     */
+    @GetMapping(value = "/approve/p_dd/")
+    public Map<String, Object> listApprovePdd() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listApprovePdd());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 班组确认列表
+     * @param p_bz
+     * @return
+     */
+    @GetMapping(value = "/approve/p_bz/{p_bz}")
+    public Map<String, Object> listApprovePbz(@PathVariable("p_bz") String p_bz) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listApprovePbz(p_bz));
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -87,6 +347,24 @@ public class Document02Controller {
         Map<String, Object> resp = new HashMap();
         try {
             resp.put("content", repos.listApprovePjsy());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 查询
+     * @param body
+     * @return
+     */
+    @PostMapping(value = "/filter/")
+    public Map<String, Object> filter(@RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.filter(body));
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
