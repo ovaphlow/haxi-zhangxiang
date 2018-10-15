@@ -27,6 +27,23 @@ public class Document02Controller {
     }
 
     /**
+     * 一般配件和关键配件的更换记录单销记时触发
+     * 检修工长销记列表
+     * @return
+     */
+    @GetMapping(value = "/verify/p_gz/")
+    public Map<String, Object> verifyPgz() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.verifyPgz());
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 检查供电状态是否冲突，列出所有冲突的申请。
      * @param id
      * @return Map

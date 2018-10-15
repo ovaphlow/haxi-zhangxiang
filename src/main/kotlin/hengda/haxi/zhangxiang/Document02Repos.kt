@@ -15,6 +15,30 @@ class Document02Repos {
     private val jdbc: JdbcTemplate? = null
 
     /**
+     * 一般配件和关键配件的更换记录单销记时触发
+     * 检修工长销记列表
+     */
+    fun verifyPgz(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                sign_verify_leader_bz is not null
+                and sign_verify_leader_qc is null
+                and (
+                    (
+                        select count(*) from journal02_02 where leader = ''
+                    ) > 0
+                    or (
+                        select count(*) from journal02_03 where leader = ''
+                    ) > 0
+                )
+        """.trimIndent())
+    }
+
+    /**
      * 检查供电状态是否冲突
      */
     fun checkPower(id: Int): List<Map<String, Any>> {
