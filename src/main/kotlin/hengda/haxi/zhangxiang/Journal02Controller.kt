@@ -792,184 +792,29 @@ class Journal02Controller {
         return resp
     }
 
-    /* 技术员签字 */
-    @RequestMapping("/{id}/jsy", method = [RequestMethod.PUT])
-    fun updateJSY(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "", "status" to 500)
-        try {
-            jdbc!!.update("""
-                update
-                    journal02
-                set
-                    p_jsy = ?,
-                    p_jsy_id = ?,
-                    p_jsy_date = now(),
-                    p_jsy_time = now(),
-                    p_jsy_content = ?,
-                    p_jsy_bz = ?,
-                    p_jsy_qc = ?,
-                    sign_p_jsy = ?
-                where
-                    id = ?
-            """.trimIndent(), map["p_jsy"], map["p_jsy_id"].toString().toInt(),
-            map["p_jsy_content"], map["p_jsy_bz"], map["p_jsy_qc"], map["sign"], id)
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误。"
-        }
-        return resp
-    }
+    /**
+     * 技术员签字
+     * 移至Document02COntroller
+     */
 
-    /* 技术员确认列表 */
-    @RequestMapping("/jsy/", method = [RequestMethod.GET])
-    fun listJSY(): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    j.*
-                from
-                    journal02 as j
-                where
-                    (sign_p_jsy is null or p_jsy_content = '')
-                    and reject = ''
-                limit 200
-            """.trimIndent())
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误。"
-        }
-        return resp
-    }
+    /**
+     * 技术员确认列表
+     * 移至Document02COntroller
+     */
 
     /**
      * 指定用户审核或销记的申请单
-     * 未测试
      */
-    @GetMapping("/filter/user/{id}/flow")
-    fun filterByUserFlow(@PathVariable("id") id: Int): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    *,
-                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
-                from
-                    journal02 as j
-                where
-                    (
-                        p_jsy_id = ?
-                        or p_dd_id = ?
-                        or p_zbsz_id = ?
-                        or verify_id = ?
-                    )
-                    and leader_id != ?
-                order by diff desc
-                limit 200
-            """.trimIndent(), id, id, id, id, id)
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
     /**
      * 指定用户申请单
+     * 移至Document02Controller
      */
-    @RequestMapping("/filter/user/{id}", method = [RequestMethod.GET])
-    fun filterByUser(@PathVariable("id") id: Int): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select * from journal02 where leader_id = ? order by id desc limit 200
-            """.trimIndent(), id)
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
     /**
      * 查询已完成申请单
+     * 移至Document02Controller
      */
-    @PostMapping("/filter/fin")
-    fun filterFin(@RequestBody body: Map<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    j.*,
-                    (
-                    select
-                        count(*)
-                    from
-                        journal02_02
-                    where
-                        qc != ''
-                        and duty_officer = ''
-                        and master_id = j.id ) as qty_verify_p_jsy_02,
-                    (
-                    select
-                        count(*)
-                    from
-                        journal02_03
-                    where
-                        qc != ''
-                        and duty_officer = ''
-                        and master_id = j.id ) as qty_verify_p_jsy_03,
-                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
-                from
-                    journal02 as j
-                where
-                    sign_verify is not null
-                    and position(? in dept) > 0
-                    and position(? in group_sn) > 0
-                    and concat(date_begin,
-                    ' ',
-                    time_begin) between concat(?, ' ', ?) and concat(?, ' ', ?)
-                order by
-                    diff
-                limit 200
-            """.trimIndent(), body["dept"], body["train"], body["date_begin"], body["time_begin"],
-                    body["date_end"], body["time_end"])
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
-
-    /**
-     * 查询未完成申请单
-     * 20180917 停用
-     */
-    @RequestMapping("/filter/notcomplete", method = [RequestMethod.POST])
-    fun filterNotComplete(@RequestBody body: Map<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    *
-                from
-                    journal02
-                where
-                    verify_id = 0
-                    and sign_verify is null
-                    and position(? in dept) = 1
-                    and position(? in group_sn) = 1
-                    and position(? in date_begin) = 1
-                    and reject = ''
-                order by date_begin
-                limit 200
-            """.trimIndent(), body["dept"], body["group"], body["date"])
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
     /**
      * 首页置顶显示 * 报警列表

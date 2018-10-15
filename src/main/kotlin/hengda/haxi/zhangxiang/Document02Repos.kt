@@ -59,6 +59,118 @@ class Document02Repos {
     }
 
     /**
+     * 技术员签字
+     */
+    fun submitApprovePjsy(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update
+                journal02
+            set
+                p_jsy = ?,
+                p_jsy_id = ?,
+                p_jsy_date = now(),
+                p_jsy_time = now(),
+                p_jsy_content = ?,
+                p_jsy_bz = ?,
+                p_jsy_qc = ?,
+                sign_p_jsy = ?
+            where
+                id = ?
+        """.trimIndent(), body["p_jsy"], body["p_jsy_id"].toString().toInt(),
+            body["p_jsy_content"], body["p_jsy_bz"], body["p_jsy_qc"], body["sign"], body["id"])
+    }
+
+    /**
+     * 技术员确认列表
+     */
+    fun listApprovePjsy(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                j.*
+            from
+                journal02 as j
+            where
+                (sign_p_jsy is null or p_jsy_content = '')
+                and reject = ''
+            limit 200
+        """.trimIndent())
+    }
+
+    /**
+     * 指定用户审核或销记的申请单
+     */
+    fun filterByUserFlow(id: Int): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *,
+                timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
+            from
+                journal02 as j
+            where
+                (
+                    p_jsy_id = ?
+                    or p_dd_id = ?
+                    or p_zbsz_id = ?
+                    or verify_id = ?
+                )
+                and leader_id != ?
+            order by diff desc
+            limit 200
+        """.trimIndent(), id, id, id, id, id)
+    }
+
+    /**
+     * 指定用户申请单
+     */
+    fun filterByUser(id: Int): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select * from journal02 where leader_id = ? order by id desc limit 200
+        """.trimIndent(), id)
+    }
+
+    /**
+     * 查询已完成申请单
+     */
+    fun filterFin(body: Map<String, Any>): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                j.*,
+                (
+                select
+                    count(*)
+                from
+                    journal02_02
+                where
+                    qc != ''
+                    and duty_officer = ''
+                    and master_id = j.id ) as qty_verify_p_jsy_02,
+                (
+                select
+                    count(*)
+                from
+                    journal02_03
+                where
+                    qc != ''
+                    and duty_officer = ''
+                    and master_id = j.id ) as qty_verify_p_jsy_03,
+                timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
+            from
+                journal02 as j
+            where
+                sign_verify is not null
+                and position(? in dept) > 0
+                and position(? in group_sn) > 0
+                and concat(date_begin,
+                ' ',
+                time_begin) between concat(?, ' ', ?) and concat(?, ' ', ?)
+            order by
+                diff
+            limit 200
+        """.trimIndent(), body["dept"], body["train"], body["date_begin"], body["time_begin"],
+            body["date_end"], body["time_end"])
+    }
+
+    /**
      * 首页置顶显示 报警列表
      */
     fun listWarning(): List<Map<String, Any>> {

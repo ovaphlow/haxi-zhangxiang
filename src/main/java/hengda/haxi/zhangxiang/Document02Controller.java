@@ -59,6 +59,97 @@ public class Document02Controller {
     }
 
     /**
+     * 技术员确认
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/{id}/approve/p_jsy")
+    public Map<String, Object> submitApprovePjsy(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitApprovePjsy(body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 技术员审核列表
+     * @return
+     */
+    @GetMapping(value = "/approve/p_jsy/")
+    public Map<String, Object> listApprovePjsy() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listApprovePjsy());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 指定用户审核或销记的申请单
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/filter/user/{id}/flow")
+    public Map<String, Object> filterByUserFlow(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.filterByUserFlow(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 指定用户申请单
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/filter/user/{id}")
+    public Map<String, Object> filterByUser(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.filterByUser(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 查询已完成申请单
+     * @param body
+     * @return
+     */
+    @PostMapping(value = "/filter/fin/")
+    public Map<String, Object> filterFin(@RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.filterFin(body));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "");
+        }
+        return resp;
+    }
+
+    /**
      * 首页置顶显示 报警列表
      * @return
      */
