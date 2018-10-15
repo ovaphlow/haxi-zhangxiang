@@ -1083,129 +1083,18 @@ class Journal02Controller {
         return resp
     }
 
-    /* 申请单信息 */
-    @RequestMapping("/{id}", method = [RequestMethod.GET])
-    fun get(@PathVariable("id") id: Int): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForMap("""
-                select
-                    *,
-                    (
-                        select
-                            count(*)
-                        from
-                            journal02_02
-                        where
-                            qc != ''
-                            and duty_officer = ''
-                            and master_id = j.id
-                    ) as qty_verify_p_jsy_02,
-                    (
-                        select
-                            count(*)
-                        from
-                            journal02_03
-                        where
-                            qc != ''
-                            and duty_officer = ''
-                            and master_id = j.id
-                    ) as qty_verify_p_jsy_03
-                from
-                    journal02 as j
-                where
-                    id = ?
-            """.trimIndent(), id)
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误。"
-        }
-        return resp
-    }
+    /**
+     * 申请单信息
+     * 移至Document02Controller
+     */
 
     /**
      * 修改申请单
+     * 移至Document02Controller
      */
-    @RequestMapping("/{id}", method = [RequestMethod.PUT])
-    fun update(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            jdbc!!.update("""
-                update
-                    journal02
-                set
-                    applicant = ?,
-                    applicant_phone = ?,
-                    leader = ?,
-                    leader_phone = ?,
-                    dept = ?,
-                    group_sn = ?,
-                    date_begin = ?,
-                    time_begin = ?,
-                    date_end = ?,
-                    time_end = ?,
-                    content = ?,
-                    content_detail = ?,
-                    p_yq_xdc = ?,
-                    p_yq_jcw = ?,
-                    p_yq_zydd = ?,
-                    p_yq_qt = ?,
-                    reject = ''
-                where
-                    id = ?
-            """.trimIndent(), body["applicant"], body["applicantPhone"], body["leader"],
-                    body["leaderPhone"], body["dept"], body["groupSN"],
-                    body["dateBegin"], body["timeBegin"], body["dateEnd"], body["timeEnd"],
-                    body["content"], body["content_detail"],
-                    body["p_yq_xdc"], body["p_yq_jcw"], body["p_yq_zydd"], body["p_yq_qt"],
-                    id)
-        } catch (e: Exception) {
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
-    /* 添加申请单 */
-    @RequestMapping("/", method = [RequestMethod.POST])
-    fun save(@RequestBody map: Map<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            jdbc!!.update("""
-                insert into
-                    journal02
-                set
-                    uuid = uuid(),
-                    applicant = ?,
-                    applicant_phone = ?,
-                    leader = ?,
-                    leader_id = ?,
-                    leader_phone = ?,
-                    dept = ?,
-                    group_sn = ?,
-                    date_begin = ?,
-                    time_begin = ?,
-                    date_end = ?,
-                    time_end = ?,
-                    content = ?,
-                    content_detail = ?,
-                    p_yq_xdc = ?,
-                    p_yq_jcw = ?,
-                    p_yq_zydd = ?,
-                    p_yq_qt = ?
-            """.trimIndent(), map["applicant"], map["applicantPhone"], map["leader"], map["leaderId"].toString().toInt(),
-                    map["leaderPhone"], map["dept"], map["groupSN"],
-                    map["dateBegin"], map["timeBegin"], map["dateEnd"], map["timeEnd"],
-                    map["content"], map["content_detail"],
-                    map["p_yq_xdc"], map["p_yq_jcw"], map["p_yq_zydd"], map["p_yq_qt"])
-            resp["content"] = jdbc.queryForMap("""
-                select last_insert_id() as last_id
-            """.trimIndent())
-            /* mapper.save(map) */
-            /* resp["content"] = mapper.lastId() */
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误。"
-        }
-        return resp
-    }
+    /**
+     * 添加申请单
+     * 移至Document02Controller
+     */
 }

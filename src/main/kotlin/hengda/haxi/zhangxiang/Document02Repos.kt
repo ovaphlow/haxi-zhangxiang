@@ -57,4 +57,106 @@ class Document02Repos {
                 and p_yq_jcw != (select p_yq_jcw from journal02 where id = ? limit 1)
         """.trimIndent(), id, id, id, id)
     }
+
+    /**
+     * 申请单信息
+     */
+    fun get(id: Int): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                *,
+                (
+                    select
+                        count(*)
+                    from
+                        journal02_02
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id
+                ) as qty_verify_p_jsy_02,
+                (
+                    select
+                        count(*)
+                    from
+                        journal02_03
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id
+                ) as qty_verify_p_jsy_03
+            from
+                journal02 as j
+            where
+                id = ?
+        """.trimIndent(), id)
+    }
+
+    /**
+     * 修改申请
+     */
+    fun update(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update
+                journal02
+            set
+                applicant = ?,
+                applicant_phone = ?,
+                leader = ?,
+                leader_phone = ?,
+                dept = ?,
+                group_sn = ?,
+                date_begin = ?,
+                time_begin = ?,
+                date_end = ?,
+                time_end = ?,
+                content = ?,
+                content_detail = ?,
+                p_yq_xdc = ?,
+                p_yq_jcw = ?,
+                p_yq_zydd = ?,
+                p_yq_qt = ?,
+                reject = ''
+            where
+                id = ?
+        """.trimIndent(), body["applicant"], body["applicantPhone"], body["leader"],
+            body["leaderPhone"], body["dept"], body["groupSN"],
+            body["dateBegin"], body["timeBegin"], body["dateEnd"], body["timeEnd"],
+            body["content"], body["content_detail"],
+            body["p_yq_xdc"], body["p_yq_jcw"], body["p_yq_zydd"], body["p_yq_qt"], body["id"])
+    }
+
+    /**
+     * 提交申请
+     */
+    fun save(body: Map<String, Any>) {
+        jdbc!!.update("""
+            insert into
+                journal02
+            set
+                uuid = uuid(),
+                applicant = ?,
+                applicant_phone = ?,
+                leader = ?,
+                leader_id = ?,
+                leader_phone = ?,
+                dept = ?,
+                group_sn = ?,
+                date_begin = ?,
+                time_begin = ?,
+                date_end = ?,
+                time_end = ?,
+                content = ?,
+                content_detail = ?,
+                p_yq_xdc = ?,
+                p_yq_jcw = ?,
+                p_yq_zydd = ?,
+                p_yq_qt = ?
+        """.trimIndent(), body["applicant"], body["applicantPhone"], body["leader"],
+            body["leaderId"].toString().toInt(),
+            body["leaderPhone"], body["dept"], body["groupSN"],
+            body["dateBegin"], body["timeBegin"], body["dateEnd"], body["timeEnd"],
+            body["content"], body["content_detail"],
+            body["p_yq_xdc"], body["p_yq_jcw"], body["p_yq_zydd"], body["p_yq_qt"])
+    }
 }

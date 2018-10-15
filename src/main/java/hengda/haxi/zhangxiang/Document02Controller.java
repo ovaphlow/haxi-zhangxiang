@@ -3,10 +3,7 @@ package hengda.haxi.zhangxiang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +51,60 @@ public class Document02Controller {
         try {
             resp.put("content", repos.checkPower(id));
             resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 申请单信息
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/{id}")
+    public Map<String, Object> get(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.get(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 修改申请单
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/{id}")
+    public Map<String, Object> update(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.update(body);
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 提交申请
+     * @param body
+     * @return
+     */
+    @PostMapping(value = "/")
+    public Map<String, Object> save(@RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            repos.save(body);
         } catch (Exception e) {
             logger.error("{}", e);
             resp.put("message", "服务器错误");
