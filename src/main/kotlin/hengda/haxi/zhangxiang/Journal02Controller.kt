@@ -972,116 +972,21 @@ class Journal02Controller {
     }
 
     /**
-     * 首页置顶显示
-     * 报警列表
-     * 未测试
+     * 首页置顶显示 * 报警列表
+     * 移至Document02Controller
      */
-    @GetMapping("/warning")
-    fun warning(): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    j.*,
-                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
-                from
-                    journal02 as j
-                where
-                    reject = ''
-                    and timestampdiff(second, concat(date_end, ' ', time_end), now()) > 0
-                    and sign_verify_leader is null
-                order by
-                    diff desc
-                limit 200
-            """.trimIndent())
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
     /**
      * 首页显示列表
      * 默认只显示非报警状态的未完成项目
      * 包括检查值班干部带处理申请单计数和超期时间
-     * 未测试
+     * 移至Document02Controller
      */
-    @GetMapping("/")
-    fun list(): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select
-                    j.*,
-                    (
-                    select
-                        count(*)
-                    from
-                        journal02_02
-                    where
-                        qc != ''
-                        and duty_officer = ''
-                        and master_id = j.id ) as qty_verify_p_jsy_02,
-                    (
-                    select
-                        count(*)
-                    from
-                        journal02_03
-                    where
-                        qc != ''
-                        and duty_officer = ''
-                        and master_id = j.id ) as qty_verify_p_jsy_03,
-                    timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
-                from
-                    journal02 as j
-                where
-                    reject = ''
-                    and (
-                        timestampdiff(second, concat(date_end, ' ', time_end), now()) < 0
-                        or sign_verify_leader is not null
-                    )
-                    and sign_verify is null
-                order by
-                    diff desc
-                limit 200
-            """.trimIndent())
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
     /**
      * 删除申请单，包括子单
-     * 物理删除
+     * 移至Document02Controller
      */
-    @RequestMapping("/{id}", method = [RequestMethod.DELETE])
-    fun remove(@PathVariable("id") id: Int): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            jdbc!!.update("""
-                delete from journal02 where id = ?
-            """.trimIndent(), id)
-            jdbc.update("""
-                delete from journal02_01 where master_id = ?
-            """.trimIndent(), id)
-            jdbc.update("""
-                delete from journal02_02 where master_id = ?
-            """.trimIndent(), id)
-            jdbc.update("""
-                delete from journal02_03 where master_id = ?
-            """.trimIndent(), id)
-            jdbc.update("""
-                delete from journal02_04 where master_id = ?
-            """.trimIndent(), id)
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
     /**
      * 申请单信息

@@ -59,6 +59,61 @@ public class Document02Controller {
     }
 
     /**
+     * 首页置顶显示 报警列表
+     * @return
+     */
+    @GetMapping(value = "/warning/")
+    public Map<String, Object> listWarning() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listWarning());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 首页显示列表
+     * 默认只显示非报警状态的未完成项目
+     * 包括检查值班干部带处理申请单计数和超期时间
+     * @return
+     */
+    @GetMapping(value = "/")
+    public Map<String, Object> list() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.list());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 删除申请单
+     * @param id
+     * @return
+     */
+    @DeleteMapping(value = "/{id}")
+    public Map<String, Object> remove(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            repos.remove(id);
+            resp.put("message", "");
+            resp.put("content", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 申请单信息
      * @param id
      * @return
@@ -88,6 +143,8 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.update(body);
+            resp.put("message", "");
+            resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
             resp.put("message", "服务器错误");
@@ -105,6 +162,8 @@ public class Document02Controller {
         Map<String, Object> resp = new HashMap();
         try {
             repos.save(body);
+            resp.put("message", "");
+            resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
             resp.put("message", "服务器错误");

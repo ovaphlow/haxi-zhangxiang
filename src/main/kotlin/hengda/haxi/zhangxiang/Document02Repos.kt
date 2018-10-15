@@ -59,6 +59,90 @@ class Document02Repos {
     }
 
     /**
+     * 首页置顶显示 报警列表
+     */
+    fun listWarning(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                j.*,
+                timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
+            from
+                journal02 as j
+            where
+                reject = ''
+                and timestampdiff(second, concat(date_end, ' ', time_end), now()) > 0
+                and sign_verify_leader is null
+            order by
+                diff desc
+            limit 200
+        """.trimIndent())
+    }
+
+    /**
+     * 首页显示列表
+     * 默认只显示非报警状态的未完成项目
+     * 包括检查值班干部带处理申请单计数和超期时间
+     */
+    fun list(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                j.*,
+                (
+                select
+                    count(*)
+                from
+                    journal02_02
+                where
+                    qc != ''
+                    and duty_officer = ''
+                    and master_id = j.id ) as qty_verify_p_jsy_02,
+                (
+                select
+                    count(*)
+                from
+                    journal02_03
+                where
+                    qc != ''
+                    and duty_officer = ''
+                    and master_id = j.id ) as qty_verify_p_jsy_03,
+                timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
+            from
+                journal02 as j
+            where
+                reject = ''
+                and (
+                    timestampdiff(second, concat(date_end, ' ', time_end), now()) < 0
+                    or sign_verify_leader is not null
+                )
+                and sign_verify is null
+            order by
+                diff desc
+            limit 200
+        """.trimIndent())
+    }
+
+    /**
+     * 删除申请单
+     */
+    fun remove(id: Int) {
+        jdbc!!.update("""
+                delete from journal02 where id = ?
+            """.trimIndent(), id)
+        jdbc.update("""
+                delete from journal02_01 where master_id = ?
+            """.trimIndent(), id)
+        jdbc.update("""
+                delete from journal02_02 where master_id = ?
+            """.trimIndent(), id)
+        jdbc.update("""
+                delete from journal02_03 where master_id = ?
+            """.trimIndent(), id)
+        jdbc.update("""
+                delete from journal02_04 where master_id = ?
+            """.trimIndent(), id)
+    }
+
+    /**
      * 申请单信息
      */
     fun get(id: Int): Map<String, Any> {
