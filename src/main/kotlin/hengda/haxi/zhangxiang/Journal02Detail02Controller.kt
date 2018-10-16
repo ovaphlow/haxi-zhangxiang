@@ -61,24 +61,8 @@ class Journal02Detail02Controller {
 
     /**
      * 子帐单02：班组确认
+     * 移至Document02Controller
      */
-    @RequestMapping("/{masterId}/02/{id}/p_bz", method = [RequestMethod.PUT])
-    fun update02Pbz(
-            @PathVariable("masterId") masterId: Int,
-            @PathVariable("id") id: Int,
-            @RequestBody body: Map<String, Any>
-    ): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            jdbc!!.update("""
-                update journal02_02 set leader = ? where id = ? and master_id = ? limit 1
-            """.trimIndent(), body["leader"], id, masterId)
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
 
     /* 子帐单02：删除 */
     @RequestMapping("/{masterId}/02/{id}", method = [RequestMethod.DELETE])
