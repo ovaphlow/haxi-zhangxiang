@@ -107,6 +107,39 @@ class Document02Repos {
     }
 
     /**
+     * 待处理任务数量：工长（review）
+     */
+    fun todoPgzReview(p_bz: String): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02
+            where
+                p_jsy_bz = ?
+                and sign_verify_leader_bz is not null
+                and (
+                    (
+                        select count(*) from journal02_02 where leader = ''
+                    ) > 0
+                    or (
+                        select count(*) from journal02_03 where leader = ''
+                    ) > 0
+                )
+                and (
+                    (
+                        position('质检' in p_jsy_content) > 0
+                        and sign_verify_leader_qc is null
+                    )
+                    or (
+                        position('质检' in p_jsy_content) = 0
+                        and sign_verify is null
+                    )
+                )
+        """.trimIndent(), p_bz)
+    }
+
+    /**
      * 待处理任务数量：班组（review）
      */
     fun todoPbzReview(p_bz: String): Map<String, Any> {
@@ -202,29 +235,6 @@ class Document02Repos {
         """.trimIndent())
     }
 
-    /**
-     * 一般配件和关键配件的更换记录单销记时触发
-     * 检修工长销记列表
-     */
-    fun verifyPgz(): List<Map<String, Any>> {
-        return jdbc!!.queryForList("""
-            select
-                *
-            from
-                journal02
-            where
-                sign_verify_leader_bz is not null
-                and sign_verify_leader_qc is null
-                and (
-                    (
-                        select count(*) from journal02_02 where leader = ''
-                    ) > 0
-                    or (
-                        select count(*) from journal02_03 where leader = ''
-                    ) > 0
-                )
-        """.trimIndent())
-    }
 
     /**
      * 检查供电状态是否冲突
@@ -374,6 +384,67 @@ class Document02Repos {
                 and p_jsy_qc = ?
                 and reject = ''
         """.trimIndent(), qc)
+    }
+
+    /**
+     * 子帐单03 工长销记
+     */
+    fun submitReviewPgz03(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update journal02_03 set leader = ? where id = ? and master_id = ?
+        """.trimIndent(), body["leader"], body["id"], body["master_id"])
+    }
+
+    /**
+     * 子帐单02 工长销记
+     */
+    fun submitReviewPgz02(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update journal02_02 set leader = ? where id = ? and master_id = ?
+        """.trimIndent(), body["leader"], body["id"], body["master_id"])
+    }
+
+    /**
+     * 一般配件和关键配件的更换记录单销记时触发
+     * 检修工长销记列表
+     */
+    fun listReviewPgz(p_bz: String): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                *
+            from
+                journal02
+            where
+                p_jsy_bz = ?
+                and sign_verify_leader_bz is not null
+                and (
+                    (
+                        select count(*) from journal02_02 where leader = ''
+                    ) > 0
+                    or (
+                        select count(*) from journal02_03 where leader = ''
+                    ) > 0
+                )
+                and (
+                    (
+                        position('质检' in p_jsy_content) > 0
+                        and sign_verify_leader_qc is null
+                    )
+                    or (
+                        position('质检' in p_jsy_content) = 0
+                        and sign_verify is null
+                    )
+                )
+        """.trimIndent(), p_bz)
+    }
+
+    /**
+     * 班组销记签字
+     */
+    fun submitReviewPbz(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update journal02 set sign_verify_leader_bz = ? where id = ?
+        """.trimIndent(), body["sign"], body["id"])
     }
 
     /**
@@ -639,23 +710,32 @@ class Document02Repos {
             select
                 j.*,
                 (
-                select
-                    count(*)
-                from
-                    journal02_02
-                where
-                    qc != ''
-                    and duty_officer = ''
-                    and master_id = j.id ) as qty_verify_p_jsy_02,
+                    select
+                        count(*)
+                    from
+                        journal02_02
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id
+                ) as qty_verify_p_jsy_02,
                 (
-                select
-                    count(*)
-                from
-                    journal02_03
-                where
-                    qc != ''
-                    and duty_officer = ''
-                    and master_id = j.id ) as qty_verify_p_jsy_03,
+                    select
+                        count(*)
+                    from
+                        journal02_03
+                    where
+                        qc != ''
+                        and duty_officer = ''
+                        and master_id = j.id
+                ) as qty_verify_p_jsy_03,
+                -- 工长待办，？？？
+                (
+                    select count(*) from journal02_02 where master_id = j.id and leader = ''
+                ) as qty_review_p_gz_02,
+                (
+                    select count(*) from journal02_03 where master_id = j.id and leader = ''
+                ) as qty_review_p_gz_03,
                 timestampdiff(second, concat(date_end, ' ', time_end), now()) as diff
             from
                 journal02 as j
@@ -719,7 +799,13 @@ class Document02Repos {
                         qc != ''
                         and duty_officer = ''
                         and master_id = j.id
-                ) as qty_verify_p_jsy_03
+                ) as qty_verify_p_jsy_03,
+                (
+                    select count(*) from journal02_02 where master_id = j.id and leader = ''
+                ) as qty_review_p_gz_02,
+                (
+                    select count(*) from journal02_03 where master_id = j.id and leader = ''
+                ) as qty_review_p_gz_03
             from
                 journal02 as j
             where

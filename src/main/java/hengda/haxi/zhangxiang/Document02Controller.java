@@ -81,6 +81,24 @@ public class Document02Controller {
     }
 
     /**
+     * 待处理任务数量：工长
+     * @param p_bz
+     * @return
+     */
+    @GetMapping(value = "/todo/p_gz/{p_bz}")
+    public Map<String, Object> todoPgz(@PathVariable("p_bz") String p_bz) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.todoPgzReview(p_bz));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 待处理任务数量：班组
      * @param p_bz
      * @return
@@ -143,22 +161,6 @@ public class Document02Controller {
         return resp;
     }
 
-    /**
-     * 一般配件和关键配件的更换记录单销记时触发
-     * 检修工长销记列表
-     * @return
-     */
-    @GetMapping(value = "/verify/p_gz/")
-    public Map<String, Object> verifyPgz() {
-        Map<String, Object> resp = new HashMap();
-        try {
-            resp.put("content", repos.verifyPgz());
-        } catch (Exception e) {
-            logger.error("{}", e);
-            resp.put("message", "服务器错误");
-        }
-        return resp;
-    }
 
     /**
      * 检查供电状态是否冲突，列出所有冲突的申请。
@@ -222,6 +224,96 @@ public class Document02Controller {
         Map<String, Object> resp = new HashMap();
         try {
             resp.put("content", repos.listReviewQc(qc));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 子帐单03：工长销记
+     * @param master_id
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/{master_id}/03/{id}/p_gz")
+    public Map<String, Object> reviewPgz03(
+            @PathVariable("master_id") int master_id,
+            @PathVariable("id") int id,
+            @RequestBody Map<String, Object> body
+    ) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("master_id", master_id);
+            body.put("id", id);
+            logger.info("{}", body);
+            repos.submitReviewPgz03(body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 子账单02：工长销记
+     * @param master_id
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/{master_id}/02/{id}/p_gz")
+    public Map<String, Object> reviewPgz02(
+            @PathVariable("master_id") int master_id,
+            @PathVariable("id") int id,
+            @RequestBody Map<String, Object> body
+    ) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("master_id", master_id);
+            body.put("id", id);
+            repos.submitReviewPgz02(body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 一般配件和关键配件的更换记录单销记时触发
+     * 检修工长销记列表
+     * @return
+     */
+    @GetMapping(value = "/verify/p_gz/{p_bz}")
+    public Map<String, Object> verifyPgz(@PathVariable("p_bz") String p_bz) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listReviewPgz(p_bz));
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 班组销记签字
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/{id}/review/p_bz")
+    public Map<String, Object> submitReviewPbz(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitReviewPbz(body);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);

@@ -72,22 +72,23 @@ class Journal02Controller {
         return resp
     }
 
-    /* 班组销记签字 */
-    @RequestMapping("/{id}/verify/leader/bz", method = [RequestMethod.PUT])
-    fun updateVerifyLeaderBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            jdbc!!.update("""
-                update journal02 set sign_verify_leader_bz = ? where id = ?
-            """.trimIndent(), map["sign"], id)
-            /* map["id"] = id */
-            /* mapper.updateVerifyLeaderBz(map) */
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误。"
-        }
-        return resp
-    }
+    /**
+     * 班组销记签字
+     * 移至Document02Controller
+     */
+//    @RequestMapping("/{id}/verify/leader/bz", method = [RequestMethod.PUT])
+//    fun updateVerifyLeaderBz(@PathVariable("id") id: Int, @RequestBody map: MutableMap<String, Any>): Map<String, Any> {
+//        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
+//        try {
+//            jdbc!!.update("""
+//                update journal02 set sign_verify_leader_bz = ? where id = ?
+//            """.trimIndent(), map["sign"], id)
+//        } catch (e: Exception) {
+//            logger.error("{}", e)
+//            resp["message"] = "服务器错误。"
+//        }
+//        return resp
+//    }
 
     /* 作业负责人销记签字 */
     @RequestMapping("/{id}/verify/leader/sign", method = [RequestMethod.PUT])
