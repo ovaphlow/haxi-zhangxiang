@@ -1,13 +1,12 @@
 buildscript {
 	ext {
 		kotlinVersion = '1.2.71'
-		springBootVersion = '2.0.5.RELEASE'
+		springBootVersion = '2.0.6.RELEASE'
 	}
 	repositories {
-    mavenLocal()
-    maven { url 'http://maven.aliyun.com/mvn/repository/' }
+        mavenLocal()
+        maven { url 'http://maven.aliyun.com/mvn/repository/' }
 		jcenter()
-		mavenCentral()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -43,7 +42,6 @@ repositories {
 	mavenLocal()
 	maven { url 'http://maven.aliyun.com/mvn/repository/' }
 	jcenter()
-	mavenCentral()
 }
 
 configurations {

@@ -249,7 +249,6 @@ public class Document02Controller {
         try {
             body.put("master_id", master_id);
             body.put("id", id);
-            logger.info("{}", body);
             repos.submitReviewPgz03(body);
             resp.put("message", "");
         } catch (Exception e) {
