@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/journal02")
 class Journal02Detail04Controller {
 
-    val logger: Logger = LoggerFactory.getLogger(Journal02Controller::class.java)
+    val logger: Logger = LoggerFactory.getLogger(Journal02Detail04Controller::class.java)
 
     @Autowired
     private val jdbc: JdbcTemplate? = null

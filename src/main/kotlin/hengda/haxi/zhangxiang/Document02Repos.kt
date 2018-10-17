@@ -257,6 +257,25 @@ class Document02Repos {
     }
 
     /**
+     * 调度销记
+     */
+    fun submitReviewPdd(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update
+                journal02
+            set
+                verify = ?,
+                verify_id = ?,
+                verify_date = now(),
+                verify_time = now(),
+                remark = ?,
+                sign_verify = ?
+            where
+                id = ?
+        """.trimIndent(), body["verify"], body["verify_id"], body["remark"], body["sign"], body["id"])
+    }
+
+    /**
      * 调度销记列表
      */
     fun listReviewPdd(): List<Map<String, Any>> {
@@ -368,6 +387,15 @@ class Document02Repos {
     }
 
     /**
+     * 质检销记
+     */
+    fun submitReviewQc(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update journal02 set sign_verify_leader_qc = ? where id = ?
+        """.trimIndent(), body["sign"], body["id"])
+    }
+
+    /**
      * 质检销记列表
      */
     fun listReviewQc(qc: String): List<Map<String, Any>> {
@@ -466,6 +494,32 @@ class Document02Repos {
     }
 
     /**
+     * 作业负责人销记
+     */
+    fun submitReviewApplicant(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update
+                journal02
+            set
+                date_begin = ?,
+                time_begin = ?,
+                date_end = ?,
+                time_end = ?,
+                verify_report = ?,
+                verify_leader = ?,
+                verify_leader_id = ?,
+                verify_leader_date = ?,
+                verify_leader_time = ?,
+                remark = ?,
+                sign_verify_leader = ?
+            where
+                id = ?
+        """.trimIndent(), body["date_begin"], body["time_begin"], body["date_end"], body["time_end"],
+                body["verify_report"], body["verify_leader"], body["verify_leader_id"],
+                body["date_end"], body["time_end"], body["remark"], body["sign"], body["id"])
+    }
+
+    /**
      * 作业负责人销记列表
      */
     fun listReviewApplicant(id: Int): List<Map<String, Any>> {
@@ -490,6 +544,24 @@ class Document02Repos {
     }
 
     /**
+     * 值班所长确认
+     */
+    fun submitApprovePzbsz(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update
+                journal02
+            set
+                p_zbsz = ?,
+                p_zbsz_id = ?,
+                p_zbsz_date = now(),
+                p_zbsz_time = now(),
+                sign_p_zbsz = ?
+            where
+                id = ?
+        """.trimIndent(), body["p_zbsz"], body["p_zbsz_id"], body["sign"], body["id"])
+    }
+
+    /**
      * 值班所长确认列表
      */
     fun listApprovePzbsz(): List<Map<String, Any>> {
@@ -507,6 +579,24 @@ class Document02Repos {
     }
 
     /**
+     * 调度确认
+     */
+    fun submitApprovePdd(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update
+                journal02
+            set
+                p_dd = ?,
+                p_dd_id = ?,
+                p_dd_date = now(),
+                p_dd_time = now(),
+                sign_p_dd = ?
+            where
+                id = ?
+        """.trimIndent(), body["p_dd"], body["p_dd_id"], body["sign"], body["id"])
+    }
+
+    /**
      * 调度确认列表
      */
     fun listApprovePdd(): List<Map<String, Any>> {
@@ -521,6 +611,15 @@ class Document02Repos {
                 and reject = ''
             limit 200
         """.trimIndent())
+    }
+
+    /**
+     * 班组确认
+     */
+    fun submitApprovePbz(body: Map<String, Any>) {
+        jdbc!!.update("""
+            update journal02 set sign_p_jsy_bz = ? where id = ?
+        """.trimIndent(), body["sign"], body["id"])
     }
 
     /**

@@ -161,7 +161,6 @@ public class Document02Controller {
         return resp;
     }
 
-
     /**
      * 检查供电状态是否冲突，列出所有冲突的申请。
      * @param id
@@ -172,6 +171,26 @@ public class Document02Controller {
         Map<String, Object> resp = new HashMap();
         try {
             resp.put("content", repos.checkPower(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 调度销记
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/review/p_dd/{id}")
+    public Map<String, Object> submitReviewPdd(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitReviewPdd(body);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -206,6 +225,26 @@ public class Document02Controller {
         Map<String, Object> resp = new HashMap();
         try {
             resp.put("content", repos.listReviewPjsy());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 质检销记
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/review/qc/{id}")
+    public Map<String, Object> submitReviewQc(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitReviewQc(body);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -342,6 +381,29 @@ public class Document02Controller {
     /**
      * 作业负责人销记
      * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/review/applicant/{id}")
+    public Map<String, Object> submitReviewApplicant(
+            @PathVariable("id") int id,
+            @RequestBody Map<String, Object> body
+    ) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitReviewApplicant(body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 作业负责人销记
+     * @param id
      * @return
      */
     @GetMapping(value = "/review/applicant/{id}/")
@@ -349,6 +411,26 @@ public class Document02Controller {
         Map<String, Object> resp = new HashMap();
         try {
             resp.put("content", repos.listReviewApplicant(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 值班所长确认
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/approve/p_zbsz/{id}")
+    public Map<String, Object> submitApprovePzbsz(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitApprovePzbsz(body);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -375,6 +457,26 @@ public class Document02Controller {
     }
 
     /**
+     * 调度确认
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/approve/p_dd/{id}")
+    public Map<String, Object> submitApprovePdd(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitApprovePdd(body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 调度确认列表
      * @return
      */
@@ -392,11 +494,31 @@ public class Document02Controller {
     }
 
     /**
+     * 班组确认
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/approve/p_bz/{id}")
+    public Map<String, Object> submitApprovePbz(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            body.put("id", id);
+            repos.submitApprovePbz(body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 班组确认列表
      * @param p_bz
      * @return
      */
-    @GetMapping(value = "/approve/p_bz/{p_bz}")
+    @GetMapping(value = "/approve/p_bz/{p_bz}/")
     public Map<String, Object> listApprovePbz(@PathVariable("p_bz") String p_bz) {
         Map<String, Object> resp = new HashMap();
         try {

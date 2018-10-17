@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/journal02")
 class Journal02RejectController {
 
-    val logger: Logger = LoggerFactory.getLogger(Journal02Controller::class.java)
+    val logger: Logger = LoggerFactory.getLogger(Journal02RejectController::class.java)
 
     @Autowired
     private val jdbc: JdbcTemplate? = null
