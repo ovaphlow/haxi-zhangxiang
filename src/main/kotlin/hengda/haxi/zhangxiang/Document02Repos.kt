@@ -14,6 +14,27 @@ class Document02Repos {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
+    /* 驳回列表 */
+    fun listReject(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select * from journal02 where reject != '' order by id desc limit 200
+        """.trimIndent())
+    }
+
+    /* 驳回 （通用） */
+    fun submitReject(id: Int, body: Map<String, Any>) {
+        jdbc!!.update("""
+            update
+                journal02
+            set
+                reject = ?,
+                reject_by = ?,
+                reject_by_id = ?
+            where
+                id = ?
+        """.trimIndent(), body["reject"], body["reject_by"], body["reject_by_id"], id)
+    }
+
     /**
      * 待处理任务数量：值班所长（approve）
      */

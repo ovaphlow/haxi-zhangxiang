@@ -24,6 +24,42 @@ public class Document02Controller {
     }
 
     /**
+     * 驳回列表
+     * @return
+     */
+    @GetMapping(value = "/reject/")
+    public Map<String, Object> listReject() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listReject());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 驳回 （通用）
+     * @param id
+     * @param body
+     * @return
+     */
+    @PutMapping(value = "/{id}/reject")
+    public Map<String, Object> submitReject(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            repos.submitReject(id, body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 待处理任务数量：值班所长
      * @return
      */
