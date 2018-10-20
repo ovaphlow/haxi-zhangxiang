@@ -18,45 +18,6 @@ class Journal02RejectController {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
-    /**
-     * 驳回（通用）
-     */
-    @RequestMapping("/{id}/reject", method = [RequestMethod.PUT])
-    fun reject(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            jdbc!!.update("""
-                update
-                    journal02
-                set
-                    reject = ?,
-                    reject_by = ?,
-                    reject_by_id = ?
-                where
-                    id = ?
-            """.trimIndent(), body["reject"], body["reject_by"], body["reject_by_id"], id)
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
-
-    // 驳回申请列表
-    @RequestMapping("/reject/", method = [RequestMethod.GET])
-    fun list(): Map<String, Any> {
-        var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
-        try {
-            resp["content"] = jdbc!!.queryForList("""
-                select * from journal02 where reject != '' order by id desc limit 200
-            """.trimIndent())
-        } catch (e: Exception) {
-            logger.error("{}", e)
-            resp["message"] = "服务器错误"
-        }
-        return resp
-    }
-
     @RequestMapping("/{id}/reject/p_zbsz", method = [RequestMethod.PUT])
     fun p_zbsz(@PathVariable("id") id: Int, @RequestBody body: Map<String, Any>): Map<String, Any> {
         var resp: MutableMap<String, Any> = hashMapOf("content" to "", "message" to "")
