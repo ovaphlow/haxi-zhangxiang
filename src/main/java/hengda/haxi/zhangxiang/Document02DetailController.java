@@ -24,6 +24,24 @@ public class Document02DetailController {
     }
 
     /**
+     * 子单 计数
+     * @param master_id
+     * @return
+     */
+    @GetMapping(value = "/{master_id}/detail/qty")
+    public Map<String, Object> qty(@PathVariable("master_id") int master_id) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.qty(master_id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
      * 04子单 计数
      * @param master_id
      * @return

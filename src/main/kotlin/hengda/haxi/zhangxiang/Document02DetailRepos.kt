@@ -15,6 +15,23 @@ class Document02DetailRepos {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
+    /* 子单 计数 */
+    fun qty(master_id: Int): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                content,
+                (select count(*) from journal02_01 where master_id = ?) as qty_01,
+                (select count(*) from journal02_02 where master_id = ?) as qty_02,
+                (select count(*) from journal02_03 where master_id = ?) as qty_03,
+                (select count(*) from journal02_04 where master_id = ?) as qty_04
+            from
+                journal02
+            where
+                id = ?
+            limit 1
+        """.trimIndent(), master_id, master_id, master_id, master_id, master_id)
+    }
+
     /* 04子单 计数 */
     fun qty04(master_id: Int): Map<String, Any> {
         return jdbc!!.queryForMap("""
