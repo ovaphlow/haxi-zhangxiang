@@ -812,7 +812,9 @@ class Document02Repos {
                 journal02 as j
             where
                 reject = ''
-                and timestampdiff(second, concat(date_end, ' ', time_end), now()) > 0
+                -- and timestampdiff(second, concat(date_end, ' ', time_end), now()) > 0
+                -- 提前15分钟预警
+                and timestampdiff(second, concat(date_end, ' ', time_end), now()) > -900
                 and sign_verify_leader is null
             order by
                 diff desc
@@ -849,7 +851,6 @@ class Document02Repos {
                         and duty_officer = ''
                         and master_id = j.id
                 ) as qty_verify_p_jsy_03,
-                -- 工长待办，？？？
                 (
                     select count(*) from journal02_02 where master_id = j.id and leader = ''
                 ) as qty_review_p_gz_02,
@@ -862,12 +863,13 @@ class Document02Repos {
             where
                 reject = ''
                 and (
-                    timestampdiff(second, concat(date_end, ' ', time_end), now()) < 0
+                    timestampdiff(second, concat(date_end, ' ', time_end), now()) < -900
                     or sign_verify_leader is not null
                 )
                 and sign_verify is null
             order by
-                diff desc
+                -- diff desc
+                id desc
             limit 200
         """.trimIndent())
     }

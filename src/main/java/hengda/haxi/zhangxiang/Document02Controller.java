@@ -678,6 +678,7 @@ public class Document02Controller {
 
     /**
      * 首页置顶显示 报警列表
+     * 2018-10 分为报警和警告，报警红色，警告黄色
      * @return
      */
     @GetMapping(value = "/warning/")
