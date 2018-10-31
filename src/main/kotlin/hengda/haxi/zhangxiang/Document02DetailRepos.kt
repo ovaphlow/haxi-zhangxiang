@@ -167,6 +167,7 @@ class Document02DetailRepos {
                 remark = ?
             where
                 id = ?
+                and master_id = ?
         """.trimIndent(), body["subject"], body["software_version_new"], body["software_version_old"],
                 body["approval_sn"], body["train"], body["date"], body["carriage"], body["time_begin"],
                 body["time_end"], body["dept"], body["operator"], body["watcher"], body["watcher_group"],
