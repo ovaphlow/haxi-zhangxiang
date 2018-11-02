@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-// 一体化作业申请单
+// �?体化作业申请�?
 @RequestMapping("/api/document/02")
 @RestController
 @SuppressWarnings("unchecked")
@@ -35,13 +35,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 驳回 （通用）
+     * 驳回 （�?�用�?
      * @param id
      * @param body
      * @return
@@ -54,13 +54,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 待处理任务数量：值班所长
+     * 待处理任务数量：值班�?�?
      * @return
      */
     @GetMapping(value = "/todo/p_zbsz")
@@ -71,7 +71,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -93,7 +93,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -111,7 +111,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -129,7 +129,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -152,13 +152,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 待处理任务数量：技术员
+     * 待处理任务数量：�?术员
      * @return
      */
     @GetMapping(value = "/todo/p_jsy")
@@ -169,19 +169,19 @@ public class Document02Controller {
             Map<String, Object> result1 = repos.todoPjsyReview();
             Map<String, Object> qty = new HashMap();
             qty.put("qty", Integer.parseInt(result.get("qty").toString()));
-            qty.put("qty1", Integer.parseInt(result.get("qty").toString()));
+            qty.put("qty1", Integer.parseInt(result1.get("qty").toString()));
             resp.put("content", qty);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
 
     /**
-     * 按车组统计作业数量
+     * 按车组统计作业数�?
      * @return
      */
     @GetMapping(value = "/stats/")
@@ -192,13 +192,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 检查供电状态是否冲突，列出所有冲突的申请。
+     * �?查供电状态是否冲突，列出�?有冲突的申请�?
      * @param id
      * @return Map
      */
@@ -210,13 +210,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 调度销记
+     * 调度�?�?
      * @param id
      * @param body
      * @return
@@ -230,13 +230,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 调度销记列表
+     * 调度�?记列�?
      * @return
      */
     @GetMapping(value = "/review/p_dd/")
@@ -247,13 +247,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 技术员销记列表
+     * �?术员�?记列�?
      * @return
      */
     @GetMapping(value = "/review/p_jsy/")
@@ -264,13 +264,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 质检销记
+     * 质检�?�?
      * @param id
      * @param body
      * @return
@@ -284,13 +284,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 质检销记列表
+     * 质检�?记列�?
      * @param qc
      * @return
      */
@@ -302,13 +302,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 子帐单03：工长销记
+     * 子帐�?03：工长销�?
      * @param master_id
      * @param id
      * @param body
@@ -328,13 +328,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 子账单02：工长销记
+     * 子账�?02：工长销�?
      * @param master_id
      * @param id
      * @param body
@@ -354,14 +354,14 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 一般配件和关键配件的更换记录单销记时触发
-     * 检修工长销记列表
+     * �?般配件和关键配件的更换记录单�?记时触发
+     * �?修工长销记列�?
      * @return
      */
     @GetMapping(value = "/verify/p_gz/{p_bz}")
@@ -371,13 +371,13 @@ public class Document02Controller {
             resp.put("content", repos.listReviewPgz(p_bz));
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 班组销记签字
+     * 班组�?记签�?
      * @param id
      * @param body
      * @return
@@ -391,13 +391,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 班组销记列表
+     * 班组�?记列�?
      * @param p_bz
      * @return
      */
@@ -409,13 +409,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 作业负责人销记
+     * 作业负责人销�?
      * @param id
      * @param body
      * @return
@@ -432,13 +432,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 作业负责人销记
+     * 作业负责人销�?
      * @param id
      * @return
      */
@@ -450,13 +450,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 值班所长确认
+     * 值班�?长确�?
      * @param id
      * @param body
      * @return
@@ -470,13 +470,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 值班所长确认列表
+     * 值班�?长确认列�?
      * @return
      */
     @GetMapping(value = "/approve/p_zbsz/")
@@ -487,7 +487,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -507,7 +507,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -524,7 +524,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -544,7 +544,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -562,13 +562,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 技术员确认
+     * �?术员确认
      * @param id
      * @param body
      * @return
@@ -582,13 +582,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 技术员审核列表
+     * �?术员审核列表
      * @return
      */
     @GetMapping(value = "/approve/p_jsy/")
@@ -599,7 +599,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -617,13 +617,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 指定用户审核或销记的申请单
+     * 指定用户审核或销记的申请�?
      * @param id
      * @return
      */
@@ -635,13 +635,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 指定用户申请单
+     * 指定用户申请�?
      * @param id
      * @return
      */
@@ -653,7 +653,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -678,7 +678,7 @@ public class Document02Controller {
 
     /**
      * 首页置顶显示 报警列表
-     * 2018-10 分为报警和警告，报警红色，警告黄色
+     * 2018-10 分为报警和警告，报警红色，警告黄�?
      * @return
      */
     @GetMapping(value = "/warning/")
@@ -689,15 +689,15 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
      * 首页显示列表
-     * 默认只显示非报警状态的未完成项目
-     * 包括检查值班干部带处理申请单计数和超期时间
+     * 默认只显示非报警状�?�的未完成项�?
+     * 包括�?查�?�班干部带处理申请单计数和超期时�?
      * @return
      */
     @GetMapping(value = "/")
@@ -708,13 +708,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 删除申请单
+     * 删除申请�?
      * @param id
      * @return
      */
@@ -727,13 +727,13 @@ public class Document02Controller {
             resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 申请单信息
+     * 申请单信�?
      * @param id
      * @return
      */
@@ -745,13 +745,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 修改申请单
+     * 修改申请�?
      * @param id
      * @param body
      * @return
@@ -766,7 +766,7 @@ public class Document02Controller {
             resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -785,7 +785,7 @@ public class Document02Controller {
             resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }

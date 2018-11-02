@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-//一体化作业申请单 子单
+//�?体化作业申请�? 子单
 @RequestMapping(value = "/api/document/02")
 @RestController
 @SuppressWarnings("unchecked")
@@ -36,7 +36,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -54,7 +54,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -72,7 +72,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -90,7 +90,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -108,13 +108,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 03子单 值班干部销记
+     * 03子单 值班干部�?�?
      * @param master_id
      * @param id
      * @param body
@@ -132,13 +132,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 02子单 值班干部销记
+     * 02子单 值班干部�?�?
      * @param master_id
      * @param id
      * @param body
@@ -156,13 +156,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 04子单 质检销记
+     * 04子单 质检�?�?
      * @param master_id
      * @param id
      * @param body
@@ -180,13 +180,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 03子单 质检销记
+     * 03子单 质检�?�?
      * @param master_id
      * @param id
      * @param body
@@ -204,13 +204,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 02子单 质检销记
+     * 02子单 质检�?�?
      * @param master_id
      * @param id
      * @param body
@@ -228,13 +228,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 01子单 质检销记
+     * 01子单 质检�?�?
      * @param master_id
      * @param id
      * @param body
@@ -252,13 +252,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 04子单 班组销记
+     * 04子单 班组�?�?
      * @param master_id
      * @param id
      * @param body
@@ -276,13 +276,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 01子单 班组销记
+     * 01子单 班组�?�?
      * @param master_id
      * @param id
      * @param body
@@ -300,7 +300,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -319,7 +319,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -338,7 +338,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -357,7 +357,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -376,7 +376,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -400,7 +400,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -424,7 +424,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -448,7 +448,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -471,7 +471,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -490,7 +490,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -509,7 +509,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -528,7 +528,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -547,7 +547,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -574,7 +574,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -600,7 +600,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -626,7 +626,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -652,7 +652,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -670,7 +670,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -688,7 +688,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
@@ -706,13 +706,13 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
 
     /**
-     * 列表：01子单
+     * 列表�?01子单
      * @param id
      * @return
      */
@@ -724,7 +724,7 @@ public class Document02DetailController {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错误");
+            resp.put("message", "服务器错�?");
         }
         return resp;
     }
