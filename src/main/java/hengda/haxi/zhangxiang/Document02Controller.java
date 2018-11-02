@@ -35,7 +35,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -54,13 +54,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
 
     /**
-     * 待处理任务数量：值班�?�?
+     * 待处理任务数量：值班销记
      * @return
      */
     @GetMapping(value = "/todo/p_zbsz")
@@ -71,7 +71,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -93,7 +93,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -111,7 +111,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -129,7 +129,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -152,7 +152,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -174,7 +174,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -192,7 +192,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -210,13 +210,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
 
     /**
-     * 调度�?�?
+     * 调度销记
      * @param id
      * @param body
      * @return
@@ -230,7 +230,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -247,7 +247,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -264,13 +264,13 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
 
     /**
-     * 质检�?�?
+     * 质检销记
      * @param id
      * @param body
      * @return
@@ -284,7 +284,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -302,7 +302,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -328,7 +328,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -354,7 +354,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -371,7 +371,7 @@ public class Document02Controller {
             resp.put("content", repos.listReviewPgz(p_bz));
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -391,7 +391,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -409,7 +409,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -432,7 +432,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -450,7 +450,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -470,7 +470,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -487,7 +487,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -507,7 +507,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -524,7 +524,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -544,7 +544,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -562,7 +562,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -582,7 +582,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -599,7 +599,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -617,7 +617,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -635,7 +635,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -653,7 +653,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -689,7 +689,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -708,7 +708,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -727,7 +727,7 @@ public class Document02Controller {
             resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -745,7 +745,7 @@ public class Document02Controller {
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -766,7 +766,7 @@ public class Document02Controller {
             resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -785,7 +785,7 @@ public class Document02Controller {
             resp.put("content", "");
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }

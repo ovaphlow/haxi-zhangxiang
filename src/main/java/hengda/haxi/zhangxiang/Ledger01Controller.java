@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-// 禁动牌台�?
+// 禁动牌台�?
 @RequestMapping(value = "/api/ledger/01")
 @RestController
 @SuppressWarnings("unchecked")
@@ -34,7 +34,7 @@ public class Ledger01Controller {
             resp.put("content", repos.returnQty());
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -50,7 +50,7 @@ public class Ledger01Controller {
             resp.put("content", repos.reviewQty());
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -66,7 +66,7 @@ public class Ledger01Controller {
             resp.put("content", repos.stats());
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -83,7 +83,7 @@ public class Ledger01Controller {
             resp.put("content", repos.filter(body));
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -99,7 +99,7 @@ public class Ledger01Controller {
             resp.put("content", repos.list());
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -118,13 +118,13 @@ public class Ledger01Controller {
             repos.returnHandler(body);
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
 
     /**
-     * 用户未返还列�?
+     * 用户未返还列�?
      * @param id
      * @return
      */
@@ -135,13 +135,13 @@ public class Ledger01Controller {
             resp.put("content", repos.returnListByUser(id));
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
 
     /**
-     * 待返还列�?
+     * 待返还列�?
      * @return
      */
     @GetMapping(value = "/return")
@@ -151,13 +151,13 @@ public class Ledger01Controller {
             resp.put("content", repos.returnList());
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
 
     /**
-     * 待发放列�?
+     * 待发放列�?
      * @return
      */
     @GetMapping(value = "/admin")
@@ -167,7 +167,7 @@ public class Ledger01Controller {
             resp.put("content", repos.reviewList());
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -184,7 +184,7 @@ public class Ledger01Controller {
             resp.put("content", repos.listByBorrower(id));
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -203,7 +203,7 @@ public class Ledger01Controller {
             repos.borrow(body);
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -220,7 +220,7 @@ public class Ledger01Controller {
             resp.put("content", repos.get(id));
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
@@ -237,7 +237,7 @@ public class Ledger01Controller {
             repos.save(body);
         } catch (Exception e) {
             logger.error("{}", e);
-            resp.put("message", "服务器错�?");
+            resp.put("message", "服务器错误");
         }
         return resp;
     }
