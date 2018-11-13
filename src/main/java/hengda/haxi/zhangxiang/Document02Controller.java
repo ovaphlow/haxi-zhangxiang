@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-// �?体化作业申请�?
+// 一体化作业申请单
 @RequestMapping("/api/document/02")
 @RestController
 @SuppressWarnings("unchecked")
@@ -21,6 +21,36 @@ public class Document02Controller {
     @Autowired
     public Document02Controller(Document02Repos repos) {
         this.repos = repos;
+    }
+
+    /** 作业计划 */
+    @GetMapping(value = "/schedule/{id}")
+    public Map<String, Object> getSchedule(@PathVariable("id") int id) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.getSchedule(id));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
+    /**
+     * 计划内作业计划
+     */
+    @GetMapping(value = "/schedule/")
+    public Map<String, Object> listSchedule() {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listSchedule());
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
     }
 
     /**
@@ -158,7 +188,7 @@ public class Document02Controller {
     }
 
     /**
-     * 待处理任务数量：�?术员
+     * 待处理任务数量：技术员
      * @return
      */
     @GetMapping(value = "/todo/p_jsy")
@@ -181,7 +211,7 @@ public class Document02Controller {
 
 
     /**
-     * 按车组统计作业数�?
+     * 按车组统计作业数量
      * @return
      */
     @GetMapping(value = "/stats/")
@@ -198,7 +228,7 @@ public class Document02Controller {
     }
 
     /**
-     * �?查供电状态是否冲突，列出�?有冲突的申请�?
+     * 检查供电状态是否冲突，列出所有冲突的申请单
      * @param id
      * @return Map
      */

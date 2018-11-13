@@ -14,6 +14,20 @@ class Document02Repos {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
+    /* 作业计划内容 */
+    fun getSchedule(id: Int): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select * from journal02_schedule where id = ?
+        """.trimIndent(), id)
+    }
+
+    /* 计划内作业 */
+    fun listSchedule(): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select * from journal02_schedule where counter = (select max(counter) from journal02_schedule)
+        """.trimIndent())
+    }
+
     /* 驳回列表 */
     fun listReject(): List<Map<String, Any>> {
         return jdbc!!.queryForList("""
@@ -259,6 +273,8 @@ class Document02Repos {
 
     /**
      * 检查供电状态是否冲突
+     * 2018.11 前一个申请单供、断电是无要求时不需要判断是否冲突
+     * -----------------------------------------------------------------------------------------------------------------
      */
     fun checkPower(id: Int): List<Map<String, Any>> {
         return jdbc!!.queryForList("""
@@ -272,8 +288,17 @@ class Document02Repos {
                 and sign_p_jsy is not null
                 -- and sign_p_zbsz is null
                 and sign_verify_leader is null
-                and p_yq_xdc != (select p_yq_xdc from journal02 where id = ? limit 1)
-                and p_yq_jcw != (select p_yq_jcw from journal02 where id = ? limit 1)
+                and (
+                    (
+                        p_yq_xdc != '无要求'
+                        and p_yq_xdc != (select p_yq_xdc from journal02 where id = ? limit 1)
+                    )
+                    or (
+                        p_yq_jcw != '无要求'
+                        and p_yq_jcw != (select p_yq_jcw from journal02 where id = ? limit 1)
+                    )
+                )
+            order by id desc
         """.trimIndent(), id, id, id, id)
     }
 
