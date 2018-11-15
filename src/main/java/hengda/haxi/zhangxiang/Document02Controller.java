@@ -801,6 +801,19 @@ public class Document02Controller {
         return resp;
     }
 
+    @PostMapping(value = "/schedule/")
+    public Map<String, Object> saveSchedule(@RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            repos.saveSchedule(body);
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
     /**
      * 提交申请
      * @param body

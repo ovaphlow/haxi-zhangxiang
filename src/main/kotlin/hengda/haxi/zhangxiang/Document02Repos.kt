@@ -17,7 +17,14 @@ class Document02Repos {
     /* 作业计划内容 */
     fun getSchedule(id: Int): Map<String, Any> {
         return jdbc!!.queryForMap("""
-            select * from journal02_schedule where id = ?
+            select
+                *, (
+                    select id from user where name = j.leader and dept = j.dept
+                ) as leader_id
+            from
+                journal02_schedule as j
+            where
+                id = ?
         """.trimIndent(), id)
     }
 
@@ -994,6 +1001,39 @@ class Document02Repos {
             body["p_yq_xdc"], body["p_yq_jcw"], body["p_yq_zydd"], body["p_yq_qt"], body["id"])
     }
 
+    /** 计划内作业申请 */
+    fun saveSchedule(body: Map<String, Any>) {
+        jdbc!!.update("""
+            insert into
+                journal02
+            set
+                uuid = uuid(),
+                category = '计划内',
+                applicant = ?,
+                applicant_phone = ?,
+                leader = ?,
+                leader_id = ?,
+                leader_phone = ?,
+                dept = ?,
+                group_sn = ?,
+                date_begin = ?,
+                time_begin = ?,
+                date_end = ?,
+                time_end = ?,
+                content = ?,
+                content_detail = ?,
+                p_yq_xdc = ?,
+                p_yq_jcw = ?,
+                p_yq_zydd = ?,
+                p_yq_qt = ?
+        """.trimIndent(), body["applicant"], body["applicant_phone"], body["leader"],
+                body["leader_id"], body["leader_phone"],
+                body["dept"], body["train"],
+                body["date_begin"], body["time_begin"], body["date_end"], body["time_end"],
+                body["content"], body["content_detail"],
+                body["p_yq_xdc"], body["p_yq_jcw"], body["p_yq_zydd"], body["p_yq_qt"])
+    }
+
     /**
      * 提交申请
      */
@@ -1003,6 +1043,7 @@ class Document02Repos {
                 journal02
             set
                 uuid = uuid(),
+                category = '计划外',
                 applicant = ?,
                 applicant_phone = ?,
                 leader = ?,
