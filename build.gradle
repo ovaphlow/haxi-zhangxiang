@@ -61,3 +61,7 @@ dependencies {
 	compile('org.apache.poi:poi-ooxml:3.17')
 	compile('commons-codec:commons-codec:1.11')
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+}
