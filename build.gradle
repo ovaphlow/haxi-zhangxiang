@@ -57,8 +57,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
 	runtime('mysql:mysql-connector-java')
-	compile('com.zaxxer:HikariCP:2.7.9')
-	compile('org.apache.poi:poi-ooxml:3.17')
+	compile('com.zaxxer:HikariCP:3.2.0') // 2.7.9
+	compile('org.apache.poi:poi-ooxml:4.0.0') // 3.1.7
 	compile('commons-codec:commons-codec:1.11')
 }
 
