@@ -28,6 +28,13 @@ class Document02Repos {
         """.trimIndent(), id)
     }
 
+    /** 指定部门计划内作业 */
+    fun listScheduleByDept(dept: String): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select * from journal02_schedule where counter = (select max(counter) from journal02_schedule) and dept = ?
+        """.trimIndent(), dept)
+    }
+
     /* 计划内作业 */
     fun listSchedule(): List<Map<String, Any>> {
         return jdbc!!.queryForList("""

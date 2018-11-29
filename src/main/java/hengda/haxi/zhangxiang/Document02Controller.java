@@ -37,6 +37,20 @@ public class Document02Controller {
         return resp;
     }
 
+    /** 指定部门的作业计划 */
+    @GetMapping(value = "/schedule/dept/{dept}/")
+    public Map<String, Object> listScheduleByDept(@PathVariable("dept") String dept) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.listScheduleByDept(dept));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
     /**
      * 计划内作业计划
      */
