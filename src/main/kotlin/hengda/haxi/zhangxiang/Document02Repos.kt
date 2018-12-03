@@ -275,6 +275,20 @@ class Document02Repos {
         """.trimIndent())
     }
 
+    /* 按计划内/外统计 */
+    fun statsSchedule(body: Map<String, Any>): List<Map<String, Any>> {
+        return jdbc!!.queryForList("""
+            select
+                category as name, count(*) as value
+            from
+                journal02
+            where
+                date_begin between ? and ?
+            group by
+                category
+        """.trimIndent(), body["date_begin"], body["date_end"])
+    }
+
     /**
      * 按车组统计作业数量
      */

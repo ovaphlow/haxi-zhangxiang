@@ -223,6 +223,21 @@ public class Document02Controller {
         return resp;
     }
 
+    /** 指定日期的计划内作业完成比例 */
+
+    /** 按计划内/外统计 */
+    @PostMapping(value = "/stats/schedule/")
+    public Map<String, Object> statsSchedule(@RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap();
+        try {
+            resp.put("content", repos.statsSchedule(body));
+            resp.put("message", "");
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
 
     /**
      * 按车组统计作业数量
