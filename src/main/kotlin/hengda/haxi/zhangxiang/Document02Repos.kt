@@ -19,7 +19,7 @@ class Document02Repos {
         return jdbc!!.queryForMap("""
             select
                 *, (
-                    select id from user where name = j.leader and dept = j.dept
+                    select id from user where name = j.applicant and dept = j.dept
                 ) as leader_id
             from
                 journal02_schedule as j
