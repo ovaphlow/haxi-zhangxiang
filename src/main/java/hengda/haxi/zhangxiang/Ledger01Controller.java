@@ -80,6 +80,7 @@ public class Ledger01Controller {
      */
     @PutMapping(value = "/return/{id}")
     public Map<String, Object> returnSubmit(@PathVariable("id") int id, @RequestBody Map<String, Object> body) {
+        logger.info("{}", body);
         Map<String, Object> resp = new HashMap();
         try {
             body.put("id", id);
@@ -96,7 +97,7 @@ public class Ledger01Controller {
      * @return
      */
     @GetMapping(value = "/return/")
-    public Map<String, Object> listreturn() {
+    public Map<String, Object> listReturn() {
         Map<String, Object> resp = new HashMap();
         try {
             resp.put("content", repos.returnList());

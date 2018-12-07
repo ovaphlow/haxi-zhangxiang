@@ -48,13 +48,17 @@ class Ledger01Repos {
             update
                 journal01
             set
+                return_name = ?,
+                return_quantity = ?,
                 return_by = ?,
                 return_by_id = ?,
                 return_date = now(),
-                return_time = now()
+                return_time = now(),
+                remark = ?
             where
                 id = ?
-        """.trimIndent(), body["return_by"], body["return_by_id"], body["id"])
+        """.trimIndent(), body["return_name"], body["return_quantity"], body["return_by"], body["return_by_id"],
+                body["remark"], body["id"])
     }
 
     /** 所有待返还列表 */
