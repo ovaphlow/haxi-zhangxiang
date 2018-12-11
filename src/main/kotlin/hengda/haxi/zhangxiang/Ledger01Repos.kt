@@ -51,13 +51,12 @@ class Ledger01Repos {
                 return_name = ?,
                 return_quantity = ?,
                 return_by = ?,
-                return_by_id = ?,
                 return_date = now(),
                 return_time = now(),
                 remark = ?
             where
                 id = ?
-        """.trimIndent(), body["return_name"], body["return_quantity"], body["return_by"], body["return_by_id"],
+        """.trimIndent(), body["return_name"], body["return_quantity"], body["return_by"],
                 body["remark"], body["id"])
     }
 
@@ -66,13 +65,13 @@ class Ledger01Repos {
         return jdbc!!.queryForList("""
             select
                 id, uuid,
-                date, time, quantity, applicant, applicant_id, dept,
-                borrow_date, borrow_time, borrow, borrow_id,
+                date, time, quantity, applicant, dept,
+                borrow_date, borrow_time, borrow,
                 remark
             from
                 journal01
             where
-                return_by_id = 0
+                return_by = ''
             order by
                 id desc
             limit 1000
