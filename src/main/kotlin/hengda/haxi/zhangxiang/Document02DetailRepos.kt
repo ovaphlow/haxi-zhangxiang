@@ -424,28 +424,28 @@ class Document02DetailRepos {
     /* 04子单列表 */
     fun list04(id: Int): List<Map<String, Any>> {
         return jdbc!!.queryForList("""
-            select * from journal02_04 where master_id = ?
+            select * from journal02_04 where master_id = ? limit 8
         """.trimIndent(), id)
     }
 
     /* 03子单列表 */
     fun list03(id: Int): List<Map<String, Any>> {
         return jdbc!!.queryForList("""
-            select * from journal02_03 where master_id = ?
+            select * from journal02_03 where master_id = ? limit 30
         """.trimIndent(), id)
     }
 
     /* 02子单列表 */
     fun list02(id: Int): List<Map<String, Any>> {
         return jdbc!!.queryForList("""
-            select * from journal02_02 where master_id = ?
+            select * from journal02_02 where master_id = ? limit 30
         """.trimIndent(), id)
     }
 
     /* 01子单列表 */
     fun list01(id: Int): List<Map<String, Any>> {
         return jdbc!!.queryForList("""
-            select * from journal02_01 where master_id = ?
+            select * from journal02_01 where master_id = ? limit 8
         """.trimIndent(), id)
     }
 }
