@@ -313,6 +313,8 @@ class Document02Repos {
             where
                 group_sn = (select group_sn from journal02 where id = ? limit 1)
                 and id != ?
+                and reject = ''
+                and reject_by = ''
                 and sign_p_jsy is not null
                 -- and sign_p_zbsz is null
                 and sign_verify_leader is null
