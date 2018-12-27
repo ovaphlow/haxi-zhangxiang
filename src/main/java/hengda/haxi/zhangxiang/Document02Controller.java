@@ -17,10 +17,12 @@ public class Document02Controller {
     private Logger logger = LoggerFactory.getLogger(Document02Controller.class);
 
     private Document02Repos repos;
+    private LogRepos logRepos;
 
     @Autowired
-    public Document02Controller(Document02Repos repos) {
+    public Document02Controller(Document02Repos repos, LogRepos logRepos) {
         this.repos = repos;
+        this.logRepos = logRepos;
     }
 
     /** 作业计划 */
@@ -286,6 +288,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitReviewPdd(body);
+            logRepos.save(Integer.parseInt(body.get("verify_id").toString()), "调度销记", id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -295,7 +298,7 @@ public class Document02Controller {
     }
 
     /**
-     * 调度�?记列�?
+     * 调度销记列表
      * @return
      */
     @GetMapping(value = "/review/p_dd/")
@@ -312,7 +315,7 @@ public class Document02Controller {
     }
 
     /**
-     * �?术员�?记列�?
+     * 技术员销记列表
      * @return
      */
     @GetMapping(value = "/review/p_jsy/")
@@ -340,6 +343,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitReviewQc(body);
+            logRepos.save(0, "质检销记", id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -349,7 +353,7 @@ public class Document02Controller {
     }
 
     /**
-     * 质检�?记列�?
+     * 质检销记列表
      * @param qc
      * @return
      */
@@ -367,7 +371,7 @@ public class Document02Controller {
     }
 
     /**
-     * 子帐�?03：工长销�?
+     * 子帐单03：工长销记
      * @param master_id
      * @param id
      * @param body
@@ -393,7 +397,7 @@ public class Document02Controller {
     }
 
     /**
-     * 子账�?02：工长销�?
+     * 子账单02：工长销记
      * @param master_id
      * @param id
      * @param body
@@ -419,8 +423,8 @@ public class Document02Controller {
     }
 
     /**
-     * �?般配件和关键配件的更换记录单�?记时触发
-     * �?修工长销记列�?
+     * 一般配件和关键配件的更换记录单销记时触发
+     * 检修工长销记列表
      * @return
      */
     @GetMapping(value = "/verify/p_gz/{p_bz}")
@@ -436,7 +440,7 @@ public class Document02Controller {
     }
 
     /**
-     * 班组�?记签�?
+     * 班组销记签字
      * @param id
      * @param body
      * @return
@@ -447,6 +451,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitReviewPbz(body);
+            logRepos.save(0, "班组销记", id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -456,7 +461,7 @@ public class Document02Controller {
     }
 
     /**
-     * 班组�?记列�?
+     * 班组销记列表
      * @param p_bz
      * @return
      */
@@ -474,7 +479,7 @@ public class Document02Controller {
     }
 
     /**
-     * 作业负责人销�?
+     * 作业负责人销记
      * @param id
      * @param body
      * @return
@@ -488,6 +493,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitReviewApplicant(body);
+            logRepos.save(Integer.parseInt(body.get("verify_leader_id").toString()), "作业负责人销记", id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -497,7 +503,7 @@ public class Document02Controller {
     }
 
     /**
-     * 作业负责人销�?
+     * 作业负责人销记
      * @param id
      * @return
      */
@@ -515,7 +521,7 @@ public class Document02Controller {
     }
 
     /**
-     * 值班�?长确�?
+     * 值班所长确认
      * @param id
      * @param body
      * @return
@@ -526,6 +532,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitApprovePzbsz(body);
+            logRepos.save(Integer.parseInt(body.get("p_zbsz_id").toString()), "值班所长审核", id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -535,7 +542,7 @@ public class Document02Controller {
     }
 
     /**
-     * 值班�?长确认列�?
+     * 值班所长确认列表
      * @return
      */
     @GetMapping(value = "/approve/p_zbsz/")
@@ -563,6 +570,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitApprovePdd(body);
+            logRepos.save(Integer.parseInt(body.get("p_dd_id").toString()), "调度审核", id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -600,6 +608,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitApprovePbz(body);
+            logRepos.save(0,"班组确认",id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -627,7 +636,7 @@ public class Document02Controller {
     }
 
     /**
-     * �?术员确认
+     * 技术员确认
      * @param id
      * @param body
      * @return
@@ -638,6 +647,7 @@ public class Document02Controller {
         try {
             body.put("id", id);
             repos.submitApprovePjsy(body);
+            logRepos.save(Integer.parseInt(body.get("p_jsy_id").toString()), "技术员审核", id);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
