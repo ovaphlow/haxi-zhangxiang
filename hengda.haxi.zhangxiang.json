@@ -3,9 +3,9 @@
   "script": "java",
   "args": [
     "-jar",
-    "./build/libs/zhangxiang-1.0.0.jar"
+    "./build/libs/zhangxiang-201812.3.jar"
   ],
   "exec_interpreter": "",
   "exec_mode": "fork",
-  "watch": "build/libs/zhangxiang-1.0.0.jar"
+  "watch": "build/libs/zhangxiang-201812.3.jar"
 }
