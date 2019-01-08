@@ -570,7 +570,9 @@ public class Document02DetailController {
             if (body.get("carriage_06").equals(true)) repos.save04(master_id, "06", body);
             if (body.get("carriage_07").equals(true)) repos.save04(master_id, "07", body);
             if (body.get("carriage_08").equals(true)) repos.save04(master_id, "08", body);
-            repos.updateMasterTime(master_id, body);
+//            添加子单后自动修改一体化申请作业时间
+//            201901后取消
+//            repos.updateMasterTime(master_id, body);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);
@@ -648,7 +650,9 @@ public class Document02DetailController {
             if (body.get("carriage_06").equals(true)) repos.save01(master_id, "06", body);
             if (body.get("carriage_07").equals(true)) repos.save01(master_id, "07", body);
             if (body.get("carriage_08").equals(true)) repos.save01(master_id, "08", body);
-            repos.updateMasterTime(master_id, body);
+//            添加子单后自动修改一体化申请作业时间
+//            201901后取消
+//            repos.updateMasterTime(master_id, body);
             resp.put("message", "");
         } catch (Exception e) {
             logger.error("{}", e);

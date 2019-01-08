@@ -577,10 +577,11 @@ class Document02Repos {
             update
                 journal02
             set
-                date_begin = ?,
-                time_begin = ?,
-                date_end = ?,
-                time_end = ?,
+                -- 201901 销记操作自动修改申请结束时间为当前时间
+                -- date_begin = ?,
+                -- time_begin = ?,
+                -- date_end = ?,
+                time_end = now(),
                 verify_report = ?,
                 verify_leader = ?,
                 verify_leader_id = ?,
@@ -590,7 +591,8 @@ class Document02Repos {
                 sign_verify_leader = ?
             where
                 id = ?
-        """.trimIndent(), body["date_begin"], body["time_begin"], body["date_end"], body["time_end"],
+        """.trimIndent(),
+//                body["date_begin"], body["time_begin"], body["date_end"], body["time_end"],
                 body["verify_report"], body["verify_leader"], body["verify_leader_id"],
                 body["date_end"], body["time_end"], body["remark"], body["sign"], body["id"])
     }
@@ -662,6 +664,8 @@ class Document02Repos {
             update
                 journal02
             set
+                -- 201901 调度签字确认后自动更新申请开始时间为当前时间
+                time_begin = now(),
                 p_dd = ?,
                 p_dd_id = ?,
                 p_dd_date = now(),
