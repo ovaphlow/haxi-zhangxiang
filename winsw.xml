@@ -1,0 +1,10 @@
+<service>
+  <id>HengdaHarbinEmud-zhangxiang.java</id>
+  <name>HengdaHarbinEmud-zhangxiang.java</name>
+  <description>哈尔滨动车段检修车间账项管理系统</description>
+  <executable>C:\jre1.8.0_191\bin\java.exe</executable>
+  <arguments>-jar "zhangxiang-201812.3.jar"</arguments>
+  <workingdirectory>c:\users\ovaphlow\srcode\haxi-zhangxiang</workingdirectory>
+  <logmode>rotate</logmode>
+  <logpath>./log</logpath>
+</service>
