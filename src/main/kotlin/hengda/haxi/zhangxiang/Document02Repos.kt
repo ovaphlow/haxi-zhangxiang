@@ -38,15 +38,17 @@ class Document02Repos {
             where
                 date_begin between ? and ?
                 and (
-                    category = '白班'
-                    and counter = (
-                        select
-                            max(counter)
-                        from
-                            journal02_schedule
-                        where
-                            date_begin = docs.date_begin
-                            and category = '白班'
+                    (
+                        category = '白班'
+                        and counter = (
+                            select
+                                max(counter)
+                            from
+                                journal02_schedule
+                            where
+                                date_begin = docs.date_begin
+                                and category = '白班'
+                        )
                     )
                     or
                     (
@@ -57,7 +59,7 @@ class Document02Repos {
                             from
                                 journal02_schedule
                             where
-                                t.date_begin = docs.date_begin
+                                date_begin = docs.date_begin
                                 and category = '夜班'
                         )
                     )
