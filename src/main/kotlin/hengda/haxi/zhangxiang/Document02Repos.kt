@@ -22,7 +22,7 @@ class Document02Repos {
             from
                 journal02 as doc
             where
-                doc.date_begin between '2018-12-01' and '2018-12-31'
+                doc.date_begin between ? and ?
                 and doc.reject = ''
                 and category = '计划内'
         """.trimIndent(), body["date_begin"], body["date_end"])
