@@ -14,6 +14,57 @@ class Document02Repos {
     @Autowired
     private val jdbc: JdbcTemplate? = null
 
+    /* 指定时段计划内任务完成数量 */
+    fun getFinishedScheduleQty(body: Map<String, Any>): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02 as doc
+            where
+                doc.date_begin between '2018-12-01' and '2018-12-31'
+                and doc.reject = ''
+                and category = '计划内'
+        """.trimIndent(), body["date_begin"], body["date_end"])
+    }
+
+    /* 指定时段计划内任务总数 */
+    fun getAllScheduleQty(body: Map<String, Any>): Map<String, Any> {
+        return jdbc!!.queryForMap("""
+            select
+                count(*) as qty
+            from
+                journal02_schedule as docs
+            where
+                date_begin between ? and ?
+                and (
+                    category = '白班'
+                    and counter = (
+                        select
+                            max(counter)
+                        from
+                            journal02_schedule
+                        where
+                            date_begin = docs.date_begin
+                            and category = '白班'
+                    )
+                    or
+                    (
+                        category = '夜班'
+                        and counter = (
+                            select
+                                max(counter)
+                            from
+                                journal02_schedule
+                            where
+                                t.date_begin = docs.date_begin
+                                and category = '夜班'
+                        )
+                    )
+                )
+        """.trimIndent(), body["date_begin"], body["date_end"])
+    }
+
     /* 作业计划内容 */
     fun getSchedule(id: Int): Map<String, Any> {
         return jdbc!!.queryForMap("""

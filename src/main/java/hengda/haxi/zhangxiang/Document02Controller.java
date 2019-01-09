@@ -25,6 +25,23 @@ public class Document02Controller {
         this.logRepos = logRepos;
     }
 
+    /** 计划内任务完成比例 */
+    @PostMapping(value = "/schedule/ratio/")
+    public Map<String, Object> getScheduleFinishedRatio(@RequestBody Map<String, Object> body) {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            Map<String, Object> data = repos.getFinishedScheduleQty(body);
+            Map<String, Object> data1 = repos.getAllScheduleQty(body);
+            data.put("qty1", data1.get("qty"));
+            resp.put("message", "");
+            resp.put("content", data);
+        } catch (Exception e) {
+            logger.error("{}", e);
+            resp.put("message", "服务器错误");
+        }
+        return resp;
+    }
+
     /** 作业计划 */
     @GetMapping(value = "/schedule/{id}")
     public Map<String, Object> getSchedule(@PathVariable("id") int id) {
